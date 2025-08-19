@@ -151,21 +151,40 @@ def aba_camera(inp_janela, dados, inp_menu):
 
     # --- Funções de Navegação e Callbacks da UI ---
 
-    def handle_failure(message):
-        """Chamado quando qualquer parte do processo falha."""
-        nonlocal processando_foto
+    def handle_failure(message, imagem_erro=None):
         print(f"FALHA: {message}")
 
-        if 'splash' in globals() and splash.winfo_exists():
-            splash.destroy()
-        
-        # Garante que a janela da câmera seja fechada também
-        if 'janela_tres' in locals() and janela_tres.winfo_exists():
-            janela_tres.destroy()
+        # Fechamento de janelas e splash como já tem
 
-        messagebox.showwarning("Falha na Análise", f"{message}\nTente novamente.")
-        processando_foto = False  # Libera para nova tentativa
-        inp_janela.deiconify()  # Mostra o menu principal
+        if imagem_erro:
+            try:
+                popup = tk.Toplevel(inp_janela)
+                popup.title("Falha na Análise")
+                popup.transient(inp_janela)  # popup modal relativo à janela principal
+                popup.grab_set()
+
+                # Carrega e redimensiona a imagem
+                img = Image.open(imagem_erro)
+                img = img.resize((300, 300))  # Ajuste o tamanho conforme preferir
+                photo = ImageTk.PhotoImage(img)
+
+                label_img = tk.Label(popup, image=photo)
+                label_img.image = photo  # mantém referência
+                label_img.pack(padx=10, pady=10)
+
+                label_msg = tk.Label(popup, text=message, fg='red')
+                label_msg.pack(padx=10, pady=5)
+
+                btn_ok = tk.Button(popup, text="OK", command=popup.destroy)
+                btn_ok.pack(pady=10)
+            except Exception as e:
+                print(f"Erro ao mostrar imagem no popup: {e}")
+                messagebox.showwarning("Falha na Análise", f"{message}\nTente novamente.")
+        else:
+            messagebox.showwarning("Falha na Análise", f"{message}\nTente novamente.")
+
+        processando_foto = False
+        inp_janela.deiconify()
 
     def handle_success(resultado):
         """Chamado quando o processamento é concluído com sucesso."""
@@ -203,7 +222,11 @@ def aba_camera(inp_janela, dados, inp_menu):
             if resultado["sucesso"]:
                 inp_menu.after(0, lambda: handle_success(resultado))
             else:
-                inp_menu.after(0, lambda: handle_failure(resultado["mensagem_erro"]))
+                # Passa também a imagem, se existir
+                inp_menu.after(0, lambda: handle_failure(
+                    resultado["mensagem_erro"], 
+                    resultado.get("imagem_erro")
+                ))
 
         # Cria a thread
         worker_thread = threading.Thread(target=tarefa_alvo)

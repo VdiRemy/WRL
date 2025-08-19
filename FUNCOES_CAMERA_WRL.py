@@ -689,7 +689,19 @@ def tarefa_de_processamento_independente(dados_entrada):
             "dados": lista_completa,
             "arquivo": nome_arquivo[0]
         }
+    except ValueError as e:
+        msg_erro = str(e).lower()
+        if "não podemos identificar os" in msg_erro:  # seu erro específico
+            # Retorna também a imagem (caminho)
+            return {
+                "sucesso": False,
+                "mensagem_erro": str(e),
+                "imagem_erro": dados_entrada.get("caminho_fotoBW")
+            }
+        else:
+            return {
+                "sucesso": False,
+                "mensagem_erro": str(e)
+            }
     except Exception as e:
-        # Captura qualquer exceção durante o processamento
         return {"sucesso": False, "mensagem_erro": str(e)}
-  

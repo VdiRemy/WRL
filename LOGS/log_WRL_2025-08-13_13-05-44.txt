@@ -1,0 +1,273 @@
+Iniciando o programa no ambiente 'wrl'... 
+
+
+ [32mIniciando o c�digo - Tela do Menu[0m
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Dados obtidos - CADASTRO_BICO_WRL:  ['4', 'USIMINAS/MG/BRASIL', 'ACIARIA', '6', '219/36,4', '8', '0']
+
+Conectando ao BD - FUNCOES_WRL
+
+
+ [36mDADOS SALVOS - CADASTRO_BICO_WRL[0m
+Desconectando do BD - FUNCOES_WRL
+
+
+
+ [32mIniciando o c�digo - Registro pre-medi��o[0m
+[31mFinalizando o c�digo - Registro pre-medi��o[0m 
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+Ultima vida registrada: 0, Vida atual: 0
+
+
+ [32mAbrindo FUNCOES CAMERA[0m
+
+
+ [32mIniciando o código - Dados do bico[0m
+[31mFinalizando o código - Dados do bico[0m 
+
+
+
+ [32mIniciando o código - Tela da câmera[0m
+[35mCAMERA INICIALIZADA[0m 
+
+Abertura: 80.18755238290139
+Salvando foto...
+[35mImagem salva[0m 
+
+ANALISAR IMAGEM EM EXECUÇÃO
+
+0: 480x640 1 Bico, 4 Furos, 263.0ms
+Speed: 6.8ms preprocess, 263.0ms inference, 32.9ms postprocess per image at shape (1, 3, 480, 640)
+Results saved to [1mC:\Users\labga\OneDrive\rea de Trabalho\WRL\resultados\registro_8_13-08-2025_13.21.png[0m
+1 label saved to C:\Users\labga\OneDrive\rea de Trabalho\WRL\resultados\registro_8_13-08-2025_13.21.png\labels
+AVISO: Ignorando uma caixa de detecção com formato inválido. Erro: not enough values to unpack (expected 6, got 4)
+AVISO: Ignorando uma caixa de detecção com formato inválido. Erro: not enough values to unpack (expected 6, got 4)
+AVISO: Ignorando uma caixa de detecção com formato inválido. Erro: not enough values to unpack (expected 6, got 4)
+AVISO: Ignorando uma caixa de detecção com formato inválido. Erro: not enough values to unpack (expected 6, got 4)
+AVISO: Ignorando uma caixa de detecção com formato inválido. Erro: not enough values to unpack (expected 6, got 4)
+coordenadas_caixas: []
+(fun_cam)Não foram detectados pontos suficientes.
+tamanho lista_completa: 11
+DIÂMETROS: []
+ESTADOS: []
+lista_diametros: []
+Não foi possível analisar o estado da lança estado geral_bico
+estado_bico: ['Indefinido']
+Comandos de desgaste para a tabela B4 executados.
+Dados de DESGASTE inseridos com sucesso.
+ERRO: Incompatibilidade de dados para a tabela B4.
+Esperado: 16, Recebido: 11
+Dados recebidos: ['4', 'USIMINAS/MG/BRASIL', 'ACIARIA', '6', '219/36,4', '8', 'GG', '0', 'registro_8_13-08-2025_13.21.png', '13/08/2025', '13:21']
+FALHA: Não podemos identificar os 4 furos. Tire a foto novamente.
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+Ultima vida registrada: 0, Vida atual: 0
+[35mCAMERA INICIALIZADA[0m 
+
+Abertura: 80.18755238290139
+Salvando foto...
+[35mImagem salva[0m 
+
+ANALISAR IMAGEM EM EXECUÇÃO
+
+0: 480x640 1 Bico, 4 Furos, 191.5ms
+Speed: 17.0ms preprocess, 191.5ms inference, 17.1ms postprocess per image at shape (1, 3, 480, 640)
+Results saved to [1mC:\Users\labga\OneDrive\rea de Trabalho\WRL\resultados\registro_8_13-08-2025_13.22.png[0m
+1 label saved to C:\Users\labga\OneDrive\rea de Trabalho\WRL\resultados\registro_8_13-08-2025_13.22.png\labels
+AVISO: Ignorando uma caixa de detecção com formato inválido. Erro: not enough values to unpack (expected 6, got 4)
+AVISO: Ignorando uma caixa de detecção com formato inválido. Erro: not enough values to unpack (expected 6, got 4)
+AVISO: Ignorando uma caixa de detecção com formato inválido. Erro: not enough values to unpack (expected 6, got 4)
+AVISO: Ignorando uma caixa de detecção com formato inválido. Erro: not enough values to unpack (expected 6, got 4)
+AVISO: Ignorando uma caixa de detecção com formato inválido. Erro: not enough values to unpack (expected 6, got 4)
+coordenadas_caixas: []
+(fun_cam)Não foram detectados pontos suficientes.
+tamanho lista_completa: 11
+DIÂMETROS: []
+ESTADOS: []
+lista_diametros: []
+Não foi possível analisar o estado da lança estado geral_bico
+estado_bico: ['Indefinido']
+Comandos de desgaste para a tabela B4 executados.
+Dados de DESGASTE inseridos com sucesso.
+ERRO: Incompatibilidade de dados para a tabela B4.
+Esperado: 16, Recebido: 11
+Dados recebidos: ['4', 'USIMINAS/MG/BRASIL', 'ACIARIA', '6', '219/36,4', '8', 'GG', '0', 'registro_8_13-08-2025_13.22.png', '13/08/2025', '13:22']
+FALHA: Não podemos identificar os 4 furos. Tire a foto novamente.
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Dados obtidos - CADASTRO_BICO_WRL:  ['4', 'USIMINAS/MG/BRASIL', 'ACIARIA', '6', '219/36,4', '89', '0']
+
+Conectando ao BD - FUNCOES_WRL
+
+
+ [36mDADOS SALVOS - CADASTRO_BICO_WRL[0m
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+Ultima vida registrada: 0, Vida atual: 262
+[35mCAMERA INICIALIZADA[0m 
+
+Abertura: 80.18755238290139
+Salvando foto...
+[35mImagem salva[0m 
+
+ANALISAR IMAGEM EM EXECUÇÃO
+
+0: 480x640 1 Bico, 2 Furos, 185.4ms
+Speed: 4.7ms preprocess, 185.4ms inference, 8.9ms postprocess per image at shape (1, 3, 480, 640)
+Results saved to [1mC:\Users\labga\OneDrive\rea de Trabalho\WRL\resultados\registro_89_13-08-2025_13.26.png[0m
+1 label saved to C:\Users\labga\OneDrive\rea de Trabalho\WRL\resultados\registro_89_13-08-2025_13.26.png\labels
+AVISO: Ignorando uma caixa de detecção com formato inválido. Erro: not enough values to unpack (expected 6, got 4)
+AVISO: Ignorando uma caixa de detecção com formato inválido. Erro: not enough values to unpack (expected 6, got 4)
+AVISO: Ignorando uma caixa de detecção com formato inválido. Erro: not enough values to unpack (expected 6, got 4)
+coordenadas_caixas: []
+(fun_cam)Não foram detectados pontos suficientes.
+tamanho lista_completa: 11
+DIÂMETROS: []
+ESTADOS: []
+lista_diametros: []
+Não foi possível analisar o estado da lança estado geral_bico
+estado_bico: ['Indefinido']
+Comandos de desgaste para a tabela B4 executados.
+Dados de DESGASTE inseridos com sucesso.
+ERRO: Incompatibilidade de dados para a tabela B4.
+Esperado: 16, Recebido: 11
+Dados recebidos: ['4', 'USIMINAS/MG/BRASIL', 'ACIARIA', '6', '219/36,4', '89', 'GG', '262', 'registro_89_13-08-2025_13.26.png', '13/08/2025', '13:26']
+FALHA: Não podemos identificar os 4 furos. Tire a foto novamente.
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Dados obtidos - CADASTRO_BICO_WRL:  ['4', 'USIMINAS/MG/BRASIL', 'ACIARIA', '6', '219/36,4', '90', '0']
+
+Conectando ao BD - FUNCOES_WRL
+
+
+ [36mDADOS SALVOS - CADASTRO_BICO_WRL[0m
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+Ultima vida registrada: 0, Vida atual: 288
+[35mCAMERA INICIALIZADA[0m 
+
+Abertura: 80.18755238290139
+Salvando foto...
+[35mImagem salva[0m 
+
+ANALISAR IMAGEM EM EXECUÇÃO
+
+0: 480x640 1 Bico, 1 Furo, 164.2ms
+Speed: 4.8ms preprocess, 164.2ms inference, 5.8ms postprocess per image at shape (1, 3, 480, 640)
+Results saved to [1mC:\Users\labga\OneDrive\rea de Trabalho\WRL\resultados\registro_90_13-08-2025_13.30.png[0m
+1 label saved to C:\Users\labga\OneDrive\rea de Trabalho\WRL\resultados\registro_90_13-08-2025_13.30.png\labels
+AVISO: Ignorando uma caixa de detecção com formato inválido. Erro: not enough values to unpack (expected 6, got 4)
+AVISO: Ignorando uma caixa de detecção com formato inválido. Erro: not enough values to unpack (expected 6, got 4)
+coordenadas_caixas: []
+(fun_cam)Não foram detectados pontos suficientes.
+tamanho lista_completa: 11
+DIÂMETROS: []
+ESTADOS: []
+lista_diametros: []
+Não foi possível analisar o estado da lança estado geral_bico
+estado_bico: ['Indefinido']
+Comandos de desgaste para a tabela B4 executados.
+Dados de DESGASTE inseridos com sucesso.
+ERRO: Incompatibilidade de dados para a tabela B4.
+Esperado: 16, Recebido: 11
+Dados recebidos: ['4', 'USIMINAS/MG/BRASIL', 'ACIARIA', '6', '219/36,4', '90', 'GG', '288', 'registro_90_13-08-2025_13.30.png', '13/08/2025', '13:30']
+FALHA: Não podemos identificar os 4 furos. Tire a foto novamente.
+[31mFinalizando o código - Tela do Menu[0m 
+
+^C

@@ -775,8 +775,8 @@ if id and selected_tables:
             tabela2 = tabela2.drop_duplicates(subset='REGIÃO')
             # Ordenando em ordem crescente pelo 'ID'
             tabela2 = tabela2.sort_values(by='REGIÃO')
-
-            image_7F = Image.open(fr'{pasta_bd()}\FOTOS_SEGMENTADA\{registro}') 
+            
+            image_7F = Image.open(fr'{pasta}\FOTOS_GUIA\{registro}') 
 
             # Exibindo os gráfico e tabelas
             col1, col2, col3 = st.columns(3)

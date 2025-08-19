@@ -10,7 +10,8 @@ import FUNCOES_TKINTER
 from direction import folder
 import Splash_screen as Loading
 import os
-
+import sv_ttk
+import sys
 print("\n\n", color.Fore.GREEN + "Iniciando o código - Tela do Menu" + color.Style.RESET_ALL)
 
 pasta = folder()
@@ -28,6 +29,7 @@ def menu_WRL():
     adicionar_detalhes(Janela_menu)
     frames_da_tela(Janela_menu)
     componentes_frame1(Janela_menu)
+        
     Janela_menu.mainloop()
 
 def tela(inp_menu): # {=======================Configuração de tela=========================}
@@ -46,7 +48,6 @@ def INICIAR_INSPECAO(inp_menu):
     """
     def carregar_inspecao():
         from INSPECAO_1_WRL import aba_cadastro
-        import FUNCOES_CAMERA_WRL as fun2  # Funções para câmera
         janela_cadastro = aba_cadastro(inp_menu)  # Executa o código pesado
         janela_cadastro.deiconify()
 
@@ -123,7 +124,7 @@ def componentes_frame1(inp_menu):
     bt_iniciar_camera.place(relx=0.07, rely=0.44, relwidth=0.4, relheight=0.45)
     
     # {=======================FECHAR ABA=========================}
-    img_fechar = PhotoImage(file=r"C:\Users\labga\OneDrive\Documentos\New_WRL\ICONES_FOTOS\fechar.png"  )
+    img_fechar = PhotoImage(file=os.path.join(pasta, "ICONES_FOTOS", "fechar.png"))
      
     bt_fechar_aba_menu = tk.Button(frame_1, image=img_fechar, command=inp_menu.destroy,compound=tk.CENTER, bg="#DE1804", bd=3)
     bt_fechar_aba_menu.place(relx=0.94, rely=0.02, relwidth=0.04, relheight=0.06)
@@ -132,3 +133,4 @@ def componentes_frame1(inp_menu):
 
 menu_WRL()
 print(color.Fore.RED + "Finalizando o código - Tela do Menu" + color.Style.RESET_ALL, "\n")
+sys.exit()

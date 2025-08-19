@@ -199,7 +199,6 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
         dados_obtidos.append('0') #vida inicial
         
         todos_tabela = tabela()
-        print('\nDados obtidos - CADASTRO_USINA_WRL: ', dados_obtidos)
 
         # Verificar se todos os campos de usina foram preenchidos
         flag = True
@@ -225,11 +224,8 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
                 messagebox.showwarning("AVISO","Este ID já existe")
                 break
         
-        if flag:
-            return
-        
         # Registrar só a usina e não lança
-        if dados_obtidos[0] != '' and dados_obtidos[3] != '' and dados_obtidos[4] != '' and dados_obtidos[5] != '' :
+        if dados_obtidos[0] == '' and dados_obtidos[3] == '' and dados_obtidos[4] == '' and dados_obtidos[5] == '' and dados_obtidos[1] != '' and dados_obtidos[2] != '' and dados_obtidos[6] != '':
             flag = True
 
         else:
@@ -238,18 +234,16 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
                 flag = False
                 return
 
-        # Inserindo dados no banco de dados
-        if flag:
-            conn, cursor = FUNCOES_BD.CONECTA_BD(fr'{pasta_bd()}\REGISTROS_WRL.db')
-            conn.commit()
-            comando = f"INSERT INTO DADOS_EMPRESAS VALUES (?, ?, ?, ?, ?, ?, ?)"
-            registros = (dados_obtidos[0], dados_obtidos[1], dados_obtidos[2], dados_obtidos[3], dados_obtidos[4],  dados_obtidos[5], dados_obtidos[6])
-            cursor.execute(comando, registros)
-            conn.commit()
-            print("\n\n", color.Fore.CYAN + "DADOS SALVOS - CADASTRO_BICO_WRL" + color.Style.RESET_ALL)
-            FUNCOES_BD.DESCONECTA_BD(conn)
-
-            FUNCOES_TKINTER.BOTAO_VOLTAR(aba_1, aba_2)
+    
+        conn, cursor = FUNCOES_BD.CONECTA_BD(fr'{pasta_bd()}\REGISTROS_WRL.db')
+        conn.commit()
+        comando = f"INSERT INTO DADOS_EMPRESAS VALUES (?, ?, ?, ?, ?, ?, ?)"
+        registros = (dados_obtidos[0], dados_obtidos[1], dados_obtidos[2], dados_obtidos[3], dados_obtidos[4],  dados_obtidos[5], dados_obtidos[6])
+        cursor.execute(comando, registros)
+        conn.commit()
+        print("\n\n", color.Fore.CYAN + "DADOS SALVOS - CADASTRO_BICO_WRL" + color.Style.RESET_ALL)
+        FUNCOES_BD.DESCONECTA_BD(conn)
+        FUNCOES_TKINTER.BOTAO_VOLTAR(aba_1, aba_2)
     
 def aba_cadastro_usina(inp_janela):
     janela_atual = tk.Toplevel(inp_janela)

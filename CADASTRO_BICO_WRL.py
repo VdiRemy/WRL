@@ -9,17 +9,20 @@ from direction import pasta_bd
 caminho = pasta_bd()
 
 def USINAS():
-    conn, cursor = FUNCOES_BD.CONECTA_BD(caminho)
+    conn, cursor = FUNCOES_BD.CONECTA_BD(fr'{caminho}\REGISTROS_WRL.db')
     comando = f"SELECT Grupo FROM DADOS_EMPRESAS "
     cursor.execute(comando)
     dados_banco = cursor.fetchall()
     FUNCOES_BD.DESCONECTA_BD(conn)
-    
+
     dados_filtrados = list(set(item[0] for item in dados_banco))
-    return dados_filtrados
+    if not dados_filtrados:
+        return ["---Nenhuma Usina Cadastrada---"]
+    else:
+        return dados_filtrados
 
 def USINA_SITE(inp_usina):
-    conn, cursor = FUNCOES_BD.CONECTA_BD(caminho)
+    conn, cursor = FUNCOES_BD.CONECTA_BD(fr'{caminho}\REGISTROS_WRL.db')
     comando = f"SELECT Site FROM DADOS_EMPRESAS WHERE Grupo = '{inp_usina}'"
     cursor.execute(comando)
     dados_banco = cursor.fetchall()
@@ -39,7 +42,7 @@ def SITE():
     return dados_filtrados
 
 def tabela(): # {=========Informações da tabela(FRAME 2)=========}
-    conn, cursor = FUNCOES_BD.CONECTA_BD(caminho)
+    conn, cursor = FUNCOES_BD.CONECTA_BD((fr'{caminho}\REGISTROS_WRL.db'))
     comando = f"SELECT * FROM DADOS_EMPRESAS "
     cursor.execute(comando)
     dados_tabela =cursor.fetchall()
@@ -234,7 +237,7 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
         if flag:
             return
         
-        conn, cursor = FUNCOES_BD.CONECTA_BD(caminho)
+        conn, cursor = FUNCOES_BD.CONECTA_BD(fr'{caminho}\REGISTROS_WRL.db')
         conn.commit()
         comando = f"INSERT INTO DADOS_EMPRESAS VALUES (?, ?, ?, ?, ?, ?, ?)"
         registros = (dados_obtidos[0], dados_obtidos[1], dados_obtidos[2], dados_obtidos[3], dados_obtidos[4],  dados_obtidos[5], dados_obtidos[6])
@@ -242,8 +245,8 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
         conn.commit()
         print("\n\n", color.Fore.CYAN + "DADOS SALVOS - CADASTRO_BICO_WRL" + color.Style.RESET_ALL)
         FUNCOES_BD.DESCONECTA_BD(conn)
-
-        FUNCOES_BD.BOTAO_VOLTAR(aba_1, aba_2)
+        messagebox.showinfo("showinfo", "Dados salvos com sucesso")
+        FUNCOES_TKINTER.BOTAO_VOLTAR(aba_1, aba_2)
     
     def deletar(aba_1, aba_2):
         dados_obtidos = []

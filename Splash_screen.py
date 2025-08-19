@@ -2,66 +2,79 @@ import threading
 import tkinter as tk
 from tkinter import ttk, messagebox, PhotoImage, Canvas
 from customtkinter import *
+from direction import folder
+from PIL import Image, ImageTk, ImageFilter
 
 class Splash(tk.Toplevel):
     def __init__(self, parent, callback):
-        """
-        Inicializa a janela de splash.
-
-        :param parent: Janela pai (geralmente a janela principal).
-        :param callback: Função a ser executada enquanto a barra de progresso carrega.
-        """
         super().__init__(parent)
         self.title("Carregando...")
-
         self.geometry("1280x720")
         self.parent = parent
         self.callback = callback
-        self.progress_value = 0
+        self.image_path = (fr'{folder()}\ICONES_FOTOS\loading_images\loading.png')
+        
         self.overrideredirect(1)
-        self.attributes("-alpha",0.5)
+        self.configure(bg='#242424')
+        self.attributes('-alpha', 0.9)
+        self.attributes('-transparentcolor', '#242424')
+        
+        self.canvas = tk.Canvas(
+            self, 
+            width=500, 
+            height=500, 
+            bg='#242424',
+            highlightthickness=0
+        )
+        self.canvas.pack(expand=True)
 
-        # Barra de progresso
-        self.progress = ttk.Progressbar(self, orient="horizontal", length=300, mode="determinate", maximum=100)
-        self.progress.pack(expand=True,pady=50)
+        self.original_image = Image.open(self.image_path).convert('RGBA')
+        self.original_image = self.original_image.filter(ImageFilter.GaussianBlur(radius=0.3))
 
-        # Inicia a thread para o carregamento
+        self.photo_image = None
+        self.current_angle = 0
+        
+        # --- MUDANÇA PRINCIPAL ---
+        # Adiciona uma flag para controlar o loop de animação
+        self.running = True
+        
+        self.rotate_image()
         self.start_loading()
 
+    def rotate_image(self):
+        # A animação só continua se a flag 'running' for True
+        if not self.running:
+            return
+
+        rotated = self.original_image.rotate(
+            self.current_angle, 
+            resample=Image.BICUBIC,
+            expand=False
+        )
+        self.photo_image = ImageTk.PhotoImage(rotated)
+        
+        self.canvas.delete("all")
+        self.canvas.create_image(
+            250, 250,
+            image=self.photo_image,
+            anchor=tk.CENTER
+        )
+
+        self.current_angle = (self.current_angle - 10) % 360
+        self.after(50, self.rotate_image)
+
     def start_loading(self):
-        """Inicia o processo de carregamento em uma thread separada."""
-        # Cria a thread para executar o callback
         self.thread = threading.Thread(target=self.run_task)
         self.thread.start()
 
-        # Atualiza a barra de progresso
-        self.update_loading_progress()
-
     def run_task(self):
-        """Executa a função de callback enquanto atualiza a barra de progresso."""
         try:
-            self.callback()  # Executa o código pesado
+            self.callback()
         except Exception as e:
             print(f"Erro durante o carregamento: {e}")
 
-    def update_loading_progress(self):
-        """Atualiza a barra de progresso na interface gráfica."""
-        if self.thread.is_alive():
-
-            self.progress_value = (self.progress_value + 1) % 101  # Incrementa progressivamente
-            self.progress['value'] = self.progress_value
-            self.after(50, self.update_loading_progress)
-
-        else:
-            self.progress['value'] = 100
-            self.after(1000, self.destroy)  # Fecha a janela após 1 segundo
-
-    def destroy_window(self):
-        self.destroy
-
-    '''tempo_inicial = time.time()
-    tempo_decorrido = tempo_fim - tempo_inicial
-    print(f"Tempo de execução: {tempo_decorrido:.4f} segundos")
-    tempo_fim = time.time()
-    tempo_decorrido = tempo_fim - tempo_inicial
-    print(f"Tempo de execução: {tempo_decorrido:.4f} segundos")'''
+    # --- MUDANÇA PRINCIPAL ---
+    # Sobrescreve o método destroy para parar a animação primeiro
+    def destroy(self):
+        self.running = False
+        super().destroy()

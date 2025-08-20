@@ -325,6 +325,7 @@ def filtrar_ponto_central(pontos, ponto_central, threshold=10):
     try:
         # A lógica original é mantida, pois é eficiente
         pontos_filtrados = [p for p in pontos if not (abs(p[0] - ponto_central[0]) < threshold and abs(p[1] - ponto_central[1]) < threshold)]
+        print("Pontos filtrados: ", pontos_filtrados)
         return pontos_filtrados
     except (TypeError, IndexError) as e:
         # Se ocorrer um erro inesperado (ex: um ponto não tem 2 coordenadas), retorna a lista original sem filtrar
@@ -403,6 +404,7 @@ def enumerar_furos(lista_pontos, id, img, nome_arquivo):
 
         diretorio_guias = fr'{pasta}\FOTOS_GUIA'
         caminho = os.path.join(diretorio_guias, nome_arquivo)
+        print("Furos enumerados salvos em: ", caminho)
         cv2.imwrite(caminho, img)
 
 def definir_centro(altura, largura):
@@ -423,7 +425,7 @@ def reunir_dados(dados_app, dados_arquivo, dados_diametros):
     # Inserir os dados dos diametros
     for dado in dados_diametros:
         lista_completa.append(dado)
-
+    print("DADOS REUNIDOS:", lista_completa)
     return lista_completa
 
 def organizar_dados_app(lista):
@@ -466,6 +468,7 @@ def identificar_estados(lista_completa):
     # Lista de diâmetros (EXTERNO até FURO_N)
     diametros = lista_completa[11:]
     print("tamanho lista_completa:", len(lista_completa))
+    print("lista completa:", lista_completa)
     print("DIÂMETROS:", diametros)
     ESTADOS = []
     for diametro in diametros:

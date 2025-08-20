@@ -215,7 +215,6 @@ def aba_camera(inp_janela, dados, inp_menu):
         # Função alvo que será executada na nova thread
         def tarefa_alvo():
             # Chama a função de lógica desacoplada (que vamos corrigir no Erro 2)
-            print("dados de entrada: ", dados_de_entrada)
             resultado = fun2.tarefa_de_processamento_independente(dados_de_entrada)
             
             # Enfileira a atualização da UI de volta para a thread principal

@@ -181,6 +181,17 @@ def analisar_imagem(model, imagem, nome, depth_frame, Abertura):
         caminho_completo_fotografia_segmentada = os.path.join(diretorio_destino_imgColorida, nome)
         cv2.imwrite(caminho_completo_fotografia_segmentada, img_segmentada)
         caminho_segmentada_cache = caminho_completo_fotografia_segmentada # Salva o caminho para o 'except'
+        
+        # if depth_frame is not None:
+        #     # --- SALVAR depth_frame na pasta do resultado ---
+        #     pasta_resultados_nome = os.path.join(fr"{pasta}\resultados", nome)
+        #     os.makedirs(pasta_resultados_nome, exist_ok=True)
+        #     caminho_depth_save = os.path.join(pasta_resultados_nome, f"{nome}_depth.npy")
+        #     np.save(caminho_depth_save, depth_frame)
+        #     print(f"Depth frame salvo em: {caminho_depth_save}")
+        # else:
+        #     print("depth_frame não disponível — pulando o salvamento do depth.")
+
 
         # --- Lógica de profundidade que pode falhar ---
         mascaras = result.masks.data

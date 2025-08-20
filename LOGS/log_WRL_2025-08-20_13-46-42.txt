@@ -1,0 +1,8 @@
+Iniciando o programa no ambiente 'wrl'... 
+
+
+ [32mIniciando o código - Tela do Menu[0m
+[31mFinalizando o código - Tela do Menu[0m 
+
+ 
+Programa finalizado. 

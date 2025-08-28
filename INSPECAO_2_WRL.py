@@ -154,7 +154,10 @@ def aba_camera(inp_janela, dados, inp_menu):
     def handle_failure(message, imagem_erro=None):
         print(f"FALHA: {message}")
 
-        # Fechamento de janelas e splash como já tem
+        # Fecha o splash se existir
+        if 'splash' in globals() and splash.winfo_exists():
+            splash.destroy()
+            print("Splash destruído após falha.")
 
         if imagem_erro:
             try:
@@ -193,20 +196,31 @@ def aba_camera(inp_janela, dados, inp_menu):
 
         if 'splash' in globals() and splash.winfo_exists():
             splash.destroy()
+            print("Splash destruído com sucesso.")
         
         # Destrói a janela da câmera para uma transição limpa
         if 'janela_tres' in locals() and janela_tres.winfo_exists():
             janela_tres.destroy()
+            print("Janela da câmera destruída com sucesso.")
 
         abrir_janela_de_resultados(resultado["dados"], resultado["arquivo"])
+        print("Resultados exibidos com sucesso.")
         processando_foto = False # Libera para um novo ciclo completo
+        inp_janela.deiconify()
+        print("Processamento de foto resetado.")
 
     def abrir_janela_de_resultados(dados_da_inspecao, arquivo_resultado):
         """Abre a tela final com os dados da inspeção."""
         # Esta função chama a próxima tela da sua aplicação
-        
-        aba_dados(inp_janela, dados_da_inspecao[5], dados_da_inspecao[4], arquivo_resultado, inp_menu, inp_janela)
+        print("DAdos da inspeção")
+        for i in range(len(dados_da_inspecao)):
+            print(f"\n{dados_da_inspecao[i]}")
 
+        try:
+            print("abrindo aba dados")
+            aba_dados(inp_janela, dados_da_inspecao[0],dados_da_inspecao[5], dados_da_inspecao[4], arquivo_resultado, inp_menu, inp_janela)
+        except:
+            print("nao abriu")
     # --- Função de Orquestração do Processamento ---
 
     def iniciar_processamento(dados_de_entrada):

@@ -1,7 +1,6 @@
 import threading
 import tkinter as tk
 from tkinter import ttk, messagebox, PhotoImage, Canvas
-from customtkinter import *
 from direction import folder
 from PIL import Image, ImageTk, ImageFilter
 

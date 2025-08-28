@@ -3,14 +3,12 @@ import tkinter as tk
 import sqlite3 as sql
 import colorama as color
 from tkinter import ttk, messagebox, PhotoImage, Canvas
-from customtkinter import *
 from PIL import Image, ImageTk
 import subprocess
 import FUNCOES_TKINTER
 from direction import folder
 import Splash_screen as Loading
 import os
-import sv_ttk
 import sys
 print("\n\n", color.Fore.GREEN + "Iniciando o código - Tela do Menu" + color.Style.RESET_ALL)
 
@@ -105,7 +103,7 @@ def componentes_frame1(inp_menu):
                             bg= 'white',
                             bd =0,
                             image = img1_pg1)
-    fotoimg1_pg1.place(relx=0.15, rely=0.23, anchor=CENTER)
+    fotoimg1_pg1.place(relx=0.15, rely=0.23, anchor='center')
 
     # {=======================Botões de Cadastro=========================}
     bt_cadastro_lanca = FUNCOES_TKINTER.CRIAR_BOTAO(frame_1,'Cadastrar Bico',verde, bege,3,'38','bold',"hand2",lambda:ABA_CADASTRO_BICO(inp_menu))

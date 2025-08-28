@@ -161,60 +161,88 @@ def analisar_imagem(model, imagem, nome, depth_frame, Abertura):
     try:
         # --- PREPARAÇÃO E EXECUÇÃO DO MODELO ---
         imagem_bgr = cv2.cvtColor(imagem, cv2.COLOR_RGB2BGR)
-        results = model(
-            imagem_bgr, device='cpu', retina_masks=True, save=True, save_crop=True,
-            overlap_mask=True, project=fr"{pasta}\resultados", name=nome,
-            save_txt=True, show_boxes=True, conf=0.80
-        )
-        results_cache = results # Salva o resultado para o bloco 'except'
+        results = model(imagem_bgr, device='cpu', retina_masks=True, save=True, save_crop=True, save_frames=True, overlap_mask=True, project=fr"{pasta}\resultados", name=nome, save_txt=True, show_boxes=True, conf=0.80)
 
-        # --- VERIFICAÇÃO DE DETECÇÃO ---
+        # --- VERIFICAÇÃO PRINCIPAL ---
+        # Verifica se a lista de resultados está vazia ou se o primeiro item não tem caixas de detecção
         if not results or len(results[0].boxes) == 0:
             raise NoDetectionsError("Nenhum objeto (bico ou furo) foi detectado na imagem.")
+        # -----------------------------
 
-        result = results[0]
+        for result in results:
+            img_segmentada = result.plot(masks=True, boxes=False)
+            
+            diretorio_destino_imgColorida = fr'{pasta}\FOTOS_SEGMENTADA'
+            os.makedirs(diretorio_destino_imgColorida, exist_ok=True)
 
-        # --- Salva a imagem segmentada ---
-        img_segmentada = result.plot(masks=True, boxes=False)
-        diretorio_destino_imgColorida = fr'{pasta}\FOTOS_SEGMENTADA'
-        os.makedirs(diretorio_destino_imgColorida, exist_ok=True)
-        caminho_completo_fotografia_segmentada = os.path.join(diretorio_destino_imgColorida, nome)
-        cv2.imwrite(caminho_completo_fotografia_segmentada, img_segmentada)
-        caminho_segmentada_cache = caminho_completo_fotografia_segmentada # Salva o caminho para o 'except'
+            caminho_completo_fotografia_segmentada = os.path.join(diretorio_destino_imgColorida, nome)
+            cv2.imwrite(caminho_completo_fotografia_segmentada, img_segmentada)
+            
+            mascaras = result.masks.data
+            depth_data_numpy_binaria = mascaras.cpu().numpy()
+            detections = len(result)
+
+            depth_data_numpy_coordenada=np.argwhere(depth_data_numpy_binaria[0] == 1)#transformar mascara em coordenada nos pontos em que tem mascara
+            
+            x = depth_data_numpy_coordenada[0:len(depth_data_numpy_coordenada),0]
+            y = depth_data_numpy_coordenada[0:len(depth_data_numpy_coordenada),1]
+            z = depth_frame[x,y]
+            
+            indices_remover = []
+            for i, (j_z) in enumerate(zip(z)):
+                if j_z[0] == 0 or j_z[0] >= 750:
+                    indices_remover.append(i)
+
+            # Remover elementos de filtered_x usando os índices calculados
+            filtered_x = np.array([v for i, v in enumerate(x) if i not in indices_remover])
+            filtered_y = np.array([v for i, v in enumerate(y) if i not in indices_remover])
+            filtered_z = np.array([v for i, v in enumerate(z) if i not in indices_remover])
+
+            # Criar a matriz de entrada para a regressão
+            X = np.column_stack((np.ones_like(filtered_x), filtered_x, filtered_y, filtered_x**2, filtered_y**2, filtered_x*filtered_y))
+
+            # Calcular os coeficientes da regressão
+            coefficients, _, _, _ = np.linalg.lstsq(X, filtered_z, rcond=None)
+
+
+            def predict_z(filtered_x, filtered_y):
+                    return coefficients[0] + coefficients[1]*filtered_x + coefficients[2]*filtered_y + coefficients[3]*filtered_x**2 + coefficients[4]*filtered_y**2 + coefficients[5]*filtered_x*filtered_y
+            
+            for j in range (detections):
+                depth_data_numpy_coordenada=np.argwhere(depth_data_numpy_binaria[:] == 1)
+                for i in range(len(depth_data_numpy_coordenada)): #para o bico de lança
+                    x = depth_data_numpy_coordenada[i,1].astype(int) #coordenada x da mascara do bico de lança
+                    y = depth_data_numpy_coordenada[i,2].astype(int) #coordenada y da mascara do bico de lança
+                    depth_data_numpy_binaria[j][x,y] = ((math.tan(float(Abertura)/2*math.pi/180)*predict_z(x,y)*2)/640)
+                    
+                valores = []
+                for i in range((detections - 1), -1, -1):
+                    if i == 0:
+                        bico_completo = (depth_data_numpy_binaria[i])
+
+                    elif i == (detections - 1):
+                        furo = depth_data_numpy_binaria[i]
+                        valores.append(furo)
+
+                    else:
+                        furo = (depth_data_numpy_binaria[i]-depth_data_numpy_binaria[i+1])
+                        valores.append(furo)
+                
+            lista_diametros = []
         
-        # if depth_frame is not None:
-        #     # --- SALVAR depth_frame na pasta do resultado ---
-        #     pasta_resultados_nome = os.path.join(fr"{pasta}\resultados", nome)
-        #     os.makedirs(pasta_resultados_nome, exist_ok=True)
-        #     caminho_depth_save = os.path.join(pasta_resultados_nome, f"{nome}_depth.npy")
-        #     np.save(caminho_depth_save, depth_frame)
-        #     print(f"Depth frame salvo em: {caminho_depth_save}")
-        # else:
-        #     print("depth_frame não disponível — pulando o salvamento do depth.")
-
-
-        # --- Lógica de profundidade que pode falhar ---
-        mascaras = result.masks.data
-        depth_data_numpy_binaria = mascaras.cpu().numpy()
-        
-        depth_data_numpy_coordenada = np.argwhere(depth_data_numpy_binaria[0] == 1)
-        if not depth_data_numpy_coordenada.size:
-             raise ValueError("A máscara de detecção principal está vazia.")
-
-        x = depth_data_numpy_coordenada[:, 0]
-        y = depth_data_numpy_coordenada[:, 1]
-        z = depth_frame[x, y]
-        
-        indices_validos = (z > 0) & (z < 750)
-        if np.count_nonzero(indices_validos) < 6:
-            raise ValueError("Pontos de profundidade insuficientes para calcular a regressão do plano.")
-
-        # ... (Restante da sua lógica complexa de regressão e cálculo) ...
-        # Se chegar aqui, o cálculo foi bem-sucedido
-        lista_diametros = [] # Substitua pela sua lista de diâmetros real
-        # ...
-
-        # RETORNO BEM-SUCEDIDO
+            area_total = np.sum(depth_data_numpy_binaria)
+            diametro_externo = 2*(np.sqrt(area_total/math.pi))
+            print("diametro externo", diametro_externo)
+            # Armazenando o diametro externo na lista
+            lista_diametros.append(round(float(diametro_externo), 2))
+            print("lista_diametros em analisar imagem", lista_diametros)
+            # Armazenando o diametro dos furos na lista  
+            for valor in valores:
+                area_furo = np.sum(valor)
+                diametro_furo_mm = 2*(np.sqrt(area_furo/math.pi))
+                print("diametro furo", diametro_furo_mm)
+                lista_diametros.append(round(float(diametro_furo_mm),2))
+        print("lista_diametros em analisar imagem", lista_diametros)    
         return lista_diametros, mascaras, results, caminho_completo_fotografia_segmentada
 
     except Exception as e:
@@ -227,6 +255,7 @@ def analisar_imagem(model, imagem, nome, depth_frame, Abertura):
 
             # Cria dados falsos ("mock") com a estrutura correta
             detections = len(results_cache[0]) if results_cache else 1
+
             dummy_lista_diametros = [0.0] * detections  # Lista de zeros com o tamanho correto
             dummy_mascaras = results_cache[0].masks.data if results_cache and results_cache[0].masks else None
             
@@ -306,9 +335,12 @@ def extrair_dados(resultado, mascaras, nome):
     
 # Função para ordenar os pontos em sentido horário
 def sort_points_clockwise(pts):
+    print("Ordenando pontos em sentido horário")
+    print("pontos antes de ordenar", pts)
     center = np.mean(pts, axis=0)
     angles = np.arctan2(pts[:, 1] - center[1], pts[:, 0] - center[0])
     sorted_pts = pts[np.argsort(angles)]
+    print("pontos após ordenar", sorted_pts)
     return sorted_pts
 
 # Função para filtrar o ponto central
@@ -367,43 +399,57 @@ def extrair_coordenadas_centro(detected_boxes, classes_nomes):
             print(box)
             continue
 
-    print(f"coordenadas_caixas: {coordenadas_caixas}")
     return pontos
 
-def enumerar_furos(lista_pontos, id, img, nome_arquivo):
-    # Definir o ponto central (suposição: centro da imagem)
-    altura, largura = img.shape[:2]
+def enumerar_furos(lista_pontos, qtd_furos, img, nome_arquivo, lista_diametros=None):
+    # Definir o ponto central (suposição: centro da imagem localizada em resultados)
+    bico_crop = cv2.imread(os.path.join(fr'{pasta}\resultados', fr'{nome_arquivo}\crops\Bico\image0.jpg'))
+    altura, largura = bico_crop.shape[:2]
+    print("altura, largura", altura, largura)
     ponto_central = definir_centro(altura, largura)
-
+    print("lista_pontos em enumerar furos", lista_pontos)
     # Filtrar o ponto central
     lista_pontos = filtrar_ponto_central(lista_pontos, ponto_central, threshold=10)
+    print("\nlista_pontos em enumerar furos pós filtrar ponto central\n", lista_pontos)
+    # Se lista_diametros não for fornecida, não filtra pelo diâmetro
+    if lista_diametros is not None and len(lista_diametros) == len(lista_pontos) + 1:
+        print("lista com diâmetros fornecida, filtrando pelo diâmetro do bico.")
+        # O primeiro elemento de lista_diametros é o bico (maior diâmetro)
+        # Remover o ponto correspondente ao bico (maior diâmetro)
+        idx_bico = np.argmax(lista_diametros)
+        # O bico está sempre no início da lista_diametros, então removemos o ponto correspondente
+        pontos_furos = [p for i, p in enumerate(lista_pontos) if i != (idx_bico - 1)]
+    else:
+        print("lista com diâmetros não fornecida ou tamanho incompatível, não filtrando pelo diâmetro do bico.")
+        pontos_furos = lista_pontos
 
-    if (id == 4 and len(lista_pontos) < 4) or (id == 5 and len(lista_pontos) < 5) or (id == 6 and len(lista_pontos) < 6):
+    if len(pontos_furos) < qtd_furos:
         print("(fun_cam)Não foram detectados pontos suficientes.")
         print("dados obtidos:")
-        print(lista_pontos)
-        print("tamanho: ", len(lista_pontos))
+        print(pontos_furos)
+        print("tamanho: ", len(pontos_furos))
+        return []
     else:
-        if id == 4:
-            furos = lista_pontos[:4]
-        elif id == 5:
-            furos = lista_pontos[:5]
-        elif id == 6:
-            furos = lista_pontos[:6]
+        furos = pontos_furos[:qtd_furos]
 
         if furos:
+            print("Furos detectados:", furos)
             furos_array = np.array(furos)
+            print("Furos array:\n", furos_array)
             # Ordenar os furos pela posição mais alta e depois em sentido horário
             sorted_holes = sort_points_clockwise(furos_array)
-
-            # Numerar os furos
+            print("Furos ordenados:\n", sorted_holes)
+            # Numerar os furos e criar lista ordenada
+            numbered_holes = [(i+1, (x, y)) for i, (x, y) in enumerate(sorted_holes)]
             for i, (x, y) in enumerate(sorted_holes, start=1):
                 cv2.putText(img, str(i), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-                
 
-        diretorio_guias = fr'{pasta}\FOTOS_GUIA'
-        caminho = os.path.join(diretorio_guias, nome_arquivo)
-        cv2.imwrite(caminho, img)
+            diretorio_guias = fr'{pasta}\FOTOS_GUIA'
+            caminho = os.path.join(diretorio_guias, nome_arquivo)
+            cv2.imwrite(caminho, img)
+            return numbered_holes
+        else:
+            return []
 
 def definir_centro(altura, largura):
     mid_x, mid_y = largura // 2, altura // 2
@@ -437,9 +483,6 @@ def organizar_dados_app(lista):
         
     return lista_APP, id, qtd_furos
 
-
-
-
 def sobrepor_molde(infra_image):
     frame = infra_image.copy()
     # Obtenha as dimensões do frame
@@ -466,7 +509,6 @@ def identificar_estados(lista_completa):
     # Lista de diâmetros (EXTERNO até FURO_N)
     diametros = lista_completa[11:]
     print("tamanho lista_completa:", len(lista_completa))
-    print("DIÂMETROS:", diametros)
     ESTADOS = []
     for diametro in diametros:
         if diametro >= 100:
@@ -488,7 +530,6 @@ def identificar_estados(lista_completa):
                 ESTADOS.append('Crítico')
             else:
                 print(f'Não foi possível analisar o diâmetro {diametro}')
-    print("ESTADOS:", ESTADOS)
     return ESTADOS
 
 
@@ -509,7 +550,6 @@ def estado_geral_bico(lista_diametros):
     else:
         print('Não foi possível analisar o estado da lança estado geral_bico')
         estado_bico.append('Indefinido')
-    print("estado_bico:", estado_bico)
     return estado_bico
 
 def salvar_registros_desgaste(cursor, lista_completa, estados, dados_diametros, estado_bico, qtd_furos):
@@ -517,6 +557,13 @@ def salvar_registros_desgaste(cursor, lista_completa, estados, dados_diametros, 
     Salva os registros de desgaste na tabela correta (B4 ou B6)
     baseado na quantidade de furos.
     """
+    print("Dados recebidos para salvar_registros_desgaste:")
+    print("lista_completa:", lista_completa)
+    print("estados:", estados)
+    print("dados_diametros:", dados_diametros)
+    print("estado_bico:", estado_bico)
+    print("qtd_furos:", qtd_furos)
+
     # Passo 1: Determinar o nome da tabela com base no novo parâmetro 'qtd_furos'
     if qtd_furos == 4:
         nome_tabela = 'B4'
@@ -674,19 +721,36 @@ def tarefa_de_processamento_independente(dados_entrada):
         # --- Início da sua lógica de processamento ---
         lista_dh = extrair_data_e_hora(nome_arquivo[0])
         lista_diametros, mascaras, resultados, caminho_fotoSegmentada = analisar_imagem(model, cv2.imread(caminho_fotoBW), nome_arquivo[0], depth_frame, Abertura)
-        
+
         caixas_detectadas, nomes_classes = extrair_dados(resultados, mascaras, nome_arquivo_BW)
         lista_pontos = extrair_coordenadas_centro(caixas_detectadas, nomes_classes)
         lista_pontos = filtrar_ponto_central(lista_pontos, centro)
-   
-        enumerar_furos(lista_pontos, qtd_furos, cv2.imread(caminho_fotoSegmentada), nome_arquivo[0])
+
+        # Obter furos numerados e ordenados
+        furos_numerados = enumerar_furos(lista_pontos, qtd_furos, cv2.imread(caminho_fotoSegmentada), nome_arquivo[0])
         for dado in lista_dh: nome_arquivo.append(dado)
-            
-        lista_completa = reunir_dados(lista_APP, nome_arquivo, lista_diametros)
+
+        # Sincronizar diametros com ordem dos furos numerados
+        diametros_ordenados = []
+        if furos_numerados and len(lista_diametros) > 1:
+            # O primeiro item de lista_diametros é o externo, os demais são furos
+            diametros_ordenados.append(lista_diametros[0]) # externo
+            # Mapear furos numerados para diametros
+            for idx, (num, coords) in enumerate(furos_numerados):
+                if idx+1 < len(lista_diametros):
+                    diametros_ordenados.append(lista_diametros[idx+1])
+        else:
+            diametros_ordenados = lista_diametros
+
+        print("Dados a serem unidos por reunir_dados: lista_APP", lista_APP)
+        print("nome_arquivo: ", nome_arquivo)
+        print("diametros_ordenados: ", diametros_ordenados)
+        lista_completa = reunir_dados(lista_APP, nome_arquivo, diametros_ordenados)
+        print("pós lista completa linhas 687 funcoes camera: ", lista_completa)
         estados = identificar_estados(lista_completa)
         estado_bico = estado_geral_bico(estados)
-        
-        dados_para_desgaste = (lista_completa, estados, lista_diametros, estado_bico)
+
+        dados_para_desgaste = (lista_completa, estados, diametros_ordenados, estado_bico)
         dados_para_registro_principal = (lista_completa, qtd_furos)
 
         sucesso_bd = processar_e_salvar_analise_completa(dados_para_desgaste, dados_para_registro_principal)
@@ -704,10 +768,11 @@ def tarefa_de_processamento_independente(dados_entrada):
         msg_erro = str(e).lower()
         if "não podemos identificar os" in msg_erro:  # seu erro específico
             # Retorna também a imagem (caminho)
+            print(f"{pasta}\resultados\{nome_arquivo[0]}\image0.jpg")
             return {
                 "sucesso": False,
                 "mensagem_erro": str(e),
-                "imagem_erro": dados_entrada.get("caminho_fotoBW")
+                "imagem_erro": os.path.join(pasta, "resultados", nome_arquivo[0], "image0.jpg")
             }
         else:
             return {

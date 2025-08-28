@@ -32,11 +32,13 @@ def buscar_registro_por_arquivo(nome_tabela, nome_arquivo):
         # Executa a query com o parâmetro em uma tupla
         cursor.execute(comando, (nome_arquivo,))
         dados_encontrados = cursor.fetchone()
+        print("dados encontrados: ", dados_encontrados)
         
     except Exception as e:
         print(f"Erro ao buscar dados no banco de dados: {e}")
         # Garante que None seja retornado em caso de erro
         dados_encontrados = None
+        print(f"dados encontrados {dados_encontrados}")
         
     finally:
         # Garante que a desconexão sempre ocorra

@@ -1,14 +1,13 @@
 import tkinter as tk
-from customtkinter import *
 from PIL import Image, ImageTk
 
-def CRIAR_FRAME(inp_frame, inp_bg, inp_light = NONE):
+def CRIAR_FRAME(inp_frame, inp_bg, inp_light = None):
     frame = tk.Frame(inp_frame,
                     bg= inp_bg,
                     highlightbackground= inp_light)
     return frame
 
-def CRIAR_BOTAO(inp_frame, inp_texto, inp_bg, inp_fg, inp_borda = NONE,inp_tamanho= NONE, inp_style = NONE, inp_cursor = NONE, inp_comando = NONE, inp_imagem=None, imagem_posicao='left'):
+def CRIAR_BOTAO(inp_frame, inp_texto, inp_bg, inp_fg, inp_borda = None,inp_tamanho= None, inp_style = None, inp_cursor = None, inp_comando = None, inp_imagem=None, imagem_posicao='left'):
     imagem = None
     
     if inp_imagem:
@@ -35,7 +34,7 @@ def CRIAR_BOTAO(inp_frame, inp_texto, inp_bg, inp_fg, inp_borda = NONE,inp_taman
     botao.imagem = imagem 
     return botao
     
-def CRIAR_LABEL(inp_frame, inp_texto, inp_bg, inp_fg, inp_fonte = NONE, inp_tam_fonte = NONE, inp_style = NONE):
+def CRIAR_LABEL(inp_frame, inp_texto, inp_bg, inp_fg, inp_fonte = None, inp_tam_fonte = None, inp_style = None):
     label = tk.Label(inp_frame, # frame
                     text = inp_texto, # texto
                     bg = inp_bg, # background

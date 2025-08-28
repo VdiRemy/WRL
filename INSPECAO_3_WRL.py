@@ -56,10 +56,8 @@ def imagens(registro_foto): # {=========Informações para imagens(FRAME 2)=====
     # Trata o caso de registro_foto ser None para evitar crash
     if registro_foto is None:
         return None, None
-        
     arquivofoto = os.path.join(endereco_pastafotos, registro_foto)
     arquivoguia = os.path.join(endereco_pastaguias, registro_foto)
-        
     return arquivofoto, arquivoguia
 
 def voltar_menu(aba_menu, insp_1,insp_2, insp_3):
@@ -91,7 +89,7 @@ def frames_da_tela(inp_janela):
     frame_2.place(relx=0.01, rely=0.02, relwidth=0.38, relheight=0.96)
     return frame_1, frame_2
 
-def componentes_frame1(inp_ID, inp_tipo, int_arquivo, inp_menu, janela_cadastro1, janela_cadastro2, inp_janela):
+def componentes_frame1(inp_ID, qtd_furos, inp_tipo, int_arquivo, inp_menu, janela_cadastro1, janela_cadastro2, inp_janela):
     dados, lista_grupo = selecao(inp_ID, inp_tipo)
     
     if dados is None: # Se a seleção inicial falhar, para a execução
@@ -106,16 +104,19 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo, inp_menu, janela_cadastro1
     
     # --- CORREÇÃO PRINCIPAL ABAIXO ---
 
-    # 1. Determina qual tabela buscar com base no 'inp_tipo'
-    if '4' in inp_tipo:
+    # 1. Determina qual tabela buscar com base na 'qtd_furos'
+    # print(f"inp_ID {inp_ID},\n inp_tipo {inp_tipo},\n int_arquivo {int_arquivo},\n inp_menu {inp_menu},\n janela_cadastro1 {janela_cadastro1},\n janela_cadastro2 {janela_cadastro2},\n inp_janela {inp_janela}")
+    
+    if '4' in qtd_furos:
         tabela_para_buscar = 'B4'
-    elif '6' in inp_tipo:
+    elif '6' in qtd_furos:
         tabela_para_buscar = 'B6'
     else:
         messagebox.showerror("Erro de Lógica", f"Não foi possível determinar a tabela para o tipo: {inp_tipo}")
         return
 
     # 2. Chama a nova função segura, passando a tabela e o arquivo corretos
+    print(f"verificando se dados do {int_arquivo} estao em {tabela_para_buscar}")
     dados2 = FUNCOES_BD.buscar_registro_por_arquivo(tabela_para_buscar, int_arquivo)
     
     # 3. Adiciona a verificação de segurança para o resultado
@@ -128,6 +129,7 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo, inp_menu, janela_cadastro1
     data_foto = dados2[9]
     hora_foto = dados2[10]
     medidas_foto = dados2[11:]
+    print("medidas foto", medidas_foto)
     
     # ... (O resto da sua função 'componentes_frame1' para criar os labels e a tabela ttk continua aqui) ...
     # ... (Copie e cole o restante da sua função original a partir daqui) ...
@@ -211,6 +213,7 @@ def componentes_frame2(inp_janela, nome_arquivo):
         messagebox.showwarning("Imagem não encontrada", "Não foi possível carregar a imagem guia.")
         return
 
+    print("arquivos verificados")
     try:
         # --- CORREÇÃO: Carregando a Imagem 1 (Foto da Análise) com Pillow ---
         # 1. Abre a imagem com a biblioteca PIL (Pillow)
@@ -251,18 +254,19 @@ def componentes_frame2(inp_janela, nome_arquivo):
         messagebox.showerror("Erro ao Carregar Imagem", f"Não foi possível carregar as imagens.\n\nErro: {e}")
         print(f"ERRO CRÍTICO ao carregar imagens com Pillow: {e}")
 
-def aba_dados(inp_janela,inp_ID,inp_tipo, int_arquivo,inp_menu,janela_cadastro1):
+def aba_dados(inp_janela, qtd_furos,inp_ID,inp_tipo, int_arquivo,inp_menu,janela_cadastro1):
     janela = tk.Toplevel(inp_janela)
     tela(janela)
     adicionar_detalhes(janela)
     frames_da_tela(janela)
-    componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu,janela_cadastro1,inp_janela,janela)
+    componentes_frame1(inp_ID, qtd_furos, inp_tipo, int_arquivo,inp_menu,janela_cadastro1,inp_janela,janela)
     componentes_frame2(janela, int_arquivo)
     
     janela.transient(inp_janela)
     janela.focus_force()
     janela.grab_set()
-    
+    janela.deiconify()
+    print("fim da aba dados")
     return janela
     
 print("\n\n", color.Fore.GREEN + "Iniciando o código - Dados do bico" + color.Style.RESET_ALL)

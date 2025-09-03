@@ -99,7 +99,7 @@ def componentes_frame2_refatorado(inp_frame, lista_dados_inspecao, dc, on_photo_
         if not borda.winfo_exists():
             return
 
-        ret, color_image, infra_image_cam = dc.get_simple_frame()
+        ret,  infra_image_cam = dc.get_simple_frame()
 
         if not ret:  
             # Não conseguiu pegar da câmera → pergunta imagem
@@ -152,12 +152,24 @@ def aba_camera(inp_janela, dados, inp_menu):
     # --- Funções de Navegação e Callbacks da UI ---
 
     def handle_failure(message, imagem_erro=None):
-        print(f"FALHA: {message}")
+        if "flush" in message.lower():
+            message = ""
+            
+        else:
+            print(f"FALHA: {message}")
 
         # Fecha o splash se existir
         if 'splash' in globals() and splash.winfo_exists():
             splash.destroy()
             print("Splash destruído após falha.")
+
+        # encerra a DepthCamera se possível
+        if 'dc' in locals() and hasattr(dc, "release"):
+            try:
+                dc.release()
+                print("DepthCamera liberada após falha.")
+            except RuntimeError:
+                print("DepthCamera já estava liberada.")
 
         if imagem_erro:
             try:
@@ -168,7 +180,9 @@ def aba_camera(inp_janela, dados, inp_menu):
 
                 # Carrega e redimensiona a imagem
                 img = Image.open(imagem_erro)
-                img = img.resize((300, 300))  # Ajuste o tamanho conforme preferir
+                # img = img.resize((300, 300))  # Ajuste o tamanho conforme preferir
+                # abrir em tela cheia, mas mantendo a proporção
+                img = img.resize(((popup.winfo_screenwidth())-250, (popup.winfo_screenheight()-250)))
                 photo = ImageTk.PhotoImage(img)
 
                 label_img = tk.Label(popup, image=photo)
@@ -185,6 +199,12 @@ def aba_camera(inp_janela, dados, inp_menu):
                 messagebox.showwarning("Falha na Análise", f"{message}\nTente novamente.")
         else:
             messagebox.showwarning("Falha na Análise", f"{message}\nTente novamente.")
+
+        # Fecha a janela da câmera para uma transição limpa
+        if 'janela_tres' in locals() and janela_tres.winfo_exists():
+            janela_tres.destroy()
+            print("Janela da câmera destruída após falha.")
+
 
         processando_foto = False
         inp_janela.deiconify()
@@ -208,6 +228,7 @@ def aba_camera(inp_janela, dados, inp_menu):
         processando_foto = False # Libera para um novo ciclo completo
         inp_janela.deiconify()
         print("Processamento de foto resetado.")
+        dc.release()  # Libera a câmera após o sucesso
 
     def abrir_janela_de_resultados(dados_da_inspecao, arquivo_resultado):
         """Abre a tela final com os dados da inspeção."""
@@ -219,8 +240,8 @@ def aba_camera(inp_janela, dados, inp_menu):
         try:
             print("abrindo aba dados")
             aba_dados(inp_janela, dados_da_inspecao[0],dados_da_inspecao[5], dados_da_inspecao[4], arquivo_resultado, inp_menu, inp_janela)
-        except:
-            print("nao abriu")
+        except Exception as e:
+            print("nao abriu aba dados", e)
     # --- Função de Orquestração do Processamento ---
 
     def iniciar_processamento(dados_de_entrada):
@@ -239,6 +260,8 @@ def aba_camera(inp_janela, dados, inp_menu):
                 inp_menu.after(0, lambda: handle_failure(
                     resultado["mensagem_erro"], 
                     resultado.get("imagem_erro")
+                    # fecha tela de camera e splash (se existir)
+
                 ))
 
         # Cria a thread
@@ -256,7 +279,7 @@ def aba_camera(inp_janela, dados, inp_menu):
     # Tenta inicializar a câmera
     try:
         dc = DepthCamera()
-        ret, _, _ = dc.get_simple_frame()
+        ret, _ = dc.get_simple_frame()
         if not ret: raise RuntimeError("Não foi possível obter o frame inicial da câmera.")
         camera_ok = True
     except Exception as e:
@@ -308,7 +331,7 @@ def aba_camera(inp_janela, dados, inp_menu):
         if (keyboard.is_pressed('ctrl') or keyboard.is_pressed('right control')) and not processando_foto:
             processando_foto = True # Trava para evitar múltiplas capturas
 
-            ret_foto, depth_frame, color_frame, infra_image, Abertura = dc.get_frame()
+            ret_foto, depth_frame, depth_image, color_frame, infra_image, Abertura = dc.get_frame()
             if ret_foto:
                 id_bico = dados[5]
                 nome_arquivo, caminho_fotoBW, _, nome_arquivo_BW = fun2.tirar_foto(color_frame, infra_image, id_bico)
@@ -318,8 +341,8 @@ def aba_camera(inp_janela, dados, inp_menu):
 
                 # Prepara dados para o processamento
                 dados_de_entrada = {
-                    "model": model, "caminho_fotoBW": caminho_fotoBW, "nome_arquivo": nome_arquivo,
-                    "depth_frame": depth_frame, "Abertura": Abertura, "nome_arquivo_BW": nome_arquivo_BW,
+                    "model": model, "caminho_fotoBW": caminho_fotoBW, "nome_arquivo": nome_arquivo, 
+                    "depth_frame" : depth_frame, "depth_image": depth_image, "Abertura": Abertura, "nome_arquivo_BW": nome_arquivo_BW,
                     "centro": centro, "lista_APP": lista_APP, "qtd_furos": qtd_furos
                 }
                 iniciar_processamento(dados_de_entrada)
@@ -330,7 +353,7 @@ def aba_camera(inp_janela, dados, inp_menu):
             return
 
         # Lógica de Exibição do Feed
-        ret_feed, _, infra_image_cam = dc.get_simple_frame()
+        ret_feed, infra_image_cam = dc.get_simple_frame()
         if ret_feed:
             back_frame = fun2.sobrepor_molde(infra_image_cam)
             frame = cv2.cvtColor(back_frame, cv2.COLOR_BGR2RGB)

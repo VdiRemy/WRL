@@ -10,6 +10,13 @@ from direction import folder
 import Splash_screen as Loading
 import os
 import sys
+import psutil
+import gc
+from collections import Counter
+
+gc.enable()  # Habilita o coletor de lixo
+ 
+contagem_objetos_inicial = None
 print("\n\n", color.Fore.GREEN + "Iniciando o código - Tela do Menu" + color.Style.RESET_ALL)
 
 pasta = folder()
@@ -20,10 +27,38 @@ bege = '#C9B783' #Cor botão
 marrom = '#68584A' 
 verde_escuro = '#1F3422' #Titulos
 
+def debug_memoria_e_objetos(etapa=""):
+    global contagem_objetos_inicial
+
+    # Força o garbage collector a rodar para limpar objetos órfãos
+    gc.collect()
+
+    # Mede o uso de memória (como antes)
+    processo = psutil.Process(os.getpid())
+    memoria_mb = processo.memory_info().rss / (1024 * 1024)
+    print(f"\n>>> [DEBUG MEMÓRIA] Uso em '{etapa}': {memoria_mb:.2f} MB")
+
+    # Conta os tipos de todos os objetos que o GC está rastreando
+    contagem_atual = Counter(type(o).__name__ for o in gc.get_objects())
+    
+    if contagem_objetos_inicial is None:
+        # Na primeira execução, apenas armazena o estado inicial
+        contagem_objetos_inicial = contagem_atual
+        print(">>> [DEBUG OBJETOS] Estado inicial da memória armazenado.")
+    else:
+        # Nas execuções seguintes, compara o estado atual com o inicial
+        print(">>> [DEBUG OBJETOS] Comparando contagem de objetos com o estado inicial (Top 10 vazamentos):")
+        diferenca = contagem_atual - contagem_objetos_inicial
+        
+        # Imprime os 10 tipos de objeto que mais cresceram em número
+        for tipo, aumento in diferenca.most_common(10):
+            if aumento > 0:
+                print(f"    - {tipo}: +{aumento} instâncias")
 
 def menu_WRL():
-    Janela_menu = tk.Tk()
-    tela(Janela_menu)
+    debug_memoria_e_objetos("Início do Programa") # Mede a memória inicial
+    Janela_menu = tk.Tk() #Cria a janela principal do menu
+    tela(Janela_menu) #Configura a tela
     adicionar_detalhes(Janela_menu)
     frames_da_tela(Janela_menu)
     componentes_frame1(Janela_menu)
@@ -54,7 +89,7 @@ def INICIAR_INSPECAO(inp_menu):
 
     splash.grab_set()  # Bloqueia interação com outras janelas
 
-    splash.protocol("WM_DELETE_WINDOW")
+    splash.protocol("WM_DELETE_WINDOW") # Desabilita o fechamento do splash
 
 def ABA_CADASTRO_USINA(inp_menu):
     from CADASTRO_USINA_WRL import aba_cadastro_usina
@@ -62,9 +97,15 @@ def ABA_CADASTRO_USINA(inp_menu):
     janela_cadastrar_bico.deiconify()
     
 def abrir_streamlit():
-    comando = ['streamlit', 'run', fr'{pasta}\SITE\site_WRL.py']
+    comando = ['streamlit', 'run', fr"{pasta}\SITE\site_WRL.py"]
+    print('comando:', comando)
     subprocess.Popen(comando)
-    
+
+def CAPTURA_DATASET(inp_menu):
+    from FUNCOES_CAPTURA_DATASET import aba_captura_dataset
+    janela_captura_dataset = aba_captura_dataset(inp_menu)
+    janela_captura_dataset.deiconify()
+
 def frames_da_tela(inp_menu):
     global frame_1
 
@@ -127,6 +168,12 @@ def componentes_frame1(inp_menu):
     bt_fechar_aba_menu = tk.Button(frame_1, image=img_fechar, command=inp_menu.destroy,compound=tk.CENTER, bg="#DE1804", bd=3)
     bt_fechar_aba_menu.place(relx=0.94, rely=0.02, relwidth=0.04, relheight=0.06)
         
+    # {=======================CAPTURA PARA DATASET=========================}
+    icone_pasta = file=os.path.join(pasta,"ICONES_FOTOS","pasta.png")
+
+    bt_captura_dataset = FUNCOES_TKINTER.CRIAR_BOTAO(frame_1,'Captura para Dataset',bege,verde,4,'20','bold',"hand2", lambda:CAPTURA_DATASET(inp_menu),inp_imagem=icone_pasta, imagem_posicao='bottom')
+    bt_captura_dataset.place(relx=0.37, rely=0.19, relwidth=0.1, relheight=0.2)
+
     inp_menu.mainloop()
 
 menu_WRL()

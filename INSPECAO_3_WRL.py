@@ -10,6 +10,10 @@ import FUNCOES_TKINTER
 import FUNCOES_CAMERA_WRL as fun2 #Funcções para camêra
 from direction import folder, pasta_bd
 import os
+import psutil
+import gc
+from collections import Counter
+contagem_objetos_inicial = None
 
 pasta = folder()
 
@@ -19,6 +23,35 @@ bege = '#C9B783' #Cor botão
 marrom = '#68584A'
 verde_escuro = '#1F3422' #Titulos
 fundo_branco = 'white' #fundo das letras em frames brancos
+
+def debug_memoria_e_objetos(etapa=""):
+    global contagem_objetos_inicial
+
+    # Força o garbage collector a rodar para limpar objetos órfãos
+    gc.collect()
+
+    # Mede o uso de memória (como antes)
+    processo = psutil.Process(os.getpid())
+    memoria_mb = processo.memory_info().rss / (1024 * 1024)
+    print(f"\n>>> [DEBUG MEMÓRIA] Uso em '{etapa}': {memoria_mb:.2f} MB")
+
+    # Conta os tipos de todos os objetos que o GC está rastreando
+    contagem_atual = Counter(type(o).__name__ for o in gc.get_objects())
+    
+    if contagem_objetos_inicial is None:
+        # Na primeira execução, apenas armazena o estado inicial
+        contagem_objetos_inicial = contagem_atual
+        print(">>> [DEBUG OBJETOS] Estado inicial da memória armazenado.")
+    else:
+        # Nas execuções seguintes, compara o estado atual com o inicial
+        print(">>> [DEBUG OBJETOS] Comparando contagem de objetos com o estado inicial (Top 10 vazamentos):")
+        diferenca = contagem_atual - contagem_objetos_inicial
+        
+        # Imprime os 10 tipos de objeto que mais cresceram em número
+        for tipo, aumento in diferenca.most_common(10):
+            if aumento > 0:
+                print(f"    - {tipo}: +{aumento} instâncias")
+
 
 def selecao(inp_ID, inp_tipo): # {=========Leitura Grupo, SIte, BOF e ID(FRAME 1)=========}
     global ID
@@ -60,11 +93,13 @@ def imagens(registro_foto): # {=========Informações para imagens(FRAME 2)=====
     arquivoguia = os.path.join(endereco_pastaguias, registro_foto)
     return arquivofoto, arquivoguia
 
-def voltar_menu(aba_menu, insp_1,insp_2, insp_3):
-    aba_menu.deiconify() # Exiba a janela da aba 1
-    insp_3.destroy()  # Destrua a janela da aba 2
-    insp_2.destroy()  # Destrua a janela cadastro
+def voltar_menu(aba_menu, insp_1, insp_2, insp_3):
+    print(f">>> [DEBUG DESTRUIÇÃO] Tentando destruir: {insp_1.title()}, {insp_2.title()}, {insp_3.title()}")
+    insp_3.destroy()
+    insp_2.destroy()
     insp_1.destroy()
+    aba_menu.deiconify()
+    debug_memoria_e_objetos("Após fechar inspeção e voltar ao menu")
 
 def adicionar_detalhes(inp_menu):
     largura = inp_menu.winfo_screenwidth()
@@ -90,6 +125,7 @@ def frames_da_tela(inp_janela):
     return frame_1, frame_2
 
 def componentes_frame1(inp_ID, qtd_furos, inp_tipo, int_arquivo, inp_menu, janela_cadastro1, janela_cadastro2, inp_janela):
+    
     dados, lista_grupo = selecao(inp_ID, inp_tipo)
     
     if dados is None: # Se a seleção inicial falhar, para a execução
@@ -102,8 +138,6 @@ def componentes_frame1(inp_ID, qtd_furos, inp_tipo, int_arquivo, inp_menu, janel
     ID = dados[5]
     vida = dados[6]
     
-    # --- CORREÇÃO PRINCIPAL ABAIXO ---
-
     # 1. Determina qual tabela buscar com base na 'qtd_furos'
     # print(f"inp_ID {inp_ID},\n inp_tipo {inp_tipo},\n int_arquivo {int_arquivo},\n inp_menu {inp_menu},\n janela_cadastro1 {janela_cadastro1},\n janela_cadastro2 {janela_cadastro2},\n inp_janela {inp_janela}")
     
@@ -124,15 +158,12 @@ def componentes_frame1(inp_ID, qtd_furos, inp_tipo, int_arquivo, inp_menu, janel
         messagebox.showerror("Erro de Dados", f"Não foi possível encontrar os dados para o arquivo '{int_arquivo}' na tabela '{tabela_para_buscar}'.")
         return
 
-    # O resto do código continua igual, mas agora com a certeza de que 'dados2' não é None
-    
     data_foto = dados2[9]
     hora_foto = dados2[10]
     medidas_foto = dados2[11:]
     print("medidas foto", medidas_foto)
     
-    # ... (O resto da sua função 'componentes_frame1' para criar os labels e a tabela ttk continua aqui) ...
-    # ... (Copie e cole o restante da sua função original a partir daqui) ...
+
     # {=======================Título=========================}
     titulo1_pg1 = FUNCOES_TKINTER.CRIAR_LABEL(frame_1, "Dados do Bico",fundo_branco,"#2F4F4F",'arial', '25', 'bold')
     titulo1_pg1.place(relx=0.32, rely=0.03)
@@ -254,6 +285,7 @@ def componentes_frame2(inp_janela, nome_arquivo):
         messagebox.showerror("Erro ao Carregar Imagem", f"Não foi possível carregar as imagens.\n\nErro: {e}")
         print(f"ERRO CRÍTICO ao carregar imagens com Pillow: {e}")
 
+
 def aba_dados(inp_janela, qtd_furos,inp_ID,inp_tipo, int_arquivo,inp_menu,janela_cadastro1):
     janela = tk.Toplevel(inp_janela)
     tela(janela)
@@ -267,6 +299,7 @@ def aba_dados(inp_janela, qtd_furos,inp_ID,inp_tipo, int_arquivo,inp_menu,janela
     janela.grab_set()
     janela.deiconify()
     print("fim da aba dados")
+    debug_memoria_e_objetos("Após fechar inspeção e voltar ao menu")
     return janela
     
 print("\n\n", color.Fore.GREEN + "Iniciando o código - Dados do bico" + color.Style.RESET_ALL)

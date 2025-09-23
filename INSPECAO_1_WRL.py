@@ -6,8 +6,42 @@ import colorama as color
 import FUNCOES_BD
 import FUNCOES_TKINTER
 from direction import pasta_bd
+import os
+import psutil
+import gc
+from collections import Counter
 
 print("\n\n", color.Fore.GREEN + "Iniciando o código - Registro pre-medição" + color.Style.RESET_ALL)
+
+gc.enable()  # Habilita o coletor de lixo
+contagem_objetos_inicial = None
+def debug_memoria_e_objetos(etapa=""):
+    global contagem_objetos_inicial
+
+    # Força o garbage collector a rodar para limpar objetos órfãos
+    gc.collect()
+
+    # Mede o uso de memória (como antes)
+    processo = psutil.Process(os.getpid())
+    memoria_mb = processo.memory_info().rss / (1024 * 1024)
+    print(f"\n>>> [DEBUG MEMÓRIA] Uso em '{etapa}': {memoria_mb:.2f} MB")
+
+    # Conta os tipos de todos os objetos que o GC está rastreando
+    contagem_atual = Counter(type(o).__name__ for o in gc.get_objects())
+    
+    if contagem_objetos_inicial is None:
+        # Na primeira execução, apenas armazena o estado inicial
+        contagem_objetos_inicial = contagem_atual
+        print(">>> [DEBUG OBJETOS] Estado inicial da memória armazenado.")
+    else:
+        # Nas execuções seguintes, compara o estado atual com o inicial
+        print(">>> [DEBUG OBJETOS] Comparando contagem de objetos com o estado inicial (Top 10 vazamentos):")
+        diferenca = contagem_atual - contagem_objetos_inicial
+        
+        # Imprime os 10 tipos de objeto que mais cresceram em número
+        for tipo, aumento in diferenca.most_common(10):
+            if aumento > 0:
+                print(f"    - {tipo}: +{aumento} instâncias")
 
 # --- Funções de Acesso ao Banco de Dados (Corrigidas) ---
 
@@ -108,7 +142,9 @@ def comandos_botao_continuar(inp_janela, inp_usina_grupo, inp_site, inp_BOF, inp
             
     # Se todas as validações passaram, continua para a próxima tela
     from INSPECAO_2_WRL import aba_camera
+    debug_memoria_e_objetos("Antes de abrir a aba de câmera")
     aba_camera(inp_janela, dados_inseridos_list, inp_menu)
+    debug_memoria_e_objetos("Depois de abrir a aba de câmera")
 
 def OnClick(event, listaCli, usina, site, BOF, ID, Furos, Tipo):
     selected_items = listaCli.selection()

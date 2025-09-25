@@ -79,17 +79,17 @@ def INICIAR_INSPECAO(inp_menu):
     """
     Inicia o processo de inspeção com uma tela de splash.
     """
-    def carregar_inspecao():
-        from INSPECAO_1_WRL import aba_cadastro
-        janela_cadastro = aba_cadastro(inp_menu)  # Executa o código pesado
-        janela_cadastro.deiconify()
+    # def carregar_inspecao():
+    from INSPECAO_1_WRL import aba_cadastro
+    janela_cadastro = aba_cadastro(inp_menu)  # Executa o código pesado
+    janela_cadastro.deiconify()
 
-    # Abre o Splash e passa o código pesado como callback
-    splash = Loading.Splash(inp_menu, carregar_inspecao)
+    # # Abre o Splash e passa o código pesado como callback
+    # splash = Loading.Splash(inp_menu, carregar_inspecao)
 
-    splash.grab_set()  # Bloqueia interação com outras janelas
+    # splash.grab_set()  # Bloqueia interação com outras janelas
 
-    splash.protocol("WM_DELETE_WINDOW") # Desabilita o fechamento do splash
+    # splash.protocol("WM_DELETE_WINDOW") # Desabilita o fechamento do splash
 
 def ABA_CADASTRO_USINA(inp_menu):
     from CADASTRO_USINA_WRL import aba_cadastro_usina

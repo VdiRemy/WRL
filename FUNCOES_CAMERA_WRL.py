@@ -210,7 +210,6 @@ def analisar_imagem(model, imagem, nome, depth_frame, depth_image, Abertura):
         for i in range(len(result.boxes)):
             class_id = int(result.boxes.cls[i])
             class_name = result.names[class_id]
-            print(f"\nProcessando detecção {i+1}: Classe '{class_name}'")
 
             # Pega a máscara binária para a detecção atual
             mask = mascaras[i].astype(np.uint8)
@@ -421,11 +420,11 @@ def extrair_dados(resultado, mascaras, nome):
 # Função para ordenar os pontos em sentido horário
 def sort_points_clockwise(pts):
     print("Ordenando pontos em sentido horário")
-    print("pontos antes de ordenar", pts)
+    # print("pontos antes de ordenar", pts)
     center = np.mean(pts, axis=0)
     angles = np.arctan2(pts[:, 1] - center[1], pts[:, 0] - center[0])
     sorted_pts = pts[np.argsort(angles)]
-    print("pontos após ordenar", sorted_pts)
+    # print("pontos após ordenar", sorted_pts)
     return sorted_pts
 
 # Função para filtrar o ponto central

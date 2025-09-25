@@ -159,25 +159,9 @@ def aba_camera(inp_janela, dados, inp_menu):
     processando_foto = False  # Flag para evitar múltiplas capturas ("debounce")
     
     def acao_voltar():
-        cleanup_camera_resources()
+        finalizar_e_limpar_camera()
         inp_janela.deiconify()
 
-    def cleanup_camera_resources():
-        """Função centralizada para parar o vídeo, liberar a câmera e destruir a janela."""
-        print(">>> [DEBUG AÇÃO] Iniciando limpeza da janela da câmera...")
-        
-        # Para o loop de vídeo para evitar vazamento de memória com 'after'
-        # Usaremos uma flag para isso, que será criada mais tarde.
-        video_loop_running[0] = False
-        
-        # Libera o recurso da câmera
-        if 'dc' in locals() and dc:
-            dc.release()
-        
-        # Destrói a janela da câmera, se ela ainda existir
-        if 'janela_tres' in locals() and janela_tres.winfo_exists():
-            janela_tres.destroy()
-            print(">>> [DEBUG AÇÃO] Janela da câmera destruída.")
     # --- Funções de Navegação e Callbacks da UI ---
 
     def handle_failure(message, imagem_erro=None, splash_obj=None): # Adicionado splash_obj
@@ -188,36 +172,79 @@ def aba_camera(inp_janela, dados, inp_menu):
             splash_obj.destroy()
 
         # Chama a limpeza
-        cleanup_camera_resources()
+        finalizar_e_limpar_camera()
 
         # (Seu código para o popup de erro aqui...)
+        if imagem_erro:
+            try:
+                popup = tk.Toplevel(inp_janela)
+                popup.title("Falha na Análise")
+                popup.transient(inp_janela)  # popup modal relativo à janela principal
+                popup.grab_set()
 
+                # Carrega e redimensiona a imagem
+                img = Image.open(imagem_erro)
+                # img = img.resize((300, 300))  # Ajuste o tamanho conforme preferir
+                # abrir em tela cheia, mas mantendo a proporção
+                img = img.resize(((popup.winfo_screenwidth())-250, (popup.winfo_screenheight()-250)))
+                photo = ImageTk.PhotoImage(img)
+
+                label_img = tk.Label(popup, image=photo)
+                label_img.image = photo  # mantém referência
+                label_img.pack(padx=10, pady=10)
+
+                label_msg = tk.Label(popup, text=message, fg='red')
+                label_msg.pack(padx=10, pady=5)
+
+                btn_ok = tk.Button(popup, text="OK", command=popup.destroy)
+                btn_ok.pack(pady=10)
+            except Exception as e:
+                print(f"Erro ao mostrar imagem no popup: {e}")
+                messagebox.showwarning("Falha na Análise", f"{message}\nTente novamente.")
+        else:
+            messagebox.showwarning("Falha na Análise", f"{message}\nTente novamente.")
+
+        # Fecha a janela da câmera para uma transição limpa
+        if 'janela_tres' in locals() and janela_tres.winfo_exists():
+            janela_tres.destroy()
+            print("Janela da câmera destruída após falha.")
+
+
+        processando_foto = False
         # Reexibe a janela de cadastro
         inp_janela.deiconify()
 
     def handle_success(resultado, splash_obj): # Adicionado splash_obj para segurança
+        nonlocal processando_foto
         print("SUCESSO: Preparando para exibir resultados.")
+
         if splash_obj and splash_obj.winfo_exists():
             splash_obj.destroy()
 
-        # Primeiro, limpa os recursos da tela da câmera
-        cleanup_camera_resources()
-
         # Depois, abre a próxima tela
         abrir_janela_de_resultados(resultado["dados"], resultado["arquivo"])
+        print("Resultados exibidos com sucesso.")
+        processando_foto = False # Libera para um novo ciclo completo
+        print("Processamento de foto resetado.")
+        # Primeiro, limpa os recursos da tela da câmera
+        finalizar_e_limpar_camera()
+        print("Recursos da câmera limpos.")
+        inp_janela.deiconify()
 
-        def abrir_janela_de_resultados(dados_da_inspecao, arquivo_resultado):
-            """Abre a tela final com os dados da inspeção."""
-            # Esta função chama a próxima tela da sua aplicação
-            print("DAdos da inspeção")
-            for i in range(len(dados_da_inspecao)):
-                print(f"\n{dados_da_inspecao[i]}")
+    def abrir_janela_de_resultados(dados_da_inspecao, arquivo_resultado):
+        """Abre a tela final com os dados da inspeção."""
+        # Esta função chama a próxima tela da sua aplicação
 
-            try:
-                print("abrindo aba dados")
-                aba_dados(inp_janela, dados_da_inspecao[0],dados_da_inspecao[5], dados_da_inspecao[4], arquivo_resultado, inp_menu, inp_janela)
-            except Exception as e:
-                print("nao abriu aba dados", e)
+        # print("DAdos da inspeção")
+        # for i in range(len(dados_da_inspecao)):
+        #     print(f"\n{dados_da_inspecao[i]}")
+
+        try:
+            print("abrindo aba dados")
+            aba_dados(inp_janela, dados_da_inspecao[0],dados_da_inspecao[5], dados_da_inspecao[4], arquivo_resultado, inp_menu, inp_janela)
+        except Exception as e:
+            print("nao abriu aba dados", e)
+
     # --- Função de Orquestração do Processamento ---
 
     def iniciar_processamento(dados_de_entrada):
@@ -289,22 +316,46 @@ def aba_camera(inp_janela, dados, inp_menu):
     
     # Cria a janela da câmera
     video_loop_running = [True]
+    after_id = [None]
     janela_tres = tk.Toplevel(inp_menu)
     tela(janela_tres)
     adicionar_detalhes(janela_tres)
     frame_um, frame_dois = frames_da_tela(janela_tres)
-    def acao_voltar():
-        print(">>> [DEBUG AÇÃO] Botão 'Voltar' pressionado.")
-        video_loop_running[0] = False  # Para o loop de vídeo
-        dc.release()                   # Libera a câmera
-        
-        # Garante que as janelas ainda existem antes de interagir com elas
-        if janela_tres.winfo_exists():
-            janela_tres.destroy()        # Destrói a janela atual (da câmera)
-        if inp_janela.winfo_exists():
-            inp_janela.deiconify()       # Mostra a janela anterior (de cadastro)
 
-    componentes_frame1(frame_um, janela_tres, inp_menu, dc, acao_voltar)
+    worker_thread = None
+    
+    def finalizar_e_limpar_camera():
+        global splash
+        nonlocal worker_thread, dc # Permite modificar as variáveis do escopo pai
+
+        print(">>> [DEBUG AÇÃO] Iniciando limpeza da janela da câmera...")
+        video_loop_running[0] = False
+        
+        if after_id[0]:
+            if video_label.winfo_exists():
+                video_label.after_cancel(after_id[0])
+                print(">>> [DEBUG AÇÃO] Tarefa .after() cancelada.")
+        
+        if dc:
+            dc.release()
+            dc = None # Quebra a referência ao objeto da câmera
+            print("CAMERA ENCERRADA")
+        
+        if splash and splash.winfo_exists():
+            splash.destroy()
+            splash = None # Quebra a referência ao splash screen
+        
+        if janela_tres and janela_tres.winfo_exists():
+            janela_tres.destroy()
+        
+        if inp_janela and inp_janela.winfo_exists():
+            inp_janela.deiconify()
+
+        # Quebra a referência à thread para garantir que ela seja coletada
+        worker_thread = None
+        print("Recursos da câmera limpos.")
+
+    componentes_frame1(frame_um, janela_tres, inp_menu, dc, finalizar_e_limpar_camera)
     
     # Lógica do Frame de Vídeo (refatorada para clareza)
     video_label = tk.Label(frame_dois, bg="white")
@@ -351,9 +402,10 @@ def aba_camera(inp_janela, dados, inp_menu):
             video_label.configure(image=image)
             video_label.image = image
 
-        # Agenda o próximo frame se não estiver processando
-        if video_label.winfo_exists():
-            video_label.after(15, exibir_video)
+        # Agenda o próximo frame se o loop deve continuar
+        if video_loop_running[0] and video_label.winfo_exists():
+            # Armazena o ID retornado pelo .after() na nossa lista
+            after_id[0] = video_label.after(15, exibir_video)
 
     # Inicia o loop de vídeo
     exibir_video()

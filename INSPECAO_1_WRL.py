@@ -324,7 +324,7 @@ def aba_cadastro(inp_janela):
     frames_da_tela(janela_dois)
     componentes_frame1(frame_1, janela_dois, inp_janela)
     
-    inp_janela.withdraw()
+    # inp_janela.withdraw()
 
     janela_dois.transient(inp_janela)
     janela_dois.focus_force()

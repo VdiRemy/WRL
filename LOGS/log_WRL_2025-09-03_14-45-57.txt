@@ -1,0 +1,37 @@
+Iniciando o programa no ambiente 'wrl'... 
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\labga\miniconda3\envs\wrl\Lib\tkinter\__init__.py", line 1948, in __call__
+    return self.func(*args)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\labga\OneDrive\Área de Trabalho\WRL\MENU_WRL.py", line 174, in <lambda>
+    bt_captura_dataset = FUNCOES_TKINTER.CRIAR_BOTAO(frame_1,'Captura para Dataset',bege,verde,4,'20','bold',"hand2", lambda:CAPTURA_DATASET(inp_menu),inp_imagem=icone_pasta, imagem_posicao='bottom')
+                                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\labga\OneDrive\Área de Trabalho\WRL\MENU_WRL.py", line 106, in CAPTURA_DATASET
+    janela_captura_dataset = aba_captura_dataset(inp_menu)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\labga\OneDrive\Área de Trabalho\WRL\FUNCOES_CAPTURA_DATASET.py", line 156, in aba_captura_dataset
+    janela_captura.protocol("WM_DELETE_WINDOW", cleanup_and_close)
+  File "C:\Users\labga\miniconda3\envs\wrl\Lib\tkinter\__init__.py", line 2253, in wm_protocol
+    return self.tk.call(
+           ^^^^^^^^^^^^^
+_tkinter.TclError: bad window path name ".!toplevel"
+
+
+ [32mIniciando o código - Tela do Menu[0m
+
+>>> [DEBUG MEMÓRIA] Uso em 'Início do Programa': 25.03 MB
+>>> [DEBUG OBJETOS] Estado inicial da memória armazenado.
+
+
+ [32mAbrindo FUNCOES CAMERA[0m
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+AVISO CONECTA A CAMÊRA
+>>> Encerrando a captura de dataset...
+[31mFinalizando o código - Tela do Menu[0m 
+
+ 
+Programa finalizado. 

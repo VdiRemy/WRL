@@ -29,7 +29,7 @@ marrom = '#68584A'
 verde_escuro = '#1F3422' #Titulos
 fundo_branco = 'white' #fundo das letras em frames brancos
 
-model = YOLO(fr'{pasta}\pesos\best.pt')
+model = YOLO(fr'{pasta}\pesos\infrared_weight\best.pt')
 
 # # Define a classe 
 # Initialize the DepthCamera

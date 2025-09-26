@@ -1,0 +1,32 @@
+Iniciando o programa no ambiente 'wrl'... 
+[ WARN:1@22.919] global cap_msmf.cpp:475 `anonymous-namespace'::SourceReaderCB::OnReadSample videoio(MSMF): OnReadSample() is called with error status: -1072873821
+[ WARN:1@22.919] global cap_msmf.cpp:487 `anonymous-namespace'::SourceReaderCB::OnReadSample videoio(MSMF): async ReadSample() call is failed with error status: -1072873821
+
+
+ [32mIniciando o código - Tela do Menu[0m
+
+>>> [DEBUG MEMÓRIA] Uso em 'Início do Programa': 24.86 MB
+>>> [DEBUG OBJETOS] Estado inicial da memória armazenado.
+
+
+ [32mAbrindo FUNCOES CAMERA[0m
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+AVISO CONECTA A CAMÊRA
+Erro ao inicializar a Realsense: wait_for_frames cannot be called before start(). Tentando a webcam padrão...
+Webcam padrão inicializada com sucesso.
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20250904_163225_472.png
+Imagem salva: capture_20250904_163225_472.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20250904_163226_113.png
+Imagem salva: capture_20250904_163226_113.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20250904_163226_341.png
+Imagem salva: capture_20250904_163226_341.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20250904_163226_575.png
+Imagem salva: capture_20250904_163226_575.png
+>>> Encerrando a captura de dataset...
+[31mFinalizando o código - Tela do Menu[0m 
+
+ 
+Programa finalizado. 

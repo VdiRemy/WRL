@@ -1,0 +1,74 @@
+Iniciando o programa no ambiente 'wrl'... 
+
+
+ [32mIniciando o código - Tela do Menu[0m
+
+>>> [DEBUG MEMÓRIA] Uso em 'Início do Programa': 24.76 MB
+>>> [DEBUG OBJETOS] Estado inicial da memória armazenado.
+
+
+ [32mAbrindo FUNCOES CAMERA[0m
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+Imagem salva: capture_20250904_141608_859.png
+Imagem salva: capture_20250904_141616_152.png
+Imagem salva: capture_20250904_141620_738.png
+Imagem salva: capture_20250904_141621_491.png
+Imagem salva: capture_20250904_141622_680.png
+Imagem salva: capture_20250904_141624_721.png
+>>> Encerrando a captura de dataset...
+[35mCAMERA ENCERRADA[0m 
+
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+Imagem salva: capture_20250904_141652_915.png
+Imagem salva: capture_20250904_141655_064.png
+Imagem salva: capture_20250904_141656_437.png
+Imagem salva: capture_20250904_141657_429.png
+Imagem salva: capture_20250904_141700_516.png
+Imagem salva: capture_20250904_141703_850.png
+Imagem salva: capture_20250904_141704_986.png
+Imagem salva: capture_20250904_141706_603.png
+>>> Encerrando a captura de dataset...
+[35mCAMERA ENCERRADA[0m 
+
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+Imagem salva: capture_20250904_141755_175.png
+Imagem salva: capture_20250904_141756_695.png
+Imagem salva: capture_20250904_141758_173.png
+Imagem salva: capture_20250904_141759_315.png
+Imagem salva: capture_20250904_141800_738.png
+Imagem salva: capture_20250904_141801_625.png
+Imagem salva: capture_20250904_141802_504.png
+Imagem salva: capture_20250904_141803_206.png
+>>> Encerrando a captura de dataset...
+[35mCAMERA ENCERRADA[0m 
+
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+Imagem salva: capture_20250904_141823_846.png
+Imagem salva: capture_20250904_141824_837.png
+Imagem salva: capture_20250904_141825_880.png
+Imagem salva: capture_20250904_141826_107.png
+Imagem salva: capture_20250904_141827_205.png
+Imagem salva: capture_20250904_141827_954.png
+Imagem salva: capture_20250904_141828_176.png
+Imagem salva: capture_20250904_141829_225.png
+Imagem salva: capture_20250904_141830_462.png
+Imagem salva: capture_20250904_141831_356.png
+>>> Encerrando a captura de dataset...
+[35mCAMERA ENCERRADA[0m 
+
+[31mFinalizando o código - Tela do Menu[0m 
+
+ 
+Programa finalizado. 

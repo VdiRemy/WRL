@@ -1,0 +1,127 @@
+Iniciando o programa no ambiente 'wrl'... 
+
+
+ [32mIniciando o código - Tela do Menu[0m
+
+>>> [DEBUG MEMÓRIA] Uso em 'Início do Programa': 24.82 MB
+>>> [DEBUG OBJETOS] Estado inicial da memória armazenado.
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+
+ [32mAbrindo FUNCOES CAMERA[0m
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+Imagem salva: capture_20250904_100042_839.png
+Imagem salva: capture_20250904_100046_101.png
+Imagem salva: capture_20250904_100047_954.png
+Imagem salva: capture_20250904_100050_155.png
+Imagem salva: capture_20250904_100052_148.png
+>>> Encerrando a captura de dataset...
+[35mCAMERA ENCERRADA[0m 
+
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+Imagem salva: capture_20250904_100132_607.png
+Imagem salva: capture_20250904_100134_037.png
+Imagem salva: capture_20250904_100148_319.png
+Imagem salva: capture_20250904_100149_890.png
+Imagem salva: capture_20250904_100153_128.png
+>>> Encerrando a captura de dataset...
+[35mCAMERA ENCERRADA[0m 
+
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+Imagem salva: capture_20250904_100315_105.png
+Imagem salva: capture_20250904_100317_855.png
+Imagem salva: capture_20250904_100319_848.png
+Imagem salva: capture_20250904_100320_979.png
+Imagem salva: capture_20250904_100323_225.png
+>>> Encerrando a captura de dataset...
+[35mCAMERA ENCERRADA[0m 
+
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+Imagem salva: capture_20250904_100410_930.png
+Imagem salva: capture_20250904_100412_892.png
+Imagem salva: capture_20250904_100413_936.png
+Imagem salva: capture_20250904_100414_876.png
+Imagem salva: capture_20250904_100416_109.png
+>>> Encerrando a captura de dataset...
+[35mCAMERA ENCERRADA[0m 
+
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+Imagem salva: capture_20250904_100515_588.png
+Imagem salva: capture_20250904_100516_643.png
+Imagem salva: capture_20250904_100517_634.png
+Imagem salva: capture_20250904_100518_527.png
+Imagem salva: capture_20250904_100521_526.png
+Imagem salva: capture_20250904_100522_564.png
+>>> Encerrando a captura de dataset...
+[35mCAMERA ENCERRADA[0m 
+
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+Imagem salva: capture_20250904_100621_312.png
+Imagem salva: capture_20250904_100622_496.png
+Imagem salva: capture_20250904_100625_963.png
+Imagem salva: capture_20250904_100627_288.png
+Imagem salva: capture_20250904_100629_529.png
+Imagem salva: capture_20250904_100631_099.png
+>>> Encerrando a captura de dataset...
+[35mCAMERA ENCERRADA[0m 
+
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+Imagem salva: capture_20250904_100748_186.png
+Imagem salva: capture_20250904_100751_677.png
+Imagem salva: capture_20250904_100753_906.png
+Imagem salva: capture_20250904_100755_752.png
+Imagem salva: capture_20250904_100756_561.png
+Imagem salva: capture_20250904_100757_038.png
+>>> Encerrando a captura de dataset...
+[35mCAMERA ENCERRADA[0m 
+
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+Imagem salva: capture_20250904_100934_008.png
+Imagem salva: capture_20250904_100934_819.png
+Imagem salva: capture_20250904_100935_386.png
+Imagem salva: capture_20250904_100935_908.png
+Imagem salva: capture_20250904_100936_433.png
+Imagem salva: capture_20250904_100936_944.png
+Imagem salva: capture_20250904_100938_477.png
+>>> Encerrando a captura de dataset...
+[35mCAMERA ENCERRADA[0m 
+
+[31mFinalizando o código - Tela do Menu[0m 
+
+ 
+Programa finalizado. 

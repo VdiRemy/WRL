@@ -171,8 +171,8 @@ def componentes_frame1(inp_menu):
     # {=======================CAPTURA PARA DATASET=========================}
     icone_pasta = file=os.path.join(pasta,"ICONES_FOTOS","pasta.png")
 
-    bt_captura_dataset = FUNCOES_TKINTER.CRIAR_BOTAO(frame_1,'Captura para Dataset',bege,verde,4,'20','bold',"hand2", lambda:CAPTURA_DATASET(inp_menu),inp_imagem=icone_pasta, imagem_posicao='bottom')
-    bt_captura_dataset.place(relx=0.37, rely=0.19, relwidth=0.1, relheight=0.2)
+    bt_captura_dataset = FUNCOES_TKINTER.CRIAR_BOTAO(frame_1,'Captura\npara\nDataset\n📂',bege,verde,4,'12','bold',"hand2", lambda:CAPTURA_DATASET(inp_menu))
+    bt_captura_dataset.place(relx=0.40, rely=0.28, relwidth=0.07, relheight=0.15)
 
     inp_menu.mainloop()
 

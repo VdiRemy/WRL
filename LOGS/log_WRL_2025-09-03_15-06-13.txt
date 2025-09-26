@@ -1,0 +1,11 @@
+Iniciando o programa no ambiente 'wrl'... 
+
+
+ [32mIniciando o código - Tela do Menu[0m
+
+>>> [DEBUG MEMÓRIA] Uso em 'Início do Programa': 24.84 MB
+>>> [DEBUG OBJETOS] Estado inicial da memória armazenado.
+[31mFinalizando o código - Tela do Menu[0m 
+
+ 
+Programa finalizado. 

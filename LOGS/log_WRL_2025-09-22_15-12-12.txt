@@ -1,0 +1,346 @@
+Iniciando o programa no ambiente 'wrl'... 
+
+
+ [32mIniciando o c�digo - Tela do Menu[0m
+
+>>> [DEBUG MEM�RIA] Uso em 'In�cio do Programa': 24.59 MB
+>>> [DEBUG OBJETOS] Estado inicial da mem�ria armazenado.
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Dados obtidos - CADASTRO_BICO_WRL:  ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '9', '276,4/49', '5', '0']
+
+
+ [32mIniciando o c�digo - Registro pre-medi��o[0m
+[31mFinalizando o c�digo - Registro pre-medi��o[0m 
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+Ultima vida registrada: 0, Vida atual: 202
+
+
+ [32mAbrindo FUNCOES CAMERA[0m
+
+
+ [32mIniciando o código - Dados do bico[0m
+[31mFinalizando o código - Dados do bico[0m 
+
+
+
+ [32mIniciando o código - Tela da câmera[0m
+[35mCAMERA INICIALIZADA[0m 
+
+Abertura: 80.18755238290139
+Salvando foto...
+[35mImagem salva[0m 
+
+--- INICIANDO ANÁLISE DE IMAGEM (FLUXO 3D) ---
+
+0: 480x640 1 Bico, 5 Furos, 175.0ms
+Speed: 2.1ms preprocess, 175.0ms inference, 17.6ms postprocess per image at shape (1, 3, 480, 640)
+Results saved to [1mC:\Users\labga\OneDrive\Documentos\WRL\resultados\registro_5_22-09-2025_15.13.55.png[0m
+Parâmetros da câmera (Intrinsics) carregados. Dimensões: 640x480
+
+Processando detecção 1: Classe 'Bico'
+Convertidos 684 pixels da borda para uma nuvem de pontos 3D.
+Filtro de outliers: 684 -> 610 pontos.
+Medição concluída para 'Bico': Diâmetro = 246.56 mm
+
+Processando detecção 2: Classe 'Furo'
+Convertidos 144 pixels da borda para uma nuvem de pontos 3D.
+Filtro de outliers: 144 -> 127 pontos.
+Medição concluída para 'Furo': Diâmetro = 49.48 mm
+
+Processando detecção 3: Classe 'Furo'
+Convertidos 137 pixels da borda para uma nuvem de pontos 3D.
+Filtro de outliers: 137 -> 117 pontos.
+Medição concluída para 'Furo': Diâmetro = 50.34 mm
+
+Processando detecção 4: Classe 'Furo'
+Convertidos 146 pixels da borda para uma nuvem de pontos 3D.
+Filtro de outliers: 146 -> 125 pontos.
+Medição concluída para 'Furo': Diâmetro = 50.26 mm
+
+Processando detecção 5: Classe 'Furo'
+Convertidos 129 pixels da borda para uma nuvem de pontos 3D.
+Filtro de outliers: 129 -> 115 pontos.
+Medição concluída para 'Furo': Diâmetro = 51.04 mm
+
+Processando detecção 6: Classe 'Furo'
+Convertidos 133 pixels da borda para uma nuvem de pontos 3D.
+Filtro de outliers: 133 -> 124 pontos.
+Medição concluída para 'Furo': Diâmetro = 49.23 mm
+
+--- ANÁLISE CONCLUÍDA ---
+Lista de diâmetros final (mm): [246.56, 49.48, 50.34, 50.26, 51.04, 49.23]
+Pontos:  [(319, 233), (245, 309), (346, 332), (217, 209), (286, 132), (387, 159)]
+Pontos filtrados:  [(319, 233), (245, 309), (346, 332), (217, 209), (286, 132), (387, 159)]
+altura, largura 288 284
+lista_pontos em enumerar furos [(319, 233), (245, 309), (346, 332), (217, 209), (286, 132), (387, 159)]
+Pontos:  [(319, 233), (245, 309), (346, 332), (217, 209), (286, 132), (387, 159)]
+Pontos filtrados:  [(319, 233), (245, 309), (346, 332), (217, 209), (286, 132), (387, 159)]
+
+lista_pontos em enumerar furos pós filtrar ponto central
+ [(319, 233), (245, 309), (346, 332), (217, 209), (286, 132), (387, 159)]
+lista com diâmetros não fornecida ou tamanho incompatível, não filtrando pelo diâmetro do bico.
+Furos detectados: [(319, 233), (245, 309), (346, 332), (217, 209), (286, 132), (387, 159)]
+Furos array:
+ [[319 233]
+ [245 309]
+ [346 332]
+ [217 209]
+ [286 132]
+ [387 159]]
+Ordenando pontos em sentido horário
+pontos antes de ordenar [[319 233]
+ [245 309]
+ [346 332]
+ [217 209]
+ [286 132]
+ [387 159]]
+pontos após ordenar [[217 209]
+ [286 132]
+ [387 159]
+ [319 233]
+ [346 332]
+ [245 309]]
+Furos ordenados:
+ [[217 209]
+ [286 132]
+ [387 159]
+ [319 233]
+ [346 332]
+ [245 309]]
+Dados a serem unidos por reunir_dados: lista_APP ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '5', 'JP', '202']
+nome_arquivo:  ['registro_5_22-09-2025_15.13.55.png', '22/09/2025', '15:13']
+diametros_ordenados:  [246.56, 49.48, 50.34, 50.26, 51.04, 49.23]
+DADOS REUNIDOS: ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '5', 'JP', '202', 'registro_5_22-09-2025_15.13.55.png', '22/09/2025', '15:13', 246.56, 49.48, 50.34, 50.26, 51.04, 49.23]
+pós lista completa linhas 687 funcoes camera:  ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '5', 'JP', '202', 'registro_5_22-09-2025_15.13.55.png', '22/09/2025', '15:13', 246.56, 49.48, 50.34, 50.26, 51.04, 49.23]
+tamanho lista_completa: 17
+lista_diametros: ['Crítico', 'Bom', 'Bom', 'Bom', 'Bom', 'Bom']
+Dados recebidos para salvar_registros_desgaste:
+lista_completa: ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '5', 'JP', '202', 'registro_5_22-09-2025_15.13.55.png', '22/09/2025', '15:13', 246.56, 49.48, 50.34, 50.26, 51.04, 49.23]
+estados: ['Crítico', 'Bom', 'Bom', 'Bom', 'Bom', 'Bom']
+dados_diametros: [246.56, 49.48, 50.34, 50.26, 51.04, 49.23]
+estado_bico: ['Bom']
+qtd_furos: 6
+Comandos de desgaste para a tabela B6 executados.
+Dados de DESGASTE inseridos com sucesso.
+ERRO: Incompatibilidade de dados para a tabela B6.
+Esperado: 18, Recebido: 17
+Dados recebidos: ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '5', 'JP', '202', 'registro_5_22-09-2025_15.13.55.png', '22/09/2025', '15:13', 246.56, 49.48, 50.34, 50.26, 51.04, 49.23]
+C:\Users\labga\OneDrive\Documentos\WRLesultados\registro_5_22-09-2025_15.13.55.png\image0.jpg
+FALHA: Não podemos identificar os 6 furos. Tire a foto novamente.
+Splash destruído após falha.
+[35mCAMERA ENCERRADA[0m 
+
+DepthCamera liberada após falha.
+Janela da câmera destruída após falha.
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+Ultima vida registrada: 0, Vida atual: 202
+[35mCAMERA INICIALIZADA[0m 
+
+Abertura: 80.18755238290139
+Salvando foto...
+[35mImagem salva[0m 
+
+--- INICIANDO ANÁLISE DE IMAGEM (FLUXO 3D) ---
+
+0: 480x640 1 Bico, 6 Furos, 147.5ms
+Speed: 4.2ms preprocess, 147.5ms inference, 15.4ms postprocess per image at shape (1, 3, 480, 640)
+Results saved to [1mC:\Users\labga\OneDrive\Documentos\WRL\resultados\registro_5_22-09-2025_15.15.07.png[0m
+Parâmetros da câmera (Intrinsics) carregados. Dimensões: 640x480
+
+Processando detecção 1: Classe 'Bico'
+Convertidos 791 pixels da borda para uma nuvem de pontos 3D.
+Filtro de outliers: 791 -> 694 pontos.
+Medição concluída para 'Bico': Diâmetro = 245.13 mm
+
+Processando detecção 2: Classe 'Furo'
+Convertidos 121 pixels da borda para uma nuvem de pontos 3D.
+Filtro de outliers: 121 -> 105 pontos.
+Medição concluída para 'Furo': Diâmetro = 46.98 mm
+
+Processando detecção 3: Classe 'Furo'
+Convertidos 135 pixels da borda para uma nuvem de pontos 3D.
+Filtro de outliers: 135 -> 118 pontos.
+Medição concluída para 'Furo': Diâmetro = 50.98 mm
+
+Processando detecção 4: Classe 'Furo'
+Convertidos 137 pixels da borda para uma nuvem de pontos 3D.
+Filtro de outliers: 137 -> 113 pontos.
+Medição concluída para 'Furo': Diâmetro = 52.25 mm
+
+Processando detecção 5: Classe 'Furo'
+Convertidos 137 pixels da borda para uma nuvem de pontos 3D.
+Filtro de outliers: 137 -> 120 pontos.
+Medição concluída para 'Furo': Diâmetro = 48.97 mm
+
+Processando detecção 6: Classe 'Furo'
+Convertidos 156 pixels da borda para uma nuvem de pontos 3D.
+Filtro de outliers: 156 -> 135 pontos.
+Medição concluída para 'Furo': Diâmetro = 51.78 mm
+
+Processando detecção 7: Classe 'Furo'
+Convertidos 160 pixels da borda para uma nuvem de pontos 3D.
+Filtro de outliers: 160 -> 133 pontos.
+Medição concluída para 'Furo': Diâmetro = 55.64 mm
+
+--- ANÁLISE CONCLUÍDA ---
+Lista de diâmetros final (mm): [245.13, 46.98, 50.98, 52.25, 48.97, 51.78, 55.64]
+Pontos:  [(324, 238), (253, 313), (228, 214), (349, 339), (398, 171), (301, 141), (421, 269)]
+Pontos filtrados:  [(324, 238), (253, 313), (228, 214), (349, 339), (398, 171), (301, 141), (421, 269)]
+altura, largura 280 273
+lista_pontos em enumerar furos [(324, 238), (253, 313), (228, 214), (349, 339), (398, 171), (301, 141), (421, 269)]
+Pontos:  [(324, 238), (253, 313), (228, 214), (349, 339), (398, 171), (301, 141), (421, 269)]
+Pontos filtrados:  [(324, 238), (253, 313), (228, 214), (349, 339), (398, 171), (301, 141), (421, 269)]
+
+lista_pontos em enumerar furos pós filtrar ponto central
+ [(324, 238), (253, 313), (228, 214), (349, 339), (398, 171), (301, 141), (421, 269)]
+lista com diâmetros não fornecida ou tamanho incompatível, não filtrando pelo diâmetro do bico.
+Furos detectados: [(324, 238), (253, 313), (228, 214), (349, 339), (398, 171), (301, 141)]
+Furos array:
+ [[324 238]
+ [253 313]
+ [228 214]
+ [349 339]
+ [398 171]
+ [301 141]]
+Ordenando pontos em sentido horário
+pontos antes de ordenar [[324 238]
+ [253 313]
+ [228 214]
+ [349 339]
+ [398 171]
+ [301 141]]
+pontos após ordenar [[228 214]
+ [301 141]
+ [398 171]
+ [324 238]
+ [349 339]
+ [253 313]]
+Furos ordenados:
+ [[228 214]
+ [301 141]
+ [398 171]
+ [324 238]
+ [349 339]
+ [253 313]]
+Dados a serem unidos por reunir_dados: lista_APP ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '5', 'JP', '202']
+nome_arquivo:  ['registro_5_22-09-2025_15.15.07.png', '22/09/2025', '15:15']
+diametros_ordenados:  [245.13, 46.98, 50.98, 52.25, 48.97, 51.78, 55.64]
+DADOS REUNIDOS: ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '5', 'JP', '202', 'registro_5_22-09-2025_15.15.07.png', '22/09/2025', '15:15', 245.13, 46.98, 50.98, 52.25, 48.97, 51.78, 55.64]
+pós lista completa linhas 687 funcoes camera:  ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '5', 'JP', '202', 'registro_5_22-09-2025_15.15.07.png', '22/09/2025', '15:15', 245.13, 46.98, 50.98, 52.25, 48.97, 51.78, 55.64]
+tamanho lista_completa: 18
+lista_diametros: ['Crítico', 'Bom', 'Bom', 'Bom', 'Bom', 'Bom', 'Bom']
+Dados recebidos para salvar_registros_desgaste:
+lista_completa: ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '5', 'JP', '202', 'registro_5_22-09-2025_15.15.07.png', '22/09/2025', '15:15', 245.13, 46.98, 50.98, 52.25, 48.97, 51.78, 55.64]
+estados: ['Crítico', 'Bom', 'Bom', 'Bom', 'Bom', 'Bom', 'Bom']
+dados_diametros: [245.13, 46.98, 50.98, 52.25, 48.97, 51.78, 55.64]
+estado_bico: ['Bom']
+qtd_furos: 6
+Comandos de desgaste para a tabela B6 executados.
+Dados de DESGASTE inseridos com sucesso.
+Salvando registro principal na tabela B6 com dados: ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '5', 'JP', '202', 'registro_5_22-09-2025_15.15.07.png', '22/09/2025', '15:15', 245.13, 46.98, 50.98, 52.25, 48.97, 51.78, 55.64]
+Comando de inserção na tabela B6 executado.
+Dados PRINCIPAIS inseridos com sucesso.
+DADOS INSERIDOS COM SUCESSO EM AMBAS AS OPERAÇÕES!
+SUCESSO: Preparando para exibir resultados.
+Splash destruído com sucesso.
+Janela da câmera destruída com sucesso.
+DAdos da inspeção
+
+6
+
+USIMINAS/MG/BRASIL
+
+ACIARIA2
+
+5
+
+276,4/49
+
+5
+
+JP
+
+202
+
+registro_5_22-09-2025_15.15.07.png
+
+22/09/2025
+
+15:15
+
+245.13
+
+46.98
+
+50.98
+
+52.25
+
+48.97
+
+51.78
+
+55.64
+abrindo aba dados
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+verificando se dados do registro_5_22-09-2025_15.15.07.png estao em B6
+
+Conectando ao BD - FUNCOES_WRL
+dados encontrados:  ('6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '5', 'JP', '202', 'registro_5_22-09-2025_15.15.07.png', '22/09/2025', '15:15', 245.13, 46.98, 50.98, 52.25, 48.97, 51.78, 55.64)
+Desconectando do BD - FUNCOES_WRL
+
+Retorno da busca na tabela B6: ('6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '5', 'JP', '202', 'registro_5_22-09-2025_15.15.07.png', '22/09/2025', '15:15', 245.13, 46.98, 50.98, 52.25, 48.97, 51.78, 55.64)
+medidas foto (245.13, 46.98, 50.98, 52.25, 48.97, 51.78, 55.64)
+
+Arquivo_foto= C:\Users\labga\OneDrive\Documentos\WRL\FOTOS_ANALISE\registro_5_22-09-2025_15.15.07.png 
+Arquivo guia=  C:\Users\labga\OneDrive\Documentos\WRL\FOTOS_GUIA\registro_5_22-09-2025_15.15.07.png
+arquivos verificados
+fim da aba dados
+
+>>> [DEBUG MEMÓRIA] Uso em 'Após fechar inspeção e voltar ao menu': 536.99 MB
+>>> [DEBUG OBJETOS] Estado inicial da memória armazenado.
+Resultados exibidos com sucesso.
+Processamento de foto resetado.
+[35mCAMERA ENCERRADA[0m 
+
+>>> [DEBUG DESTRUIÇÃO] Tentando destruir: INICIAR INSPECÇÃO, INICIAR INSPECÇÃO, DADOS DA INSPECÇÃO
+
+>>> [DEBUG MEMÓRIA] Uso em 'Após fechar inspeção e voltar ao menu': 529.31 MB
+>>> [DEBUG OBJETOS] Comparando contagem de objetos com o estado inicial (Top 10 vazamentos):
+    - ReferenceType: +1 instâncias
+    - builtin_function_or_method: +1 instâncias
+    - Counter: +1 instâncias
+[31mFinalizando o código - Tela do Menu[0m 
+
+ 
+Programa finalizado. 

@@ -1,0 +1,72 @@
+Iniciando o programa no ambiente 'wrl'... 
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\labga\miniconda3\envs\wrl\Lib\tkinter\__init__.py", line 1948, in __call__
+    return self.func(*args)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\labga\OneDrive\Área de Trabalho\WRL\MENU_WRL.py", line 174, in <lambda>
+    bt_captura_dataset = FUNCOES_TKINTER.CRIAR_BOTAO(frame_1,'Captura\npara\nDataset\n\U0001f4c2',bege,verde,4,'12','bold',"hand2", lambda:CAPTURA_DATASET(inp_menu))
+                                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\labga\OneDrive\Área de Trabalho\WRL\MENU_WRL.py", line 106, in CAPTURA_DATASET
+    janela_captura_dataset = aba_captura_dataset(inp_menu)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\labga\OneDrive\Área de Trabalho\WRL\FUNCOES_CAPTURA_DATASET.py", line 151, in aba_captura_dataset
+    if camera_ok:
+       ^^^^^^^^^
+UnboundLocalError: cannot access local variable 'camera_ok' where it is not associated with a value
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\labga\miniconda3\envs\wrl\Lib\tkinter\__init__.py", line 1948, in __call__
+    return self.func(*args)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\labga\OneDrive\Área de Trabalho\WRL\FUNCOES_CAPTURA_DATASET.py", line 52, in cleanup_and_close
+    if camera_ok and dc:
+       ^^^^^^^^^
+NameError: cannot access free variable 'camera_ok' where it is not associated with a value in enclosing scope
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\labga\miniconda3\envs\wrl\Lib\tkinter\__init__.py", line 1948, in __call__
+    return self.func(*args)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\labga\OneDrive\Área de Trabalho\WRL\FUNCOES_CAPTURA_DATASET.py", line 52, in cleanup_and_close
+    if camera_ok and dc:
+       ^^^^^^^^^
+NameError: cannot access free variable 'camera_ok' where it is not associated with a value in enclosing scope
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\labga\miniconda3\envs\wrl\Lib\tkinter\__init__.py", line 1948, in __call__
+    return self.func(*args)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\labga\OneDrive\Área de Trabalho\WRL\FUNCOES_CAPTURA_DATASET.py", line 52, in cleanup_and_close
+    if camera_ok and dc:
+       ^^^^^^^^^
+NameError: cannot access free variable 'camera_ok' where it is not associated with a value in enclosing scope
+
+
+ [32mIniciando o código - Tela do Menu[0m
+
+>>> [DEBUG MEMÓRIA] Uso em 'Início do Programa': 24.95 MB
+>>> [DEBUG OBJETOS] Estado inicial da memória armazenado.
+
+
+ [32mAbrindo FUNCOES CAMERA[0m
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+AVISO CONECTA A CAMÊRA
+>>> Encerrando a captura de dataset...
+>>> Encerrando a captura de dataset...
+>>> Encerrando a captura de dataset...
+Traceback (most recent call last):
+  File "C:\Users\labga\OneDrive\Área de Trabalho\WRL\MENU_WRL.py", line 179, in <module>
+    menu_WRL()
+  File "C:\Users\labga\OneDrive\Área de Trabalho\WRL\MENU_WRL.py", line 64, in menu_WRL
+    componentes_frame1(Janela_menu)
+  File "C:\Users\labga\OneDrive\Área de Trabalho\WRL\MENU_WRL.py", line 177, in componentes_frame1
+    inp_menu.mainloop()
+  File "C:\Users\labga\miniconda3\envs\wrl\Lib\tkinter\__init__.py", line 1485, in mainloop
+    self.tk.mainloop(n)
+KeyboardInterrupt
+^C 
+Programa finalizado. 

@@ -1,0 +1,16 @@
+Iniciando o programa no ambiente 'wrl'... 
+
+  You can now view your Streamlit app in your browser.
+
+  Local URL: http://localhost:8501
+  Network URL: http://127.0.0.1:8501
+
+
+
+ [32mIniciando o código - Tela do Menu[0m
+
+>>> [DEBUG MEMÓRIA] Uso em 'Início do Programa': 24.71 MB
+>>> [DEBUG OBJETOS] Estado inicial da memória armazenado.
+comando: ['streamlit', 'run', 'C:\\Users\\labga\\OneDrive\\Documentos\\WRL\\SITE\\site_WRL.py']
+[31mFinalizando o código - Tela do Menu[0m 
+

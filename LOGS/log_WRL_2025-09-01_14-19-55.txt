@@ -1,0 +1,512 @@
+Iniciando o programa no ambiente 'wrl'... 
+
+
+ [32mIniciando o c�digo - Tela do Menu[0m
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+
+ [32mIniciando o c�digo - Registro pre-medi��o[0m
+[31mFinalizando o c�digo - Registro pre-medi��o[0m 
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Dados obtidos - CADASTRO_BICO_WRL:  ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '7', '276,4/49', '5', '0']
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+Ultima vida registrada: 0, Vida atual: 154
+
+
+ [32mAbrindo FUNCOES CAMERA[0m
+
+
+ [32mIniciando o código - Dados do bico[0m
+[31mFinalizando o código - Dados do bico[0m 
+
+
+
+ [32mIniciando o código - Tela da câmera[0m
+[35mCAMERA INICIALIZADA[0m 
+
+Abertura: 80.18755238290139
+Salvando foto...
+[35mImagem salva[0m 
+
+ANALISAR IMAGEM EM EXECUÇÃO
+
+0: 480x640 1 Bico, 6 Furos, 231.1ms
+Speed: 5.2ms preprocess, 231.1ms inference, 32.9ms postprocess per image at shape (1, 3, 480, 640)
+Results saved to [1mC:\Users\labga\OneDrive\rea de Trabalho\WRL\resultados\registro_5_01-09-2025_14.23.png[0m
+1 label saved to C:\Users\labga\OneDrive\rea de Trabalho\WRL\resultados\registro_5_01-09-2025_14.23.png\labels
+diametro externo 355.71610748565195
+lista_diametros em analisar imagem [355.72]
+diametro furo 63.98021517601384
+diametro furo 45.46661288629732
+diametro furo 44.59211803705092
+diametro furo 53.54258355733868
+diametro furo 52.40671525009705
+diametro furo 41.915045107415345
+lista_diametros em analisar imagem [355.72, 63.98, 45.47, 44.59, 53.54, 52.41, 41.92]
+Pontos filtrados:  [(316, 240), (416, 209), (340, 142), (238, 184), (403, 309), (311, 349), (229, 289)]
+altura, largura 289 288
+lista_pontos em enumerar furos [(316, 240), (416, 209), (340, 142), (238, 184), (403, 309), (311, 349), (229, 289)]
+Pontos filtrados:  [(316, 240), (416, 209), (340, 142), (238, 184), (403, 309), (311, 349), (229, 289)]
+
+lista_pontos em enumerar furos pós filtrar ponto central
+ [(316, 240), (416, 209), (340, 142), (238, 184), (403, 309), (311, 349), (229, 289)]
+lista com diâmetros não fornecida ou tamanho incompatível, não filtrando pelo diâmetro do bico.
+Furos detectados: [(316, 240), (416, 209), (340, 142), (238, 184), (403, 309), (311, 349)]
+Furos array:
+ [[316 240]
+ [416 209]
+ [340 142]
+ [238 184]
+ [403 309]
+ [311 349]]
+Ordenando pontos em sentido horário
+pontos antes de ordenar [[316 240]
+ [416 209]
+ [340 142]
+ [238 184]
+ [403 309]
+ [311 349]]
+pontos após ordenar [[238 184]
+ [340 142]
+ [416 209]
+ [403 309]
+ [311 349]
+ [316 240]]
+Furos ordenados:
+ [[238 184]
+ [340 142]
+ [416 209]
+ [403 309]
+ [311 349]
+ [316 240]]
+Dados a serem unidos por reunir_dados: lista_APP ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '5', 'RAFA', '154']
+nome_arquivo:  ['registro_5_01-09-2025_14.23.png', '01/09/2025', '14:23']
+diametros_ordenados:  [355.72, 63.98, 45.47, 44.59, 53.54, 52.41, 41.92]
+DADOS REUNIDOS: ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '5', 'RAFA', '154', 'registro_5_01-09-2025_14.23.png', '01/09/2025', '14:23', 355.72, 63.98, 45.47, 44.59, 53.54, 52.41, 41.92]
+pós lista completa linhas 687 funcoes camera:  ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '5', 'RAFA', '154', 'registro_5_01-09-2025_14.23.png', '01/09/2025', '14:23', 355.72, 63.98, 45.47, 44.59, 53.54, 52.41, 41.92]
+tamanho lista_completa: 18
+lista_diametros: ['Estável', 'Estável', 'Bom', 'Bom', 'Bom', 'Bom', 'Bom']
+Dados recebidos para salvar_registros_desgaste:
+lista_completa: ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '5', 'RAFA', '154', 'registro_5_01-09-2025_14.23.png', '01/09/2025', '14:23', 355.72, 63.98, 45.47, 44.59, 53.54, 52.41, 41.92]
+estados: ['Estável', 'Estável', 'Bom', 'Bom', 'Bom', 'Bom', 'Bom']
+dados_diametros: [355.72, 63.98, 45.47, 44.59, 53.54, 52.41, 41.92]
+estado_bico: ['Bom']
+qtd_furos: 6
+Comandos de desgaste para a tabela B6 executados.
+Dados de DESGASTE inseridos com sucesso.
+Salvando registro principal na tabela B6 com dados: ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '5', 'RAFA', '154', 'registro_5_01-09-2025_14.23.png', '01/09/2025', '14:23', 355.72, 63.98, 45.47, 44.59, 53.54, 52.41, 41.92]
+Comando de inserção na tabela B6 executado.
+Dados PRINCIPAIS inseridos com sucesso.
+DADOS INSERIDOS COM SUCESSO EM AMBAS AS OPERAÇÕES!
+SUCESSO: Preparando para exibir resultados.
+Splash destruído com sucesso.
+Janela da câmera destruída com sucesso.
+DAdos da inspeção
+
+6
+
+USIMINAS/MG/BRASIL
+
+ACIARIA2
+
+5
+
+276,4/49
+
+5
+
+RAFA
+
+154
+
+registro_5_01-09-2025_14.23.png
+
+01/09/2025
+
+14:23
+
+355.72
+
+63.98
+
+45.47
+
+44.59
+
+53.54
+
+52.41
+
+41.92
+abrindo aba dados
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+verificando se dados do registro_5_01-09-2025_14.23.png estao em B6
+
+Conectando ao BD - FUNCOES_WRL
+dados encontrados:  ('6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '5', 'RAFA', '154', 'registro_5_01-09-2025_14.23.png', '01/09/2025', '14:23', 355.72, 63.98, 45.47, 44.59, 53.54, 52.41, 41.92)
+Desconectando do BD - FUNCOES_WRL
+
+Retorno da busca na tabela B6: ('6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '5', 'RAFA', '154', 'registro_5_01-09-2025_14.23.png', '01/09/2025', '14:23', 355.72, 63.98, 45.47, 44.59, 53.54, 52.41, 41.92)
+medidas foto (355.72, 63.98, 45.47, 44.59, 53.54, 52.41, 41.92)
+
+Arquivo_foto= C:\Users\labga\OneDrive\Área de Trabalho\WRL\FOTOS_ANALISE\registro_5_01-09-2025_14.23.png 
+Arquivo guia=  C:\Users\labga\OneDrive\Área de Trabalho\WRL\FOTOS_GUIA\registro_5_01-09-2025_14.23.png
+arquivos verificados
+fim da aba dados
+Resultados exibidos com sucesso.
+Processamento de foto resetado.
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Dados obtidos - CADASTRO_BICO_WRL:  ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '3', '0']
+
+Conectando ao BD - FUNCOES_WRL
+
+
+ [36mDADOS SALVOS - CADASTRO_BICO_WRL[0m
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+Ultima vida registrada: 0, Vida atual: 545
+[35mCAMERA INICIALIZADA[0m 
+
+Abertura: 80.18755238290139
+Salvando foto...
+[35mImagem salva[0m 
+
+ANALISAR IMAGEM EM EXECUÇÃO
+
+0: 480x640 1 Bico, 5 Furos, 139.2ms
+Speed: 3.3ms preprocess, 139.2ms inference, 14.1ms postprocess per image at shape (1, 3, 480, 640)
+Results saved to [1mC:\Users\labga\OneDrive\rea de Trabalho\WRL\resultados\registro_3_01-09-2025_14.27.png[0m
+1 label saved to C:\Users\labga\OneDrive\rea de Trabalho\WRL\resultados\registro_3_01-09-2025_14.27.png\labels
+diametro externo 334.4493860130034
+lista_diametros em analisar imagem [334.45]
+diametro furo 54.18622486174842
+diametro furo 54.57417652249747
+diametro furo 51.11594528178741
+diametro furo 55.139819273217775
+diametro furo 52.732450501776846
+lista_diametros em analisar imagem [334.45, 54.19, 54.57, 51.12, 55.14, 52.73]
+Pontos filtrados:  [(321, 241), (229, 259), (254, 173), (291, 330), (345, 148), (382, 314)]
+altura, largura 286 284
+lista_pontos em enumerar furos [(321, 241), (229, 259), (254, 173), (291, 330), (345, 148), (382, 314)]
+Pontos filtrados:  [(321, 241), (229, 259), (254, 173), (291, 330), (345, 148), (382, 314)]
+
+lista_pontos em enumerar furos pós filtrar ponto central
+ [(321, 241), (229, 259), (254, 173), (291, 330), (345, 148), (382, 314)]
+lista com diâmetros não fornecida ou tamanho incompatível, não filtrando pelo diâmetro do bico.
+Furos detectados: [(321, 241), (229, 259), (254, 173), (291, 330), (345, 148), (382, 314)]
+Furos array:
+ [[321 241]
+ [229 259]
+ [254 173]
+ [291 330]
+ [345 148]
+ [382 314]]
+Ordenando pontos em sentido horário
+pontos antes de ordenar [[321 241]
+ [229 259]
+ [254 173]
+ [291 330]
+ [345 148]
+ [382 314]]
+pontos após ordenar [[254 173]
+ [345 148]
+ [321 241]
+ [382 314]
+ [291 330]
+ [229 259]]
+Furos ordenados:
+ [[254 173]
+ [345 148]
+ [321 241]
+ [382 314]
+ [291 330]
+ [229 259]]
+Dados a serem unidos por reunir_dados: lista_APP ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '3', 'RAFA', '545']
+nome_arquivo:  ['registro_3_01-09-2025_14.27.png', '01/09/2025', '14:27']
+diametros_ordenados:  [334.45, 54.19, 54.57, 51.12, 55.14, 52.73]
+DADOS REUNIDOS: ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '3', 'RAFA', '545', 'registro_3_01-09-2025_14.27.png', '01/09/2025', '14:27', 334.45, 54.19, 54.57, 51.12, 55.14, 52.73]
+pós lista completa linhas 687 funcoes camera:  ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '3', 'RAFA', '545', 'registro_3_01-09-2025_14.27.png', '01/09/2025', '14:27', 334.45, 54.19, 54.57, 51.12, 55.14, 52.73]
+tamanho lista_completa: 17
+lista_diametros: ['Estável', 'Bom', 'Bom', 'Bom', 'Bom', 'Bom']
+Dados recebidos para salvar_registros_desgaste:
+lista_completa: ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '3', 'RAFA', '545', 'registro_3_01-09-2025_14.27.png', '01/09/2025', '14:27', 334.45, 54.19, 54.57, 51.12, 55.14, 52.73]
+estados: ['Estável', 'Bom', 'Bom', 'Bom', 'Bom', 'Bom']
+dados_diametros: [334.45, 54.19, 54.57, 51.12, 55.14, 52.73]
+estado_bico: ['Bom']
+qtd_furos: 6
+Comandos de desgaste para a tabela B6 executados.
+Dados de DESGASTE inseridos com sucesso.
+ERRO: Incompatibilidade de dados para a tabela B6.
+Esperado: 18, Recebido: 17
+Dados recebidos: ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '3', 'RAFA', '545', 'registro_3_01-09-2025_14.27.png', '01/09/2025', '14:27', 334.45, 54.19, 54.57, 51.12, 55.14, 52.73]
+C:\Users\labga\OneDrive\Área de Trabalho\WRLesultados\registro_3_01-09-2025_14.27.png\image0.jpg
+FALHA: Não podemos identificar os 6 furos. Tire a foto novamente.
+Splash destruído após falha.
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+Ultima vida registrada: 0, Vida atual: 545
+[35mCAMERA INICIALIZADA[0m 
+
+Abertura: 80.18755238290139
+Salvando foto...
+[35mImagem salva[0m 
+
+ANALISAR IMAGEM EM EXECUÇÃO
+
+0: 480x640 1 Bico, 4 Furos, 144.4ms
+Speed: 101.1ms preprocess, 144.4ms inference, 12.4ms postprocess per image at shape (1, 3, 480, 640)
+Results saved to [1mC:\Users\labga\OneDrive\rea de Trabalho\WRL\resultados\registro_3_01-09-2025_14.27.png2[0m
+1 label saved to C:\Users\labga\OneDrive\rea de Trabalho\WRL\resultados\registro_3_01-09-2025_14.27.png2\labels
+diametro externo 314.176132703324
+lista_diametros em analisar imagem [314.18]
+diametro furo 55.84377618830355
+diametro furo 60.67685415441875
+diametro furo 56.31341568794948
+diametro furo 52.753502677430575
+lista_diametros em analisar imagem [314.18, 55.84, 60.68, 56.31, 52.75]
+Pontos filtrados:  [(325, 236), (311, 325), (254, 178), (235, 269), (339, 139)]
+altura, largura 286 284
+lista_pontos em enumerar furos [(325, 236), (311, 325), (254, 178), (235, 269), (339, 139)]
+Pontos filtrados:  [(325, 236), (311, 325), (254, 178), (235, 269), (339, 139)]
+
+lista_pontos em enumerar furos pós filtrar ponto central
+ [(325, 236), (311, 325), (254, 178), (235, 269), (339, 139)]
+lista com diâmetros não fornecida ou tamanho incompatível, não filtrando pelo diâmetro do bico.
+(fun_cam)Não foram detectados pontos suficientes.
+dados obtidos:
+[(325, 236), (311, 325), (254, 178), (235, 269), (339, 139)]
+tamanho:  5
+Dados a serem unidos por reunir_dados: lista_APP ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '3', 'RAFA', '545']
+nome_arquivo:  ['registro_3_01-09-2025_14.27.png', '01/09/2025', '14:27']
+diametros_ordenados:  [314.18, 55.84, 60.68, 56.31, 52.75]
+DADOS REUNIDOS: ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '3', 'RAFA', '545', 'registro_3_01-09-2025_14.27.png', '01/09/2025', '14:27', 314.18, 55.84, 60.68, 56.31, 52.75]
+pós lista completa linhas 687 funcoes camera:  ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '3', 'RAFA', '545', 'registro_3_01-09-2025_14.27.png', '01/09/2025', '14:27', 314.18, 55.84, 60.68, 56.31, 52.75]
+tamanho lista_completa: 16
+lista_diametros: ['Estável', 'Bom', 'Estável', 'Bom', 'Bom']
+Dados recebidos para salvar_registros_desgaste:
+lista_completa: ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '3', 'RAFA', '545', 'registro_3_01-09-2025_14.27.png', '01/09/2025', '14:27', 314.18, 55.84, 60.68, 56.31, 52.75]
+estados: ['Estável', 'Bom', 'Estável', 'Bom', 'Bom']
+dados_diametros: [314.18, 55.84, 60.68, 56.31, 52.75]
+estado_bico: ['Bom']
+qtd_furos: 6
+Comandos de desgaste para a tabela B6 executados.
+Dados de DESGASTE inseridos com sucesso.
+ERRO: Incompatibilidade de dados para a tabela B6.
+Esperado: 18, Recebido: 16
+Dados recebidos: ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '3', 'RAFA', '545', 'registro_3_01-09-2025_14.27.png', '01/09/2025', '14:27', 314.18, 55.84, 60.68, 56.31, 52.75]
+C:\Users\labga\OneDrive\Área de Trabalho\WRLesultados\registro_3_01-09-2025_14.27.png\image0.jpg
+FALHA: Não podemos identificar os 6 furos. Tire a foto novamente.
+Splash destruído após falha.
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+Ultima vida registrada: 0, Vida atual: 545
+[35mCAMERA INICIALIZADA[0m 
+
+Abertura: 80.18755238290139
+Salvando foto...
+[35mImagem salva[0m 
+
+ANALISAR IMAGEM EM EXECUÇÃO
+
+0: 480x640 1 Bico, 2 Furos, 137.6ms
+Speed: 19.5ms preprocess, 137.6ms inference, 7.4ms postprocess per image at shape (1, 3, 480, 640)
+Results saved to [1mC:\Users\labga\OneDrive\rea de Trabalho\WRL\resultados\registro_3_01-09-2025_14.29.png[0m
+1 label saved to C:\Users\labga\OneDrive\rea de Trabalho\WRL\resultados\registro_3_01-09-2025_14.29.png\labels
+diametro externo 257.55670637206055
+lista_diametros em analisar imagem [257.56]
+diametro furo 61.42689492472781
+diametro furo 55.34572422519028
+lista_diametros em analisar imagem [257.56, 61.43, 55.35]
+Pontos filtrados:  [(326, 247), (392, 316), (243, 273)]
+altura, largura 268 274
+lista_pontos em enumerar furos [(326, 247), (392, 316), (243, 273)]
+Pontos filtrados:  [(326, 247), (392, 316), (243, 273)]
+
+lista_pontos em enumerar furos pós filtrar ponto central
+ [(326, 247), (392, 316), (243, 273)]
+lista com diâmetros não fornecida ou tamanho incompatível, não filtrando pelo diâmetro do bico.
+(fun_cam)Não foram detectados pontos suficientes.
+dados obtidos:
+[(326, 247), (392, 316), (243, 273)]
+tamanho:  3
+Dados a serem unidos por reunir_dados: lista_APP ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '3', 'RAFA', '545']
+nome_arquivo:  ['registro_3_01-09-2025_14.29.png', '01/09/2025', '14:29']
+diametros_ordenados:  [257.56, 61.43, 55.35]
+DADOS REUNIDOS: ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '3', 'RAFA', '545', 'registro_3_01-09-2025_14.29.png', '01/09/2025', '14:29', 257.56, 61.43, 55.35]
+pós lista completa linhas 687 funcoes camera:  ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '3', 'RAFA', '545', 'registro_3_01-09-2025_14.29.png', '01/09/2025', '14:29', 257.56, 61.43, 55.35]
+tamanho lista_completa: 14
+lista_diametros: ['Crítico', 'Estável', 'Bom']
+Não foi possível analisar o estado da lança estado geral_bico
+Dados recebidos para salvar_registros_desgaste:
+lista_completa: ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '3', 'RAFA', '545', 'registro_3_01-09-2025_14.29.png', '01/09/2025', '14:29', 257.56, 61.43, 55.35]
+estados: ['Crítico', 'Estável', 'Bom']
+dados_diametros: [257.56, 61.43, 55.35]
+estado_bico: ['Indefinido']
+qtd_furos: 6
+Comandos de desgaste para a tabela B6 executados.
+Dados de DESGASTE inseridos com sucesso.
+ERRO: Incompatibilidade de dados para a tabela B6.
+Esperado: 18, Recebido: 14
+Dados recebidos: ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '3', 'RAFA', '545', 'registro_3_01-09-2025_14.29.png', '01/09/2025', '14:29', 257.56, 61.43, 55.35]
+C:\Users\labga\OneDrive\Área de Trabalho\WRLesultados\registro_3_01-09-2025_14.29.png\image0.jpg
+FALHA: Não podemos identificar os 6 furos. Tire a foto novamente.
+Splash destruído após falha.
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+Ultima vida registrada: 0, Vida atual: 545
+[35mCAMERA INICIALIZADA[0m 
+
+Abertura: 80.18755238290139
+Salvando foto...
+[35mImagem salva[0m 
+
+ANALISAR IMAGEM EM EXECUÇÃO
+
+0: 480x640 1 Bico, 3 Furos, 143.1ms
+Speed: 105.1ms preprocess, 143.1ms inference, 11.5ms postprocess per image at shape (1, 3, 480, 640)
+Results saved to [1mC:\Users\labga\OneDrive\rea de Trabalho\WRL\resultados\registro_3_01-09-2025_14.29.png2[0m
+1 label saved to C:\Users\labga\OneDrive\rea de Trabalho\WRL\resultados\registro_3_01-09-2025_14.29.png2\labels
+diametro externo 275.9724765833188
+lista_diametros em analisar imagem [275.97]
+diametro furo 59.35129091901812
+diametro furo 57.587047417592714
+diametro furo 54.383660454833816
+lista_diametros em analisar imagem [275.97, 59.35, 57.59, 54.38]
+Pontos filtrados:  [(322, 240), (389, 308), (412, 222), (262, 179)]
+altura, largura 268 274
+lista_pontos em enumerar furos [(322, 240), (389, 308), (412, 222), (262, 179)]
+Pontos filtrados:  [(322, 240), (389, 308), (412, 222), (262, 179)]
+
+lista_pontos em enumerar furos pós filtrar ponto central
+ [(322, 240), (389, 308), (412, 222), (262, 179)]
+lista com diâmetros não fornecida ou tamanho incompatível, não filtrando pelo diâmetro do bico.
+(fun_cam)Não foram detectados pontos suficientes.
+dados obtidos:
+[(322, 240), (389, 308), (412, 222), (262, 179)]
+tamanho:  4
+Dados a serem unidos por reunir_dados: lista_APP ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '3', 'RAFA', '545']
+nome_arquivo:  ['registro_3_01-09-2025_14.29.png', '01/09/2025', '14:29']
+diametros_ordenados:  [275.97, 59.35, 57.59, 54.38]
+DADOS REUNIDOS: ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '3', 'RAFA', '545', 'registro_3_01-09-2025_14.29.png', '01/09/2025', '14:29', 275.97, 59.35, 57.59, 54.38]
+pós lista completa linhas 687 funcoes camera:  ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '3', 'RAFA', '545', 'registro_3_01-09-2025_14.29.png', '01/09/2025', '14:29', 275.97, 59.35, 57.59, 54.38]
+tamanho lista_completa: 15
+lista_diametros: ['Crítico', 'Bom', 'Bom', 'Bom']
+Dados recebidos para salvar_registros_desgaste:
+lista_completa: ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '3', 'RAFA', '545', 'registro_3_01-09-2025_14.29.png', '01/09/2025', '14:29', 275.97, 59.35, 57.59, 54.38]
+estados: ['Crítico', 'Bom', 'Bom', 'Bom']
+dados_diametros: [275.97, 59.35, 57.59, 54.38]
+estado_bico: ['Bom']
+qtd_furos: 6
+Comandos de desgaste para a tabela B6 executados.
+Dados de DESGASTE inseridos com sucesso.
+ERRO: Incompatibilidade de dados para a tabela B6.
+Esperado: 18, Recebido: 15
+Dados recebidos: ['6', 'USIMINAS/MG/BRASIL', 'ACIARIA2', '5', '276,4/49', '3', 'RAFA', '545', 'registro_3_01-09-2025_14.29.png', '01/09/2025', '14:29', 275.97, 59.35, 57.59, 54.38]
+C:\Users\labga\OneDrive\Área de Trabalho\WRLesultados\registro_3_01-09-2025_14.29.png\image0.jpg
+FALHA: Não podemos identificar os 6 furos. Tire a foto novamente.
+Splash destruído após falha.
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+Ultima vida registrada: 0, Vida atual: 545
+[35mCAMERA INICIALIZADA[0m 
+
+[35mCAMERA ENCERRADA[0m 
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+Ultima vida registrada: 0, Vida atual: 545
+[35mCAMERA INICIALIZADA[0m 
+
+[35mCAMERA ENCERRADA[0m 
+
+[31mFinalizando o código - Tela do Menu[0m 
+
+^C

@@ -508,6 +508,7 @@ def enumerar_furos(lista_pontos, qtd_furos, img, nome_arquivo, lista_diametros=N
     else:
         print("lista com diâmetros não fornecida ou tamanho incompatível, não filtrando pelo diâmetro do bico.")
         pontos_furos = lista_pontos
+        print("pontos_furos", pontos_furos)  
 
     if len(pontos_furos) < qtd_furos:
         print("(fun_cam)Não foram detectados pontos suficientes.")
@@ -516,6 +517,8 @@ def enumerar_furos(lista_pontos, qtd_furos, img, nome_arquivo, lista_diametros=N
         print("tamanho: ", len(pontos_furos))
         return []
     else:
+        # Quando tem mais pontos do que o necessário, seleciona do começo da lista até a quantidade de furos 
+        # o ideal seria selecionar os mais próximos do centro
         furos = pontos_furos[:qtd_furos]
 
         if furos:

@@ -165,7 +165,7 @@ def OnClick(event, listaCli, usina, site, BOF, ID, Furos, Tipo):
     Tipo.insert(tk.END, item_selecionado[4])
     ID.insert(tk.END, item_selecionado[5])
 
-# --- Funções de Construção da UI (sem alterações significativas) ---
+# --- Funções de Construção da UI  ---
 
 #CORES USADAS
 verde = '#416951'
@@ -317,15 +317,13 @@ def componentes_frame1(inp_frame, inp_janela, inp_menu):
 # --- Função Principal de Entrada ---
 
 def aba_cadastro(inp_janela):
+
     janela_dois = tk.Toplevel(inp_janela)
-    
     tela(janela_dois)
     adicionar_detalhes(janela_dois)
     frames_da_tela(janela_dois)
     componentes_frame1(frame_1, janela_dois, inp_janela)
     
-    # inp_janela.withdraw()
-
     janela_dois.transient(inp_janela)
     janela_dois.focus_force()
     janela_dois.grab_set()

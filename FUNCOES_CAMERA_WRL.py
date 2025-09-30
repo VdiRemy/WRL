@@ -242,9 +242,9 @@ def analisar_imagem(model, imagem, nome, depth_frame, depth_image, Abertura):
                     # Converte de metros para milímetros e adiciona à nossa lista
                     pontos_3d_mm.append([p * 1000 for p in ponto_3d_metros])
             
-            if len(pontos_3d_mm) < 10: # Se tivermos muito poucos pontos 3D, a medição não é confiável
-                print(f"AVISO: Pontos de profundidade insuficientes ({len(pontos_3d_mm)}) para a detecção {i+1}. Pulando.")
-                continue
+            # if len(pontos_3d_mm) < 10: # Se tivermos muito poucos pontos 3D, a medição não é confiável
+            #     print(f"AVISO: Pontos de profundidade insuficientes ({len(pontos_3d_mm)}) para a detecção {i+1}. Pulando.")
+            #     continue
 
             print(f"Convertidos {len(pontos_3d_mm)} pixels da borda para uma nuvem de pontos 3D.")
 
@@ -329,27 +329,7 @@ def analisar_imagem(model, imagem, nome, depth_frame, depth_image, Abertura):
             # Retorna None para indicar falha e permitir que o código que chamou a função trate o erro.
             return None, None, None, None
     
-    except Exception as e:
-        # --- BLOCO DE TRATAMENTO DE ERROS ---
-        
-        # VERIFICA SE O ERRO É O ESPERADO (FALTA DE PROFUNDIDADE)
-        if "Pontos de profundidade insuficientes" in str(e) or "máscara de detecção principal está vazia" in str(e):
-            print(f"AVISO: Erro de profundidade detectado (esperado para imagem local): {e}")
-            print("--- MASCARANDO ERRO: Retornando dados falsos para continuar o fluxo. ---")
 
-            # Cria dados falsos ("mock") com a estrutura correta
-            detections = len(results_cache[0]) if results_cache else 1
-
-            dummy_lista_diametros = [0.0] * detections  # Lista de zeros com o tamanho correto
-            dummy_mascaras = results_cache[0].masks.data if results_cache and results_cache[0].masks else None
-            
-            # RETORNA OS DADOS FALSOS, MAS COM A ESTRUTURA VÁLIDA
-            return dummy_lista_diametros, dummy_mascaras, results_cache, caminho_segmentada_cache
-        
-        else:
-            # Se for qualquer outro erro inesperado, sinaliza uma falha real
-            print(f"ERRO CRÍTICO DENTRO DE analisar_imagem: {e}")
-            return None, None, None, None
 
 def extrair_data_e_hora(nome_arquivo):
     lista = nome_arquivo.split("_")
@@ -498,13 +478,19 @@ def enumerar_furos(lista_pontos, qtd_furos, img, nome_arquivo, lista_diametros=N
     lista_pontos = filtrar_ponto_central(lista_pontos, ponto_central, threshold=10)
     print("\nlista_pontos em enumerar furos pós filtrar ponto central\n", lista_pontos)
     # Se lista_diametros não for fornecida, não filtra pelo diâmetro
-    if lista_diametros is not None and len(lista_diametros) == len(lista_pontos) + 1:
+    if lista_diametros is not None and len(lista_diametros) == len(lista_pontos):
         print("lista com diâmetros fornecida, filtrando pelo diâmetro do bico.")
         # O primeiro elemento de lista_diametros é o bico (maior diâmetro)
         # Remover o ponto correspondente ao bico (maior diâmetro)
         idx_bico = np.argmax(lista_diametros)
         # O bico está sempre no início da lista_diametros, então removemos o ponto correspondente
-        pontos_furos = [p for i, p in enumerate(lista_pontos) if i != (idx_bico - 1)]
+
+        pontos_furos = []
+        # Itera sobre os pontos e seus índices
+        for i, p in enumerate(lista_pontos):
+            if i != idx_bico:  # Filtra o ponto do bico
+                pontos_furos.append(p)
+        print("pontos_furos", pontos_furos)
     else:
         print("lista com diâmetros não fornecida ou tamanho incompatível, não filtrando pelo diâmetro do bico.")
         pontos_furos = lista_pontos
@@ -579,7 +565,7 @@ def sobrepor_molde(infra_image):
     # Calcule o centro do frame
     center_x = width // 2
     center_y = height // 2
-    cv2.circle(frame, (center_x, center_y), 140, (0, 255, 255),5, 1)
+    cv2.circle(frame, (center_x, center_y), 140, (0, 255, 255),2, 1)
 
     # back_frame = cv2.cvtColor(back_frame, cv2.COLOR_GRAY2RGB)
     # molde = cv2.imread(fr'{pasta}\ICONES_FOTOS\MOLDE.png')
@@ -818,7 +804,7 @@ def tarefa_de_processamento_independente(dados_entrada):
         lista_pontos = filtrar_ponto_central(lista_pontos, centro)
 
         # Obter furos numerados e ordenados
-        furos_numerados = enumerar_furos(lista_pontos, qtd_furos, cv2.imread(caminho_fotoSegmentada), nome_arquivo[0])
+        furos_numerados = enumerar_furos(lista_pontos, qtd_furos, cv2.imread(caminho_fotoSegmentada), nome_arquivo[0], lista_diametros)
         for dado in lista_dh: nome_arquivo.append(dado)
 
         # Sincronizar diametros com ordem dos furos numerados
@@ -859,7 +845,7 @@ def tarefa_de_processamento_independente(dados_entrada):
         msg_erro = str(e).lower()
         if "não podemos identificar os" in msg_erro:  # seu erro específico
             # Retorna também a imagem (caminho)
-            print(f"{pasta}\resultados\{nome_arquivo[0]}\image0.jpg")
+            print(rf"{pasta}\resultados\{nome_arquivo[0]}\image0.jpg")
             return {
                 "sucesso": False,
                 "mensagem_erro": str(e),

@@ -325,6 +325,8 @@ def aba_camera(inp_janela, dados, inp_menu):
     video_label = tk.Label(frame_dois, bg="white")
     video_label.place(relx=0, rely=0, relwidth=1, relheight=1)
 
+    # Crie uma nova função para a captura em lote e agregação
+    
     def exibir_video():
         nonlocal processando_foto
         if not video_loop_running[0] or not video_label.winfo_exists():
@@ -375,26 +377,3 @@ def aba_camera(inp_janela, dados, inp_menu):
     janela_tres.grab_set()
 
     return janela_tres
-
-
-    #     ret_feed, infra_image_cam = dc.get_simple_frame()
-    #     if ret_feed:
-    #         display_frame = cv2.cvtColor(infra_image_cam, cv2.COLOR_GRAY2RGB)
-    #         img = Image.fromarray(display_frame)
-    #         if video_label.winfo_width() > 1:
-    #             img.thumbnail((video_label.winfo_width(), video_label.winfo_height()))
-    #         img_tk = ImageTk.PhotoImage(image=img)
-    #         video_label.configure(image=img_tk)
-    #         video_label.image = img_tk
-
-    #     if video_loop_running[0]:
-    #         after_id[0] = video_label.after(15, exibir_video)
-
-    # exibir_video()
-
-    # janela_tres.protocol("WM_DELETE_WINDOW", finalizar_e_limpar_camera)
-    # janela_tres.focus_force()
-    # janela_tres.grab_set()
-
-    # return janela_tres
-

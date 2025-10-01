@@ -87,68 +87,6 @@ def componentes_frame1(inp_frame, inp_janela, inp_menu, dc, comando_para_voltar)
     btfoto_pg2 = tk.Button(inp_frame, text='TIRAR FOTO (CTRL)', relief="ridge", cursor="circle", bd=4, bg='#545454', fg='white', font=("arial", 13))
     btfoto_pg2.place(relx=0.5, rely=0.93, anchor=CENTER)
 
-def componentes_frame2_refatorado(inp_frame, lista_dados_inspecao, dc, on_photo_taken_callback):
-    borda = tk.Label(inp_frame, bg="white")
-    borda.place(relx=0, rely=0, relwidth=1, relheight=1)
-
-    def escolher_imagem_local():
-        caminho_imagem = filedialog.askopenfilename(
-            title="Selecione uma imagem",
-            filetypes=[("Arquivos de imagem", "*.png;*.jpg;*.jpeg;*.bmp")]
-        )
-        if caminho_imagem:
-            img = cv2.imread(caminho_imagem)
-            return img
-        return None
-
-    def exibir_video():
-        global nome_arquivo, caminho_fotoBW, caminho_fotoColorida, nome_arquivo_BW
-        global lista_APP, qtd_furos, Abertura, infra_image, centro, depth_frame
-        
-        if not borda.winfo_exists():
-            return
-
-        ret,  infra_image_cam = dc.get_simple_frame()
-
-        if not ret:  
-            # Não conseguiu pegar da câmera → pergunta imagem
-            infra_image_cam = escolher_imagem_local()
-            if infra_image_cam is None:
-                print("Nenhuma imagem selecionada. Encerrando...")
-                return
-            ret = True  # força fluxo normal
-
-        if ret:
-            infra_image = infra_image_cam  
-            back_frame = fun2.sobrepor_molde(infra_image)
-            lista_APP, id_bico, qtd_furos = fun2.organizar_dados_app(lista_dados_inspecao)
-            
-            frame = cv2.cvtColor(back_frame, cv2.COLOR_BGR2RGB)
-            img = Image.fromarray(frame)
-            img = img.resize((borda.winfo_width(), borda.winfo_height()))
-            image = ImageTk.PhotoImage(image=img)
-            borda.configure(image=image)
-            borda.image = image
-            centro = fun2.definir_centro(borda.winfo_height(), borda.winfo_width())
-
-            if keyboard.is_pressed('ctrl') or keyboard.is_pressed('right control'):
-                if hasattr(dc, "get_frame"):  
-                    ret, depth_frame, color_frame, _, Abertura = dc.get_frame()
-                    nome_arquivo, caminho_fotoBW, caminho_fotoColorida, nome_arquivo_BW = \
-                        fun2.tirar_foto(color_frame, infra_image, id_bico)
-                    if hasattr(dc, "release"):
-                        try:
-                            dc.release()
-                        except RuntimeError:
-                            pass
-                on_photo_taken_callback()
-                return
-        
-        borda.after(10, exibir_video)
-
-    exibir_video()
-
-
 def aba_camera(inp_janela, dados, inp_menu):
     """
     Gerencia a UI da câmera, com a ordem das funções internas corrigida.
@@ -281,7 +219,7 @@ def aba_camera(inp_janela, dados, inp_menu):
     # --- Inicialização da Câmera ---
     try:
         dc = DepthCamera()
-        ret, _ = dc.get_simple_frame()
+        ret, _ = dc.get_simple_infrared()
         if not ret: raise RuntimeError("Não foi possível obter o frame inicial da câmera.")
         camera_ok = True
     except Exception as e:
@@ -354,7 +292,7 @@ def aba_camera(inp_janela, dados, inp_menu):
 
 
         # Lógica de Exibição do Feed
-        ret_feed, infra_image_cam = dc.get_simple_frame()
+        ret_feed, infra_image_cam = dc.get_simple_infrared()
         if ret_feed:
             back_frame = fun2.sobrepor_molde(infra_image_cam)
             frame = cv2.cvtColor(back_frame, cv2.COLOR_BGR2RGB)

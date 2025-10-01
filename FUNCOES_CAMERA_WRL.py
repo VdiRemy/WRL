@@ -45,15 +45,50 @@ class DepthCamera:
         except:
             print("AVISO","CONECTA A CAMÊRA")
 
-    def get_simple_frame(self):
-        frames = self.pipeline.wait_for_frames(timeout_ms=1000) #timeout_ms=2000
-        infrared = frames.get_infrared_frame()
-        infra_image = np.asanyarray(infrared.get_data())
-        if not infrared:
+    def get_simple_infrared(self):
+        ret, frames = self.only_get_frame()
+        if ret:
+            infrared = frames.get_infrared_frame()
+            infra_image = np.asanyarray(infrared.get_data())
+            return True, infra_image
+        else:
             return False, None
-        return True, infra_image
                 
-
+    def only_get_frame(self):
+        frames = self.pipeline.wait_for_frames(timeout_ms=1000) #timeout_ms=2000
+        if not frames:
+            return False, None
+        else:
+            return True, frames
+    
+    
+    def turn_in_array(self, frames):
+        depth_frame = frames.get_depth_frame()
+        color_frame = frames.get_color_frame()
+        infrared = frames.get_infrared_frame()
+        depth_image = np.asanyarray(depth_frame.get_data())
+        color_image = np.asanyarray(color_frame.get_data())
+        infra_image = np.asanyarray(infrared.get_data())
+        if not depth_frame or not color_frame:
+            return False, None, None
+        return True, depth_frame, depth_image, color_image, infra_image
+    
+    def get_cp(self, frames):
+        #Salva nuvem de pontos e retorna o nome do arquivo
+        colorizer = rs.colorizer()
+        colorized = colorizer.process(frames)
+        carimbo = frames.get_timestamp()
+        ply = rs.save_to_ply(f"cloudpoint_{carimbo}.ply")
+        ply.set_option(rs.save_to_ply.option_ply_binary, True)
+        ply.set_option(rs.save_to_ply.option_ply_normals, False)
+        ply.process(colorized)
+        print(f"Cloud point saved: cloudpoint_{carimbo}.ply")
+        return f"cloudpoint_{carimbo}.ply"
+    
+    def get_intrin(self, depth_frame):
+        depth_intrin = depth_frame.profile.as_video_stream_profile().intrinsics
+        return depth_intrin
+    
     def get_frame(self):      
         frames = self.pipeline.wait_for_frames(timeout_ms=2000) #timeout_ms=2000
         colorizer = rs.colorizer()

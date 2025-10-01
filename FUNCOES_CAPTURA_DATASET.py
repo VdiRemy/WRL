@@ -31,7 +31,7 @@ def aba_captura_dataset(inp_menu):
     try:
         dc = DepthCamera()
         # Verifica se a câmera realmente iniciou
-        ret, _ = dc.get_simple_frame()
+        ret, _ = dc.get_simple_infrared()
         if not ret: raise RuntimeError("Não foi possível obter o frame inicial.")
         camera_ok = True
     except Exception as e:
@@ -113,7 +113,7 @@ def aba_captura_dataset(inp_menu):
             return
 
         # Captura o frame da câmera
-        ret, infra_frame = dc.get_simple_frame()
+        ret, infra_frame = dc.get_simple_infrared()
         if not ret:
             label_video.after(15, exibir_video)
             return

@@ -18,6 +18,7 @@ import sys
 import Splash_screen as Loading
 import json
 import threading
+import math
 
 print("\n\n", color.Fore.GREEN + "Iniciando o código - Tela da câmera" + color.Style.RESET_ALL)
 pasta = folder()
@@ -274,12 +275,18 @@ def aba_camera(inp_janela, dados, inp_menu):
             processando_foto = True
             video_loop_running[0] = False
 
-            ret_foto, depth_frame, depth_image, color_frame, infra_image, Abertura = dc.get_frame()
-            if ret_foto:
+            ret, frames = dc.only_get_frame()
+            _, depth_frame, depth_image, color_frame, infra_image = dc.turn_in_array(frames)
+            depth_intrin = dc.get_intrin(depth_frame)
+            Abertura = math.degrees(2*math.atan(depth_intrin.width/(2*depth_intrin.fx)))
+            
+            if ret:
                 id_bico = dados[5]
                 nome_arquivo, caminho_fotoBW, _, _ = fun2.tirar_foto(color_frame, infra_image, id_bico)
                 lista_APP, _, qtd_furos = fun2.organizar_dados_app(dados)
                 centro = fun2.definir_centro(video_label.winfo_height(), video_label.winfo_width())
+                
+                Abertura =  dc.get_intrin(depth_frame)
                 dados_de_entrada = {
                     "model": model, "caminho_fotoBW": caminho_fotoBW, "nome_arquivo": nome_arquivo, 
                     "depth_frame" : depth_frame, "depth_image": depth_image, "Abertura": Abertura, "nome_arquivo_BW": nome_arquivo_BW,

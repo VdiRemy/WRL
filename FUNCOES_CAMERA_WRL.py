@@ -354,7 +354,7 @@ def analisar_imagem(model, imagem, nome, depth_frame, depth_image, Abertura):
         print(f"\n--- ANÁLISE CONCLUÍDA ---")
         print(f"Lista de diâmetros final (mm): {lista_diametros}")
         
-        return lista_diametros, result.masks.data, results, caminho_completo_fotografia_segmentada
+        return lista_diametros, result.masks.data, results, caminho_completo_fotografia_segmentada, nuvem_pontos
 
     except Exception as e:
         if 'Nenhum objeto (bico ou furo) foi detectado na imagem.' in str(e):

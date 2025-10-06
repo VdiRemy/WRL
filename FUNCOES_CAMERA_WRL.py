@@ -45,6 +45,40 @@ class DepthCamera:
         except:
             print("AVISO","CONECTA A CAMÊRA")
 
+    def start_recording(self, filename="recording.bag"):
+        """Inicia a gravação da câmera em um arquivo .bag"""
+        try:
+            if self.pipeline:
+                self.pipeline.stop()
+
+            # Cria nova pipeline e configuração
+            self.pipeline = rs.pipeline()
+            config = rs.config()
+
+            # Configura para gravar no arquivo
+            config.enable_record_to_file(filename)
+
+            # Configura os streams desejados
+            config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
+            config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
+            config.enable_stream(rs.stream.infrared, 1, 640, 480, rs.format.y8, 30)
+
+            # Inicia a pipeline com a gravação ativada
+            self.pipeline.start(config)
+            print(f"Gravação iniciada no arquivo: {filename}")
+        except Exception as e:
+            print(f"Erro ao iniciar a gravação: {e}")
+
+    def stop_recording(self):
+        """Para a gravação e salva o arquivo .bag."""
+        try:
+            recorder = self.pipeline.get_active_profile().get_device().as_recorder()
+            recorder.pause() # Pausa a gravação
+            print("Gravação pausada e arquivo salvo.")
+        except Exception as e:
+            print(f"Erro ao parar a gravação: {e}")
+
+
     def get_simple_infrared(self):
         ret, frames = self.only_get_frame()
         if ret:
@@ -831,7 +865,7 @@ def tarefa_de_processamento_independente(dados_entrada):
 
         # --- Início da sua lógica de processamento ---
         lista_dh = extrair_data_e_hora(nome_arquivo[0])
-        lista_diametros, mascaras, resultados, caminho_fotoSegmentada = analisar_imagem(model, cv2.imread(caminho_fotoBW), nome_arquivo[0], depth_frame, depth_image, Abertura)
+        lista_diametros, mascaras, resultados, caminho_fotoSegmentada, nuvem = analisar_imagem(model, cv2.imread(caminho_fotoBW), nome_arquivo[0], depth_frame, depth_image, Abertura)
         if lista_diametros is None:
             raise ValueError("Não podemos identificar os furos. Tire a foto novamente.")
         caixas_detectadas, nomes_classes = extrair_dados(resultados, mascaras, nome_arquivo_BW)
@@ -858,7 +892,7 @@ def tarefa_de_processamento_independente(dados_entrada):
         print("nome_arquivo: ", nome_arquivo)
         print("diametros_ordenados: ", diametros_ordenados)
         lista_completa = reunir_dados(lista_APP, nome_arquivo, diametros_ordenados)
-        print("pós lista completa linhas 687 funcoes camera: ", lista_completa)
+        print("pós lista completa linhas 871 funcoes camera: ", lista_completa)
         estados = identificar_estados(lista_completa)
         estado_bico = estado_geral_bico(estados)
 

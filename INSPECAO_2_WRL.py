@@ -274,11 +274,18 @@ def aba_camera(inp_janela, dados, inp_menu):
         if (keyboard.is_pressed('ctrl') or keyboard.is_pressed('right control')) and not processando_foto:
             processando_foto = True
             video_loop_running[0] = False
-
             ret, frames = dc.only_get_frame()
             _, depth_frame, depth_image, color_frame, infra_image = dc.turn_in_array(frames)
             depth_intrin = dc.get_intrin(depth_frame)
             Abertura = math.degrees(2*math.atan(depth_intrin.width/(2*depth_intrin.fx)))
+             # Chama get_timestamp() no quadro
+            timestamp_sec = (depth_frame.get_timestamp()) / 1000
+
+            print(f"Timestamp em segundos: {timestamp_sec:.2f} s")
+            dc.start_recording(filename=f"registro_{timestamp_sec:.2f}.bag")
+            import time
+            time.sleep(5)
+            dc.stop_recording()
             
             if ret:
                 id_bico = dados[5]

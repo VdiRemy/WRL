@@ -56,6 +56,7 @@ class DepthCamera:
             config = rs.config()
 
             # Configura para gravar no arquivo
+            # SALVAR DENTRO DA PASTA REGISTROS
             config.enable_record_to_file(filename)
 
             # Configura os streams desejados
@@ -179,6 +180,112 @@ def exibir_imagens(foto_app, img_segmentada, img_identificada):
         if key == 27:
             break
     cv2.destroyAllWindows()
+
+
+
+def salvar_frames(dc):
+    import pyrealsense2 as rs
+    import numpy as np
+    import cv2
+    import os
+    import time 
+
+    data = datetime.now()
+    diretorio_destino=  fr'{pasta}\registros'
+    nome_arquivo = data.strftime('registro_%d-%m-%Y_%H.%M.%S')
+
+    os.makedirs(diretorio_destino, exist_ok=True)
+
+    try:
+        caminho_completo_fotografia = os.path.join(diretorio_destino, nome_arquivo)
+    except:
+        os.mkdir(fr'{pasta}\registros')
+        os.mkdir(fr'{diretorio_destino}\{nome_arquivo}')
+        print(fr'{pasta}\registros',"criado com sucesso")
+        print(fr'{diretorio_destino}\{nome_arquivo}',"criado com sucesso")
+        caminho_completo_fotografia = os.path.join(diretorio_destino, nome_arquivo)
+
+    dc.start_recording(filename=diretorio_destino + f'\{nome_arquivo}.bag')
+    time.sleep(5)  # Aguarda 3 segundos para capturar mais frames
+    dc.stop_recording()
+
+    if dc:
+        try:
+            dc.release()
+        except:
+            pass
+        dc = None
+
+
+    # === CONFIGURAÇÕES ===
+    bag_file = diretorio_destino + f'\{nome_arquivo}.bag'
+    output_folder = diretorio_destino + f'\{nome_arquivo}'
+
+    os.makedirs(output_folder, exist_ok=True)
+
+    # === CONFIGURANDO A LEITURA DO .BAG ===
+    pipeline = rs.pipeline()
+    config = rs.config()
+
+    # Carrega o .bag para leitura (sem loop)
+    config.enable_device_from_file(bag_file, repeat_playback=False)
+
+    # Habilita os streams desejados (igual aos da gravação)
+    config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
+    config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
+    config.enable_stream(rs.stream.infrared, 1, 640, 480, rs.format.y8, 30)
+
+    # Inicia o pipeline
+    pipeline.start(config)
+
+    # Para obter o controle do playback
+    device = pipeline.get_active_profile().get_device()
+    playback = device.as_playback()
+    playback.set_real_time(False)  # Para não depender do tempo real
+
+    frame_id = 0
+
+    while frame_id < 70:
+        frames = pipeline.wait_for_frames()
+
+        color_frame = frames.get_color_frame()
+        depth_frame = frames.get_depth_frame()
+        infra_frame = frames.get_infrared_frame()
+
+        if not color_frame or not depth_frame or not infra_frame:
+            continue
+
+        # Converte para numpy arrays
+        color_image = np.asanyarray(color_frame.get_data())
+        depth_image = np.asanyarray(depth_frame.get_data())
+        infra_image = np.asanyarray(infra_frame.get_data())
+
+        # === Aqui você trata os frames individualmente ===
+
+        # Exemplo: salva os frames como imagem
+        color_path = os.path.join(output_folder, f"color_{frame_id:04d}.png")
+        infra_frame_path = os.path.join(output_folder, f"infra_{frame_id:04d}.png")
+        
+        #salvar nuvem de pontos
+        colorizer = rs.pointcloud()
+        colorized = colorizer.process(frames)
+
+        ply = rs.save_to_ply(f"{output_folder}\cloudpoint_{frame_id:04d}.ply")
+        ply.set_option(rs.save_to_ply.option_ply_binary, True)
+        ply.set_option(rs.save_to_ply.option_ply_normals, False)
+        ply.process(colorized)
+
+        cv2.imwrite(color_path, color_image)
+        cv2.imwrite(infra_frame_path, infra_image)
+
+        frame_id += 1
+
+    pipeline.stop()
+    cv2.destroyAllWindows()
+    print(f"Total de frames processados: {frame_id}")
+
+    return output_folder,
+
 
 def tirar_foto(color_frame, infra_image, id_bico):
     data = datetime.now()

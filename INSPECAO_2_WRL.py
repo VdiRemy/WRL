@@ -263,6 +263,7 @@ def aba_camera(inp_janela, dados, inp_menu):
     
     video_label = tk.Label(frame_dois, bg="white")
     video_label.place(relx=0, rely=0, relwidth=1, relheight=1)
+    tamanho = (video_label.winfo_width(), video_label.winfo_height())
 
     # Crie uma nova função para a captura em lote e agregação
     
@@ -282,18 +283,15 @@ def aba_camera(inp_janela, dados, inp_menu):
             timestamp_sec = (depth_frame.get_timestamp()) / 1000
 
             print(f"Timestamp em segundos: {timestamp_sec:.2f} s")
-            dc.start_recording(filename=f"registro_{timestamp_sec:.2f}.bag")
-            import time
-            time.sleep(5)
-            dc.stop_recording()
+            pasta_arquivo = fun2.salvar_frames(dc)
+            
             
             if ret:
                 id_bico = dados[5]
                 nome_arquivo, caminho_fotoBW, _, _ = fun2.tirar_foto(color_frame, infra_image, id_bico)
-                lista_APP, _, qtd_furos = fun2.organizar_dados_app(dados)
-                centro = fun2.definir_centro(video_label.winfo_height(), video_label.winfo_width())
                 
-                Abertura =  dc.get_intrin(depth_frame)
+                lista_APP, _, qtd_furos = fun2.organizar_dados_app(dados)
+                centro = fun2.definir_centro(tamanho[0], tamanho[1])
                 dados_de_entrada = {
                     "model": model, "caminho_fotoBW": caminho_fotoBW, "nome_arquivo": nome_arquivo, 
                     "depth_frame" : depth_frame, "depth_image": depth_image, "Abertura": Abertura, "nome_arquivo_BW": nome_arquivo_BW,

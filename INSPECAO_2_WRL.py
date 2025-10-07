@@ -279,12 +279,8 @@ def aba_camera(inp_janela, dados, inp_menu):
             _, depth_frame, depth_image, color_frame, infra_image = dc.turn_in_array(frames)
             depth_intrin = dc.get_intrin(depth_frame)
             Abertura = math.degrees(2*math.atan(depth_intrin.width/(2*depth_intrin.fx)))
-             # Chama get_timestamp() no quadro
-            timestamp_sec = (depth_frame.get_timestamp()) / 1000
 
-            print(f"Timestamp em segundos: {timestamp_sec:.2f} s")
             pasta_arquivo = fun2.salvar_frames(dc)
-            
             
             if ret:
                 id_bico = dados[5]
@@ -295,8 +291,15 @@ def aba_camera(inp_janela, dados, inp_menu):
                 dados_de_entrada = {
                     "model": model, "caminho_fotoBW": caminho_fotoBW, "nome_arquivo": nome_arquivo, 
                     "depth_frame" : depth_frame, "depth_image": depth_image, "Abertura": Abertura, "nome_arquivo_BW": nome_arquivo_BW,
-                    "centro": centro, "lista_APP": lista_APP, "qtd_furos": qtd_furos
+                    "centro": centro, "lista_APP": lista_APP, "qtd_furos": qtd_furos, "caminho_arquivos": pasta_arquivo, "depth_intrin": depth_intrin
                 }
+
+                # dados_de_entrada = {
+                #     "model": model, "caminho_fotoBW": caminho_fotoBW, "nome_arquivo": nome_arquivo, 
+                #     "depth_frame" : depth_frame, "depth_image": depth_image, "Abertura": Abertura, "nome_arquivo_BW": nome_arquivo_BW,
+                #     "centro": centro, "lista_APP": lista_APP, "qtd_furos": qtd_furos
+                # }
+
                 iniciar_processamento(dados_de_entrada)
             else:
                 handle_failure("Falha ao capturar a imagem da câmera.")

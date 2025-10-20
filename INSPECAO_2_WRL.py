@@ -180,7 +180,7 @@ def aba_camera(inp_janela, dados, inp_menu):
     def handle_success(resultado, splash_obj=None):
         nonlocal processando_foto
         print("SUCESSO: Preparando para exibir resultados.")
-        
+        ''
         if splash_obj and splash_obj.winfo_exists():
             splash_obj.destroy()
 
@@ -189,9 +189,10 @@ def aba_camera(inp_janela, dados, inp_menu):
     def abrir_janela_de_resultados(dados_da_inspecao, arquivo_resultado):
         # ANTES de abrir a próxima janela, DESTRUÍMOS a da câmera.
         finalizar_e_limpar_camera()
-        
         try:
             print("abrindo aba dados")
+            print("dados_da_inspecao:", dados_da_inspecao)
+            print("arquivo_resultado:", arquivo_resultado)
             # Passa a referência da janela 1 (inp_janela) para a próxima etapa.
             aba_dados(inp_janela, dados_da_inspecao[0],dados_da_inspecao[5], dados_da_inspecao[4], arquivo_resultado, inp_menu, inp_janela)
         except Exception as e:

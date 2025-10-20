@@ -603,55 +603,7 @@ def analisar_imagem(model, imagem, nome, depth_frame, depth_image, Abertura, lis
                 lista_diametros.append(float(round(estatisticas_finais[chave]['media'], 2)))
 
         return lista_diametros, result.masks.data, result, caminho_completo_fotografia_segmentada, nuvem_pontos_imagem
-        '''
-        #     # fazer média de diametros obtidos pela foto e retornar valor médio
-        #     # 2. Extrair TODOS os diâmetros de TODAS as imagens para uma única lista
-        #     todos_os_diametros = []
-        #     for resultado_imagem in lista_de_resultados_do_lote:
-        #         # O primeiro item da tupla (índice 0) é a `lista_diametros` daquela imagem
-        #         todos_os_diametros.extend(resultado_imagem[0])
-
-        #     # 3. Calcular a média geral e outras estatísticas
-        #     media_geral = 0.0
-        #     desvio_padrao = 0.0
-        #     total_medicoes = len(todos_os_diametros)
-
-        #     if total_medicoes > 0:
-        #         media_geral = np.mean(todos_os_diametros)
-        #         desvio_padrao = np.std(todos_os_diametros)
-        #         print(f"Análise do lote concluída.")
-        #         print(f"Total de medições de diâmetro: {total_medicoes}")
-        #         print(f"Diâmetro médio do lote: {media_geral:.2f} mm")
-        #         print(f"Desvio padrão: {desvio_padrao:.2f} mm")
-        #     else:
-        #         print("AVISO: Nenhum diâmetro foi medido no lote de imagens.")
-
-
-        #     # AQUI você pode adicionar uma lógica para ordenar os furos se necessário,
-        #     # por exemplo, usando as coordenadas X e Y do 'centroide_3d'.
-        #     # Por enquanto, vamos apenas adicionar os diâmetros.
-            
-        #     lista_diametros = [float(round(diametro_bico, 2))]
-        #     for furo in furos:
-        #         lista_diametros.append(float(round(furo['diametro_mm'], 2)))
-
-        #     print(f"\n--- ANÁLISE CONCLUÍDA ---")
-        #     print(f"Lista de diâmetros final (mm): {lista_diametros}")
-        #     # Armazena o resultado da imagem atual
-        #     lista_de_resultados_do_lote.append((
-        #         lista_diametros, 
-        #         result.masks.data, 
-        #         result, 
-        #         caminho_completo_fotografia_segmentada, 
-        #         nuvem_pontos_imagem
-        #     ))
-
-        # # fazer média de diametros obtidos pela foto e 
-
-        
-
-        # return lista_diametros, result.masks.data, result, caminho_completo_fotografia_segmentada, nuvem_pontos_imagem
-        '''
+       
 
     except Exception as e:
         if 'Nenhum objeto (bico ou furo) foi detectado na imagem.' in str(e):
@@ -811,7 +763,7 @@ def enumerar_furos(lista_pontos, qtd_furos, img, nome_arquivo, lista_diametros=N
     # 4. Listar todas as imagens, ordená-las e pegar a última
     lista_de_imagens_crop = sorted(os.listdir(path_crops_bico))
     nome_ultima_imagem = lista_de_imagens_crop[-1] # Pega o último item da lista ordenada
-
+    print("nome_ultima_imagem", nome_ultima_imagem)
     # 5. Construir o caminho final completo e carregar a imagem
     caminho_final_crop = os.path.join(path_crops_bico, nome_ultima_imagem)
 
@@ -875,10 +827,11 @@ def enumerar_furos(lista_pontos, qtd_furos, img, nome_arquivo, lista_diametros=N
                 cv2.putText(img, str(i), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
 
             diretorio_guias = fr'{pasta}\FOTOS_GUIA'
-            caminho = os.path.join(diretorio_guias, nome_arquivo)
+            caminho = os.path.join(diretorio_guias, nome_ultima_imagem)
+            print("Caminho para salvar imagem com furos numerados:", caminho)
             cv2.imwrite(caminho, img)
             
-            return numbered_holes
+            return numbered_holes, caminho
         else:
             return []
 
@@ -1177,7 +1130,7 @@ def tarefa_de_processamento_independente(dados_entrada):
         lista_pontos = filtrar_ponto_central(lista_pontos, centro)
 
         # Obter furos numerados e ordenados
-        furos_numerados = enumerar_furos(lista_pontos, qtd_furos, cv2.imread(caminho_fotoSegmentada), nome_arquivo[0], lista_diametros, output_folder)
+        furos_numerados, caminho_foto_enumerada = enumerar_furos(lista_pontos, qtd_furos, cv2.imread(caminho_fotoSegmentada), nome_arquivo[0], lista_diametros, output_folder)
         for dado in lista_dh: nome_arquivo.append(dado)
 
         # Sincronizar diametros com ordem dos furos numerados

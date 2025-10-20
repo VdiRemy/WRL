@@ -1,4 +1,3 @@
-import threading
 import tkinter as tk
 import sqlite3 as sql
 import colorama as color
@@ -10,8 +9,6 @@ from direction import folder
 import Splash_screen as Loading
 import os
 import sys
-import psutil
-import gc
 from collections import Counter
 
 # gc.enable()  # Habilita o coletor de lixo

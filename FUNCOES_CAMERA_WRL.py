@@ -446,7 +446,7 @@ def processamento_individual(i, result, mascaras, depth_frame, depth_intrin, rs)
         'nuvem_pontos': nuvem_pontos # Retorna a nuvem para poder retornar na função principal
     }
 
-def analisar_imagem(model, imagem, nome, depth_frame, depth_image, Abertura, lista_imagens, output_folder, depth_intrin):
+def analisar_imagem(model, nome, depth_frame, lista_imagens, output_folder, depth_intrin):
     """
     Analisa a imagem para detectar o bico e os furos, e calcula seus diâmetros reais
     usando uma abordagem de nuvem de pontos 3D.
@@ -469,7 +469,8 @@ def analisar_imagem(model, imagem, nome, depth_frame, depth_image, Abertura, lis
     """
     print("--- INICIANDO ANÁLISE DE IMAGEM (FLUXO 3D) ---")
     lista_de_resultados_do_lote = [] 
-
+    if not nome.lower().endswith(('.png', '.jpg', '.jpeg')):
+        nome = nome + '.png'  # ou .jpg
     try:
         results_lote  = model(lista_imagens, device='cpu', retina_masks=True, save=True, save_crop=True,
                 project=fr"{output_folder}\resultados", name=nome, conf=0.80)
@@ -477,6 +478,7 @@ def analisar_imagem(model, imagem, nome, depth_frame, depth_image, Abertura, lis
         if not results_lote :
             raise NoDetectionsError("Nenhum objeto (bico ou furo) foi detectado na imagem.")
     
+
 
         #PASSAR A TRABALHAR COM LOTE DE IMAGENS
         for k, result in enumerate(results_lote):
@@ -492,14 +494,17 @@ def analisar_imagem(model, imagem, nome, depth_frame, depth_image, Abertura, lis
 
             # --- SALVAR IMAGEM SEGMENTADA (VISUALIZAÇÃO) ---
             img_segmentada = result.plot(masks=True, boxes=False)
+
             try:
                 diretorio_destino_imgSegmentada = fr'{pasta}\FOTOS_SEGMENTADA\{nome}'
+                print(diretorio_destino_imgSegmentada)
             except:
                 os.mkdir(fr'{pasta}\FOTOS_SEGMENTADA\{nome}')
                 print(fr'{pasta}\FOTOS_SEGMENTADA\{nome}',"criado com sucesso")
             os.makedirs(diretorio_destino_imgSegmentada, exist_ok=True)
             caminho_completo_fotografia_segmentada = os.path.join(diretorio_destino_imgSegmentada, nome)
             cv2.imwrite(caminho_completo_fotografia_segmentada, img_segmentada)
+            print(f"Imagem segmentada salva em: {caminho_completo_fotografia_segmentada}")
 
             # --- 2. PREPARAÇÃO PARA CONVERSÃO 3D ---
             # Obter os parâmetros intrínsecos da câmera. Isso é crucial para a conversão de pixel para ponto 3D.
@@ -601,7 +606,7 @@ def analisar_imagem(model, imagem, nome, depth_frame, depth_image, Abertura, lis
             chave = f'furo_{i+1}'
             if chave in estatisticas_finais:
                 lista_diametros.append(float(round(estatisticas_finais[chave]['media'], 2)))
-
+        #CONCERTAR RETORNO, ESTOU RECEBENDO APENAS O ULTIMO RESULTADO DO LOTE, SENDO SOMENTE O BICO DE BOX
         return lista_diametros, result.masks.data, result, caminho_completo_fotografia_segmentada, nuvem_pontos_imagem
        
 
@@ -617,9 +622,8 @@ def analisar_imagem(model, imagem, nome, depth_frame, depth_image, Abertura, lis
 def extrair_data_e_hora(nome_arquivo):
     lista = nome_arquivo.split("_")
 
-    data_original = lista[2]
-    hora_original = lista[3]
-    hora_original = hora_original[:5]
+    data_original = lista[1]
+    hora_original = lista[2]
 
     data = data_original.replace("-", "/")
     hora = hora_original.replace(".", ":")
@@ -1100,11 +1104,11 @@ def tarefa_de_processamento_independente(dados_entrada):
 
         # Desempacota os dados de entrada
         model = dados_entrada["model"]
-        caminho_fotoBW = dados_entrada["caminho_fotoBW"]
-        nome_arquivo = dados_entrada["nome_arquivo"]
+        # caminho_fotoBW = dados_entrada["caminho_fotoBW"]
+        
         depth_frame = dados_entrada["depth_frame"]        
-        depth_image = dados_entrada["depth_image"]
-        Abertura = dados_entrada["Abertura"]
+        # depth_image = dados_entrada["depth_image"]
+        # Abertura = dados_entrada["Abertura"]
         nome_arquivo_BW = dados_entrada["nome_arquivo_BW"]
         centro = dados_entrada["centro"]
         lista_APP = dados_entrada["lista_APP"]
@@ -1112,13 +1116,16 @@ def tarefa_de_processamento_independente(dados_entrada):
         output_folder = dados_entrada["caminho_arquivos"]
         depth_intrin = dados_entrada["depth_intrin"]
 
-        # --- Início da sua lógica de processamento ---
-        lista_dh = extrair_data_e_hora(nome_arquivo[0])
-        from pathlib import Path
-        output_folder = Path(output_folder)
-        lista_imagens = list(output_folder.glob("infra_*.png"))
 
-        lista_diametros, mascaras, resultados, caminho_fotoSegmentada, nuvem = analisar_imagem(model, cv2.imread(caminho_fotoBW), nome_arquivo[0], depth_frame, depth_image, Abertura, lista_imagens, output_folder, depth_intrin)
+        nome_arquivo = output_folder[len(output_folder)-28:]
+
+        # --- Início da sua lógica de processamento ---
+        lista_dh = extrair_data_e_hora(nome_arquivo)
+        from pathlib import Path
+        output_folder_ = Path(output_folder)
+        lista_imagens = list(output_folder_.glob("infra_*.png"))
+
+        lista_diametros, mascaras, resultados, caminho_fotoSegmentada, nuvem = analisar_imagem(model, nome_arquivo, depth_frame, lista_imagens, output_folder, depth_intrin)
         
 
         # lista_diametros, mascaras, resultados, caminho_fotoSegmentada, nuvem = analisar_imagem(model, cv2.imread(caminho_fotoBW), nome_arquivo[0], depth_frame, depth_image, Abertura)
@@ -1130,7 +1137,7 @@ def tarefa_de_processamento_independente(dados_entrada):
         lista_pontos = filtrar_ponto_central(lista_pontos, centro)
 
         # Obter furos numerados e ordenados
-        furos_numerados, caminho_foto_enumerada = enumerar_furos(lista_pontos, qtd_furos, cv2.imread(caminho_fotoSegmentada), nome_arquivo[0], lista_diametros, output_folder)
+        furos_numerados, caminho_foto_enumerada = enumerar_furos(lista_pontos, qtd_furos, cv2.imread(caminho_fotoSegmentada), nome_arquivo, lista_diametros, output_folder)
         for dado in lista_dh: nome_arquivo.append(dado)
 
         # Sincronizar diametros com ordem dos furos numerados

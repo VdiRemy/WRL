@@ -1,3 +1,4 @@
+from pathlib import Path
 import tkinter as tk
 from tkinter import messagebox, filedialog
 import colorama as color
@@ -6,6 +7,7 @@ from tkinter.constants import *
 from tkinter import Canvas
 from customtkinter import *
 from PIL import Image, ImageTk
+
 from ultralytics import YOLO
 import keyboard
 import FUNCOES_TKINTER
@@ -266,46 +268,65 @@ def aba_camera(inp_janela, dados, inp_menu):
     video_label.place(relx=0, rely=0, relwidth=1, relheight=1)
     tamanho = (video_label.winfo_width(), video_label.winfo_height())
 
-    # Crie uma nova função para a captura em lote e agregação
     
     def exibir_video():
-        nonlocal processando_foto
+        nonlocal processando_foto, dc, video_loop_running, after_id, video_label
         if not video_loop_running[0] or not video_label.winfo_exists():
             return
 
         if (keyboard.is_pressed('ctrl') or keyboard.is_pressed('right control')) and not processando_foto:
-            processando_foto = True
-            video_loop_running[0] = False
-            ret, frames = dc.only_get_frame()
-            _, depth_frame, depth_image, color_frame, infra_image = dc.turn_in_array(frames)
-            depth_intrin = dc.get_intrin(depth_frame)
-            Abertura = math.degrees(2*math.atan(depth_intrin.width/(2*depth_intrin.fx)))
+            processando_foto = True # Trava para evitar múltiplas capturas
+            video_loop_running[0] = False # Para o loop de renderização
 
-            pasta_arquivo = fun2.salvar_frames(dc)
+            print("Iniciando gravação e extração de frames...")
             
-            if ret:
-                id_bico = dados[5]
-                nome_arquivo, caminho_fotoBW, _, _ = fun2.tirar_foto(color_frame, infra_image, id_bico)
-                
-                lista_APP, _, qtd_furos = fun2.organizar_dados_app(dados)
-                centro = fun2.definir_centro(tamanho[0], tamanho[1])
-                dados_de_entrada = {
-                    "model": model, "caminho_fotoBW": caminho_fotoBW, "nome_arquivo": nome_arquivo, 
-                    "depth_frame" : depth_frame, "depth_image": depth_image, "Abertura": Abertura, "nome_arquivo_BW": nome_arquivo_BW,
-                    "centro": centro, "lista_APP": lista_APP, "qtd_furos": qtd_furos, "caminho_arquivos": pasta_arquivo, "depth_intrin": depth_intrin
-                }
+            # 1. Obtém os intrinsics ANTES de reconfigurar a pipeline para gravação
+            #    (Assumindo que dc.get_intrinsics() existe e funciona)
+            depth_intrin = dc.get_intrinsics()
+            if depth_intrin is None:
+                 handle_failure("Falha ao obter parâmetros intrínsecos da câmera.")
+                 return # Aborta se não conseguir os intrinsics
+                 
+            # 2. Chama a função que grava o .bag e extrai os frames
+            #    Ela retorna a pasta onde os frames foram extraídos.
+            try:
+                 output_folder_extracao = fun2.salvar_frames(dc) # dc é passado aqui
+                 # IMPORTANTE: salvar_frames agora fecha a câmera (dc=None lá dentro)
+                 dc = None # Garante que a referência local também seja quebrada
+            except Exception as e_save:
+                 handle_failure(f"Erro durante gravação/extração: {e_save}")
+                 return
 
-                # dados_de_entrada = {
-                #     "model": model, "caminho_fotoBW": caminho_fotoBW, "nome_arquivo": nome_arquivo, 
-                #     "depth_frame" : depth_frame, "depth_image": depth_image, "Abertura": Abertura, "nome_arquivo_BW": nome_arquivo_BW,
-                #     "centro": centro, "lista_APP": lista_APP, "qtd_furos": qtd_furos
-                # }
+            print(f"Frames extraídos para: {output_folder_extracao}")
 
-                iniciar_processamento(dados_de_entrada)
-            else:
-                handle_failure("Falha ao capturar a imagem da câmera.")
-            return
+            # 3. Prepara os dados para a função de processamento
+            #    Passa a pasta com os frames extraídos, não frames ao vivo.
+            id_bico = dados[5]
+            # Gera um nome base consistente (sem extensão)
+            nome_base_arquivo = Path(output_folder_extracao).name # Usa o nome da pasta como base
 
+            lista_APP, _, qtd_furos = fun2.organizar_dados_app(dados)
+            # O 'centro' pode precisar ser recalculado ou não ser mais necessário
+            # centro = fun2.definir_centro(...) 
+
+            dados_de_entrada = {
+                "model": model,
+                "nome": nome_base_arquivo,        # Nome base para logs/resultados
+                "output_folder": output_folder_extracao, # Pasta com frames extraídos
+                "depth_intrin": depth_intrin,     # Intrinsics capturados
+                "lista_APP": lista_APP,
+                "qtd_furos": qtd_furos,
+                # Removidos: "depth_frame", "nome_arquivo_BW", "centro" (serão lidos/calculados depois)
+            }
+            
+            iniciar_processamento(dados_de_entrada)
+            
+            # Não precisamos mais fazer nada aqui, a limpeza ocorrerá nos callbacks
+            return # Sai da função exibir_video
+
+        if dc is None:
+             print(">>> [DEBUG] Câmera já liberada, parando exibição.")
+             return # Não tenta exibir mais nada
 
         # Lógica de Exibição do Feed
         ret_feed, infra_image_cam = dc.get_simple_infrared()

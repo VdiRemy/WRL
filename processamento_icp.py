@@ -39,18 +39,18 @@ db_lock = threading.Lock() # Lock para acesso ao BD
 
 # --- Constantes (Embutidas - Substitua pelos seus valores reais) ---
 # Valores de exemplo de config_dados_diametros.py
-e_min_bom = 190.0
-e_max_bom = 190.0
-e_min_extavel = 185.0 # Nome corrigido (era extavel)
-e_max_estavel = 195.0
-f_min_bom = 30.0
-f_max_bom = 30.0
-f_min_extavel = 25.0 # Nome corrigido
-f_max_estavel = 35.0
+e_min_bom = 359.0
+e_max_bom = 361.0
+e_min_extavel = 355.0 # Nome corrigido (era extavel)
+e_max_estavel = 365.0
+f_min_bom = 59.0
+f_max_bom = 61.0
+f_min_extavel = 55.0 # Nome corrigido
+f_max_estavel = 65.0
 
 MODELO_YOLO_PATH = fr'{pasta_base}\pesos\best.pt'
-NUM_FRAMES_ANALISE = 25 # Quantos frames do .bag processar
-SKIP_FRAMES_INICIO = 10 # Pular alguns frames iniciais
+NUM_FRAMES_ANALISE = 35 # Quantos frames do .bag processar
+SKIP_FRAMES_INICIO = 30 # Pular alguns frames iniciais
 
 # [INÍCIO DO NOVO BLOCO DE CÓDIGO]
 # Funções para captura ao vivo e gravação de .bag
@@ -232,7 +232,7 @@ def gravar_sessoes_de_analise(output_dir):
                 # Grava por 3 segundos
                 # (Poderia mostrar um contador, mas time.sleep é mais simples)
                 start_time = time.time()
-                while time.time() - start_time < 3.0:
+                while time.time() - start_time < 5.0:
                     # Apenas consome frames para manter a gravação ativa
                     pipeline_rec.wait_for_frames()
                 
@@ -781,8 +781,8 @@ def analisar_imagem_lote_comparativo(model, nome, depth_frames_lote, lista_image
 
 def analisar_arquivo_bag(bag_filepath, num_frames_processar, visualizar, model, output_dir_analise):
     """
-    Função refatorada que analisa um ÚNICO arquivo .bag.
-    Contém a lógica principal da sua 'main' original.
+    Versão robusta da função de análise de um único arquivo .bag.
+    Corrige problemas de timeout e pipeline duplicada.
     """
     print(f"\n--- Processando arquivo .bag: {bag_filepath} ---")
     bag_path = Path(bag_filepath)
@@ -790,132 +790,147 @@ def analisar_arquivo_bag(bag_filepath, num_frames_processar, visualizar, model, 
         print(f"ERRO: Arquivo .bag não encontrado em '{bag_filepath}'")
         return None, None, None
 
-    # --- Configurar Pipeline RealSense (Lógica da sua main original) ---
+    # --- Configuração inicial do pipeline RealSense ---
     pipeline = rs.pipeline()
     config = rs.config()
-    align = None
-    depth_intrinsics = None
-    profile = None 
 
     try:
         config.enable_device_from_file(str(bag_path), repeat_playback=False)
         profile = pipeline.start(config)
-        
-        dev_check = profile.get_device()
-        playback_check = dev_check.as_playback() 
-        if playback_check is None:
-            print(f"ERRO CRÍTICO: Dispositivo do {bag_path.name} não suporta playback.")
+
+        device = profile.get_device()
+        playback = device.as_playback()
+        if not playback:
+            print(f"ERRO: Dispositivo de {bag_path.name} não suporta playback.")
             pipeline.stop()
             return None, None, None
 
+        playback.set_real_time(False)
+
+        # Obter parâmetros e alinhamento
         depth_profile = profile.get_stream(rs.stream.depth).as_video_stream_profile()
         depth_intrinsics = depth_profile.intrinsics
         align = rs.align(rs.stream.infrared)
-        pipeline.stop()
-        profile = None 
-        
-        profile = pipeline.start(config) 
-        playback_dev = profile.get_device()
-        playback = playback_dev.as_playback() 
-        if playback is None:
-            print(f"ERRO CRÍTICO: Falha ao obter playback na 2ª leitura de {bag_path.name}.")
-            pipeline.stop()
-            return None, None, None
-            
-        playback.set_real_time(False)
+
     except Exception as e:
-        print(f"!!! ERRO GERAL ao configurar a pipeline para {bag_path.name}: {e}")
-        if pipeline: 
-            try: pipeline.stop(); 
-            except: pass
+        print(f"!!! ERRO ao configurar pipeline para {bag_path.name}: {e}")
+        try:
+            pipeline.stop()
+        except:
+            pass
         return None, None, None
 
-    # --- Extração e Preparação dos Frames (Lógica da sua main original) ---
+    # --- Leitura de frames ---
     lista_imagens_bgr = []
     lista_depth_frames = []
     frames_lidos = 0
     frames_processados_validos = 0
     max_wait_attempts = 10
     wait_attempts = 0
+    SKIP_FRAMES_INICIO = 5  # ajustar conforme necessário
 
     try:
         while frames_processados_validos < num_frames_processar:
             success, frames = pipeline.try_wait_for_frames(2000)
             if not success:
+                # Verifica se playback terminou
+                if playback.current_status() == rs.playback_status.stopped:
+                    print(f"Fim do arquivo {bag_path.name} alcançado.")
+                    break
+
+                print(f"AVISO: Timeout ao ler frames de {bag_path.name}. Tentando novamente...")
                 wait_attempts += 1
-                if wait_attempts >= max_wait_attempts: break 
-                continue 
+                if wait_attempts >= max_wait_attempts:
+                    print(f"ERRO: Limite de tentativas atingido para {bag_path.name}.")
+                    break
+                continue
+
             wait_attempts = 0
             frames_lidos += 1
-            if frames_lidos <= SKIP_FRAMES_INICIO: continue
-            
+            if frames_lidos <= SKIP_FRAMES_INICIO:
+                continue
+
             aligned_frames = align.process(frames)
-            if not aligned_frames: continue
-            
+            if not aligned_frames:
+                continue
+
             depth_frame = aligned_frames.get_depth_frame()
             infra_frame = aligned_frames.get_infrared_frame()
-            if not depth_frame or not infra_frame: continue
+            if not depth_frame or not infra_frame:
+                continue
 
             infra_image = np.asanyarray(infra_frame.get_data())
             infra_bgr = cv2.cvtColor(infra_image, cv2.COLOR_GRAY2BGR)
-            
+
             lista_depth_frames.append(depth_frame)
             lista_imagens_bgr.append(infra_bgr)
             frames_processados_validos += 1
-            
+
+            print(f"Frame {frames_processados_validos} extraído com sucesso de {bag_path.name}.")
+
     except RuntimeError as e:
         if "Frames did not arrive within" in str(e):
-             print(f"Fim do arquivo {bag_path.name} alcançado.")
+            print(f"Fim do arquivo {bag_path.name} alcançado.")
         else:
-             print(f"ERRO de Runtime durante a leitura de {bag_path.name}: {e}")
+            print(f"ERRO de Runtime durante leitura de {bag_path.name}: {e}")
+
     finally:
         pipeline.stop()
 
-    if frames_processados_validos == 0: 
+    # --- Validação dos frames capturados ---
+    if frames_processados_validos == 0:
         print(f"ERRO: Nenhum frame válido extraído de {bag_path.name}.")
         return None, None, None
 
-    # --- Execução da Análise (Lógica da sua main original) ---
-    print(f"Iniciando análise YOLO + ICP em {frames_processados_validos} frames de {bag_path.name}...")
+    # --- Análise YOLO + ICP ---
+    print(f"\nIniciando análise YOLO + ICP em {frames_processados_validos} frames de {bag_path.name}...")
     nome_base_analise = bag_path.stem
-    
+
     try:
         retorno_analise = analisar_imagem_lote_comparativo(
-            model, nome_base_analise, lista_depth_frames, lista_imagens_bgr,
-            str(output_dir_analise), depth_intrinsics, visualizar_passos=visualizar
+            model, nome_base_analise,
+            lista_depth_frames, lista_imagens_bgr,
+            str(output_dir_analise), depth_intrinsics,
+            visualizar_passos=visualizar
         )
-        if retorno_analise[0] is None: 
+
+        if retorno_analise[0] is None:
             print(f"ERRO: Análise de {bag_path.name} falhou.")
             return None, None, None
-        
-        # Desempacota (agora com o 9º item)
+
         (lista_diametros_media, _, _, _, _, 
          estatisticas_individuais, resultados_mesclados, 
          nuvens_mescladas_dict, nuvens_por_objeto_brutas) = retorno_analise
-             
-        # --- Apresenta Resultados Finais (Lógica da sua main original) ---
+
+        # --- Exibe resultados ---
         print("\n" + "="*80)
         print(f"     RESULTADOS INDIVIDUAIS PARA: {nome_base_analise}")
         print("="*80)
         print(f"{'Classe':<10} | {'Média Individual':>18} | {'Desvio Padrão':>15} ({'N':>2}) | {'Resultado Mesclado (ICP)':>25}")
         print("-" * 80)
+
         todas_classes = set(estatisticas_individuais.keys()) | set(resultados_mesclados.keys())
         classes_ordenadas = sorted(list(todas_classes), key=lambda x: (x != 'bico', x))
+
         for classe in classes_ordenadas:
-            n_ind = estatisticas_individuais[classe]['n'] if classe in estatisticas_individuais else 0
+            n_ind = estatisticas_individuais.get(classe, {}).get('n', 0)
             m_ind = f"{estatisticas_individuais[classe]['media']:.2f}" if classe in estatisticas_individuais else "N/A"
             s_ind = f"{estatisticas_individuais[classe]['desvio_padrao']:.3f}" if classe in estatisticas_individuais else "N/A"
             r_mesc = f"{resultados_mesclados[classe]['diametro_mm']:.2f}" if classe in resultados_mesclados else "Falhou/N/A"
             nome_fmt = classe.replace('_', ' ').title()
             print(f"{nome_fmt:<10} | {m_ind:>18} | {s_ind:>15} ({n_ind:>2}) | {r_mesc:>25}")
+
         print("=" * 80)
 
-        # Retorna os dados para agregação
         return nuvens_mescladas_dict, nuvens_por_objeto_brutas, nome_base_analise
 
-    except NoDetectionsError as e: print(f"ERRO DE ANÁLISE em {bag_path.name}: {e}")
-    except Exception as e: print(f"ERRO CRÍTICO durante a análise de {bag_path.name}: {e}"); import traceback; traceback.print_exc()
-    
+    except NoDetectionsError as e:
+        print(f"ERRO DE ANÁLISE em {bag_path.name}: {e}")
+    except Exception as e:
+        import traceback
+        print(f"ERRO CRÍTICO durante a análise de {bag_path.name}: {e}")
+        traceback.print_exc()
+
     return None, None, None
 
 
@@ -1023,12 +1038,28 @@ def visualizar_analise_agregada(resultados_agregados, visualizar, output_dir_ana
         # Adiciona a "Legenda" (Esfera 3D)
         centroide_furo = pcd_furo_icp.get_center()
         nome_furo_legivel = chave_furo.replace('_', ' ').title()
-        
-        # Adiciona a esfera de legenda
+
+        # Dicionário de nomes legíveis para cores específicas (viridis)
+        cores_legiveis = {
+            (0.267004, 0.004874, 0.329415): "Roxo escuro",
+            (0.253935, 0.265254, 0.529983): "Azul arroxeado",
+            (0.163625, 0.471133, 0.558148): "Azul petróleo",
+            (0.134692, 0.658636, 0.517649): "Verde água",
+            (0.477504, 0.821444, 0.318195): "Verde limão",
+            (0.993248, 0.906157, 0.143936): "Amarelo vivo",
+        }
+
+        # Converte os floats do color para uma tupla arredondada (para comparar)
+        color_key = tuple(round(float(c), 6) for c in color)
+        nome_cor_legivel = cores_legiveis.get(color_key, "Cor desconhecida")
+
+        # Cria a esfera 3D de legenda
         legenda_esfera = criar_legenda_3d(nome_furo_legivel, centroide_furo, color)
         geometrias_icp_agregadas.append(legenda_esfera)
-        
-        print(f"  - {nome_furo_legivel} = Cor {color} (marcado com esfera)")
+
+        # Exibe nome do furo e a cor em forma legível
+        print(f"  - {nome_furo_legivel} = {nome_cor_legivel} (marcado com esfera)")
+
     
     print("="*50)
 

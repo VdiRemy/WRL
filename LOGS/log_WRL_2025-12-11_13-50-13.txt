@@ -1,0 +1,302 @@
+Iniciando o programa no ambiente 'wrl'... 
+[ WARN:1@14.009] global cap_msmf.cpp:475 `anonymous-namespace'::SourceReaderCB::OnReadSample videoio(MSMF): OnReadSample() is called with error status: -1072873821
+[ WARN:1@14.010] global cap_msmf.cpp:487 `anonymous-namespace'::SourceReaderCB::OnReadSample videoio(MSMF): async ReadSample() call is failed with error status: -1072873821
+
+
+ [32mIniciando o c�digo - Tela do Menu[0m
+
+
+ [32mAbrindo FUNCOES CAMERA[0m
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+C�mera Realsense inicializada com sucesso.
+>>> Encerrando a captura de dataset...
+[35mCAMERA ENCERRADA[0m 
+
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+C�mera Realsense inicializada com sucesso.
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_135126_260.png
+Imagem salva: capture_20251211_135126_260.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_135127_195.png
+Imagem salva: capture_20251211_135127_195.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_135127_683.png
+Imagem salva: capture_20251211_135127_683.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_135128_124.png
+Imagem salva: capture_20251211_135128_124.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_135128_602.png
+Imagem salva: capture_20251211_135128_602.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_135129_082.png
+Imagem salva: capture_20251211_135129_082.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_135129_701.png
+Imagem salva: capture_20251211_135129_701.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_135130_184.png
+Imagem salva: capture_20251211_135130_184.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_135130_661.png
+Imagem salva: capture_20251211_135130_661.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_135132_235.png
+Imagem salva: capture_20251211_135132_235.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_135134_236.png
+Imagem salva: capture_20251211_135134_236.png
+>>> Encerrando a captura de dataset...
+[35mCAMERA ENCERRADA[0m 
+
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+C�mera Realsense inicializada com sucesso.
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_135253_643.png
+Imagem salva: capture_20251211_135253_643.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_135254_360.png
+Imagem salva: capture_20251211_135254_360.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_135254_881.png
+Imagem salva: capture_20251211_135254_881.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_135255_261.png
+Imagem salva: capture_20251211_135255_261.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_135255_741.png
+Imagem salva: capture_20251211_135255_741.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_135256_128.png
+Imagem salva: capture_20251211_135256_128.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_135256_603.png
+Imagem salva: capture_20251211_135256_603.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_135257_080.png
+Imagem salva: capture_20251211_135257_080.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_135257_563.png
+Imagem salva: capture_20251211_135257_563.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_135257_988.png
+Imagem salva: capture_20251211_135257_988.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_135258_570.png
+Imagem salva: capture_20251211_135258_570.png
+>>> Encerrando a captura de dataset...
+[35mCAMERA ENCERRADA[0m 
+
+
+
+ [32mIniciando o c�digo - Registro pre-medi��o[0m
+[31mFinalizando o c�digo - Registro pre-medi��o[0m 
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Dados obtidos - CADASTRO_BICO_WRL:  ['4', 'USIMINAS/MG/BRASIL', 'ACIARIA', '1', '219/36,4', '2', '0']
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Dados obtidos - CADASTRO_BICO_WRL:  ['4', 'USIMINAS/MG/BRASIL', 'ACIARIA', '1', '219/36,4', '7', '0']
+
+Conectando ao BD - FUNCOES_WRL
+
+
+ [36mDADOS SALVOS - CADASTRO_BICO_WRL[0m
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+Ultima vida registrada: 0, Vida atual: 502
+
+
+ [32mIniciando o código - Dados do bico[0m
+[31mFinalizando o código - Dados do bico[0m 
+
+
+
+ [32mIniciando o código - Tela da câmera[0m
+
+>>> [DEBUG MEMÓRIA] Uso em 'Antes de abrir a aba de câmera': 309.74 MB
+>>> [DEBUG OBJETOS] Estado inicial da memória armazenado.
+[35mCAMERA INICIALIZADA[0m 
+
+
+>>> [DEBUG MEMÓRIA] Uso em 'Depois de abrir a aba de câmera': 319.70 MB
+>>> [DEBUG OBJETOS] Comparando contagem de objetos com o estado inicial (Top 10 vazamentos):
+    - ReferenceType: +50 instâncias
+    - builtin_function_or_method: +25 instâncias
+    - set: +25 instâncias
+    - cell: +20 instâncias
+    - list: +10 instâncias
+    - tuple: +8 instâncias
+    - function: +8 instâncias
+    - method: +5 instâncias
+    - dict: +4 instâncias
+    - CallWrapper: +4 instâncias
+Abertura: 80.18755238290139
+Salvando foto...
+[35mImagem salva[0m 
+
+--- INICIANDO ANÁLISE DE IMAGEM (FLUXO 3D) ---
+
+0: 480x640 1 Bico, 4 Furos, 225.1ms
+Speed: 5.7ms preprocess, 225.1ms inference, 29.7ms postprocess per image at shape (1, 3, 480, 640)
+Results saved to [1mC:\Users\labga\OneDrive\Documentos\WRL\resultados\registro_7_11-12-2025_13.58.10.png[0m
+Parâmetros da câmera (Intrinsics) carregados. Dimensões: 640x480
+Convertidos 160 pixels da borda para uma nuvem de pontos 3D.
+Filtro de outliers: 160 -> 158 pontos.
+Medição concluída para 'Bico': Diâmetro = 194.44 mm
+Convertidos 101 pixels da borda para uma nuvem de pontos 3D.
+Filtro de outliers: 101 -> 86 pontos.
+Medição concluída para 'Furo': Diâmetro = 35.83 mm
+Convertidos 166 pixels da borda para uma nuvem de pontos 3D.
+Filtro de outliers: 166 -> 139 pontos.
+Medição concluída para 'Furo': Diâmetro = 44.01 mm
+Convertidos 154 pixels da borda para uma nuvem de pontos 3D.
+Filtro de outliers: 154 -> 121 pontos.
+Medição concluída para 'Furo': Diâmetro = 43.18 mm
+Convertidos 133 pixels da borda para uma nuvem de pontos 3D.
+Filtro de outliers: 133 -> 115 pontos.
+Medição concluída para 'Furo': Diâmetro = 38.39 mm
+
+--- ANÁLISE CONCLUÍDA ---
+Lista de diâmetros final (mm): [194.44, 35.83, 44.01, 43.18, 38.39]
+Pontos:  [(307, 246), (351, 183), (280, 319), (246, 210), (381, 282)]
+Pontos filtrados:  [(307, 246), (351, 183), (280, 319), (246, 210), (381, 282)]
+altura, largura 265 263
+lista_pontos em enumerar furos [(307, 246), (351, 183), (280, 319), (246, 210), (381, 282)]
+Pontos:  [(307, 246), (351, 183), (280, 319), (246, 210), (381, 282)]
+Pontos filtrados:  [(307, 246), (351, 183), (280, 319), (246, 210), (381, 282)]
+
+lista_pontos em enumerar furos pós filtrar ponto central
+ [(307, 246), (351, 183), (280, 319), (246, 210), (381, 282)]
+lista com diâmetros não fornecida ou tamanho incompatível, não filtrando pelo diâmetro do bico.
+Furos detectados: [(307, 246), (351, 183), (280, 319), (246, 210)]
+Furos array:
+ [[307 246]
+ [351 183]
+ [280 319]
+ [246 210]]
+Ordenando pontos em sentido horário
+Furos ordenados:
+ [[246 210]
+ [351 183]
+ [307 246]
+ [280 319]]
+Dados a serem unidos por reunir_dados: lista_APP ['4', 'USIMINAS/MG/BRASIL', 'ACIARIA', '1', '219/36,4', '7', 'AIRON', '502']
+nome_arquivo:  ['registro_7_11-12-2025_13.58.10.png', '11/12/2025', '13:58']
+diametros_ordenados:  [194.44, 35.83, 44.01, 43.18, 38.39]
+DADOS REUNIDOS: ['4', 'USIMINAS/MG/BRASIL', 'ACIARIA', '1', '219/36,4', '7', 'AIRON', '502', 'registro_7_11-12-2025_13.58.10.png', '11/12/2025', '13:58', 194.44, 35.83, 44.01, 43.18, 38.39]
+pós lista completa linhas 687 funcoes camera:  ['4', 'USIMINAS/MG/BRASIL', 'ACIARIA', '1', '219/36,4', '7', 'AIRON', '502', 'registro_7_11-12-2025_13.58.10.png', '11/12/2025', '13:58', 194.44, 35.83, 44.01, 43.18, 38.39]
+tamanho lista_completa: 16
+lista_diametros: ['Crítico', 'Estável', 'Bom', 'Bom', 'Estável']
+Não foi possível analisar o estado da lança estado geral_bico
+Dados recebidos para salvar_registros_desgaste:
+lista_completa: ['4', 'USIMINAS/MG/BRASIL', 'ACIARIA', '1', '219/36,4', '7', 'AIRON', '502', 'registro_7_11-12-2025_13.58.10.png', '11/12/2025', '13:58', 194.44, 35.83, 44.01, 43.18, 38.39]
+estados: ['Crítico', 'Estável', 'Bom', 'Bom', 'Estável']
+dados_diametros: [194.44, 35.83, 44.01, 43.18, 38.39]
+estado_bico: ['Indefinido']
+qtd_furos: 4
+Comandos de desgaste para a tabela B4 executados.
+Dados de DESGASTE inseridos com sucesso.
+Salvando registro principal na tabela B4 com dados: ['4', 'USIMINAS/MG/BRASIL', 'ACIARIA', '1', '219/36,4', '7', 'AIRON', '502', 'registro_7_11-12-2025_13.58.10.png', '11/12/2025', '13:58', 194.44, 35.83, 44.01, 43.18, 38.39]
+Comando de inserção na tabela B4 executado.
+Dados PRINCIPAIS inseridos com sucesso.
+DADOS INSERIDOS COM SUCESSO EM AMBAS AS OPERAÇÕES!
+SUCESSO: Preparando para exibir resultados.
+abrindo aba dados
+
+Conectando ao BD - FUNCOES_WRL
+Desconectando do BD - FUNCOES_WRL
+
+verificando se dados do registro_7_11-12-2025_13.58.10.png estao em B4
+
+Conectando ao BD - FUNCOES_WRL
+dados encontrados:  ('4', 'USIMINAS/MG/BRASIL', 'ACIARIA', '1', '219/36,4', '7', 'AIRON', '502', 'registro_7_11-12-2025_13.58.10.png', '11/12/2025', '13:58', 194.44, 35.83, 44.01, 43.18, 38.39)
+Desconectando do BD - FUNCOES_WRL
+
+Retorno da busca na tabela B4: ('4', 'USIMINAS/MG/BRASIL', 'ACIARIA', '1', '219/36,4', '7', 'AIRON', '502', 'registro_7_11-12-2025_13.58.10.png', '11/12/2025', '13:58', 194.44, 35.83, 44.01, 43.18, 38.39)
+medidas foto (194.44, 35.83, 44.01, 43.18, 38.39)
+
+Arquivo_foto= C:\Users\labga\OneDrive\Documentos\WRL\FOTOS_ANALISE\registro_7_11-12-2025_13.58.10.png 
+Arquivo guia=  C:\Users\labga\OneDrive\Documentos\WRL\FOTOS_GUIA\registro_7_11-12-2025_13.58.10.png
+arquivos verificados
+fim da aba dados
+
+>>> [DEBUG MEMÓRIA] Uso em 'Após fechar inspeção e voltar ao menu': 530.88 MB
+>>> [DEBUG OBJETOS] Estado inicial da memória armazenado.
+Resultados exibidos com sucesso.
+Processamento de foto resetado.
+>>> [DEBUG AÇÃO] Iniciando limpeza da janela da câmera...
+>>> [DEBUG AÇÃO] Tarefa .after() cancelada.
+[35mCAMERA ENCERRADA[0m 
+
+CAMERA ENCERRADA
+Recursos da câmera limpos.
+Recursos da câmera limpos.
+>>> [DEBUG DESTRUIÇÃO] Tentando destruir: INICIAR INSPECÇÃO, INICIAR INSPECÇÃO, DADOS DA INSPECÇÃO
+
+>>> [DEBUG MEMÓRIA] Uso em 'Após fechar inspeção e voltar ao menu': 524.23 MB
+>>> [DEBUG OBJETOS] Comparando contagem de objetos com o estado inicial (Top 10 vazamentos):
+    - Counter: +1 instâncias
+[31mFinalizando o código - Tela do Menu[0m 
+
+ 
+Programa finalizado. 

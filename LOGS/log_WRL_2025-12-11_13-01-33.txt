@@ -1,0 +1,363 @@
+Iniciando o programa no ambiente 'wrl'... 
+[ WARN:1@29.166] global cap_msmf.cpp:475 `anonymous-namespace'::SourceReaderCB::OnReadSample videoio(MSMF): OnReadSample() is called with error status: -1072873821
+[ WARN:1@29.166] global cap_msmf.cpp:487 `anonymous-namespace'::SourceReaderCB::OnReadSample videoio(MSMF): async ReadSample() call is failed with error status: -1072873821
+
+
+ [32mIniciando o código - Tela do Menu[0m
+
+
+ [32mAbrindo FUNCOES CAMERA[0m
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+Câmera Realsense inicializada com sucesso.
+>>> Encerrando a captura de dataset...
+[35mCAMERA ENCERRADA[0m 
+
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+Câmera Realsense inicializada com sucesso.
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130311_365.png
+Imagem salva: capture_20251211_130311_365.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130311_616.png
+Imagem salva: capture_20251211_130311_616.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130313_284.png
+Imagem salva: capture_20251211_130313_284.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130327_151.png
+Imagem salva: capture_20251211_130327_151.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130327_771.png
+Imagem salva: capture_20251211_130327_771.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130328_341.png
+Imagem salva: capture_20251211_130328_341.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130328_864.png
+Imagem salva: capture_20251211_130328_864.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130332_323.png
+Imagem salva: capture_20251211_130332_323.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130332_996.png
+Imagem salva: capture_20251211_130332_996.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130333_979.png
+Imagem salva: capture_20251211_130333_979.png
+>>> Encerrando a captura de dataset...
+[35mCAMERA ENCERRADA[0m 
+
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+Câmera Realsense inicializada com sucesso.
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130355_500.png
+Imagem salva: capture_20251211_130355_500.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130401_906.png
+Imagem salva: capture_20251211_130401_906.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130402_997.png
+Imagem salva: capture_20251211_130402_997.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130403_999.png
+Imagem salva: capture_20251211_130403_999.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130406_201.png
+Imagem salva: capture_20251211_130406_201.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130406_863.png
+Imagem salva: capture_20251211_130406_863.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130407_480.png
+Imagem salva: capture_20251211_130407_480.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130408_149.png
+Imagem salva: capture_20251211_130408_149.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130408_807.png
+Imagem salva: capture_20251211_130408_807.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130409_566.png
+Imagem salva: capture_20251211_130409_566.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130410_141.png
+Imagem salva: capture_20251211_130410_141.png
+>>> Encerrando a captura de dataset...
+[35mCAMERA ENCERRADA[0m 
+
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+Câmera Realsense inicializada com sucesso.
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130437_826.png
+Imagem salva: capture_20251211_130437_826.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130438_200.png
+Imagem salva: capture_20251211_130438_200.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130438_674.png
+Imagem salva: capture_20251211_130438_674.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130439_054.png
+Imagem salva: capture_20251211_130439_054.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130439_477.png
+Imagem salva: capture_20251211_130439_477.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130439_903.png
+Imagem salva: capture_20251211_130439_903.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130440_283.png
+Imagem salva: capture_20251211_130440_283.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130440_663.png
+Imagem salva: capture_20251211_130440_663.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130441_038.png
+Imagem salva: capture_20251211_130441_038.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130441_471.png
+Imagem salva: capture_20251211_130441_471.png
+>>> Encerrando a captura de dataset...
+[35mCAMERA ENCERRADA[0m 
+
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+Câmera Realsense inicializada com sucesso.
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130455_338.png
+Imagem salva: capture_20251211_130455_338.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130504_744.png
+Imagem salva: capture_20251211_130504_744.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130505_314.png
+Imagem salva: capture_20251211_130505_314.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130505_833.png
+Imagem salva: capture_20251211_130505_833.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130506_409.png
+Imagem salva: capture_20251211_130506_409.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130507_080.png
+Imagem salva: capture_20251211_130507_080.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130507_552.png
+Imagem salva: capture_20251211_130507_552.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130508_026.png
+Imagem salva: capture_20251211_130508_026.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130508_410.png
+Imagem salva: capture_20251211_130508_410.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130508_887.png
+Imagem salva: capture_20251211_130508_887.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130509_977.png
+Imagem salva: capture_20251211_130509_977.png
+>>> Encerrando a captura de dataset...
+[35mCAMERA ENCERRADA[0m 
+
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+Câmera Realsense inicializada com sucesso.
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130531_543.png
+Imagem salva: capture_20251211_130531_543.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130532_209.png
+Imagem salva: capture_20251211_130532_209.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130538_817.png
+Imagem salva: capture_20251211_130538_817.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130539_537.png
+Imagem salva: capture_20251211_130539_537.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130540_105.png
+Imagem salva: capture_20251211_130540_105.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130540_627.png
+Imagem salva: capture_20251211_130540_627.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130541_149.png
+Imagem salva: capture_20251211_130541_149.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130541_712.png
+Imagem salva: capture_20251211_130541_712.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130542_233.png
+Imagem salva: capture_20251211_130542_233.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130542_713.png
+Imagem salva: capture_20251211_130542_713.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130543_322.png
+Imagem salva: capture_20251211_130543_322.png
+>>> Encerrando a captura de dataset...
+[35mCAMERA ENCERRADA[0m 
+
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+Câmera Realsense inicializada com sucesso.
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130633_077.png
+Imagem salva: capture_20251211_130633_077.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130633_695.png
+Imagem salva: capture_20251211_130633_695.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130634_324.png
+Imagem salva: capture_20251211_130634_324.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130634_846.png
+Imagem salva: capture_20251211_130634_846.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130635_371.png
+Imagem salva: capture_20251211_130635_371.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130635_884.png
+Imagem salva: capture_20251211_130635_884.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130636_320.png
+Imagem salva: capture_20251211_130636_320.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130636_749.png
+Imagem salva: capture_20251211_130636_749.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130637_131.png
+Imagem salva: capture_20251211_130637_131.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130637_515.png
+Imagem salva: capture_20251211_130637_515.png
+>>> Encerrando a captura de dataset...
+[35mCAMERA ENCERRADA[0m 
+
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+Câmera Realsense inicializada com sucesso.
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130733_431.png
+Imagem salva: capture_20251211_130733_431.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130734_048.png
+Imagem salva: capture_20251211_130734_048.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130734_621.png
+Imagem salva: capture_20251211_130734_621.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130735_093.png
+Imagem salva: capture_20251211_130735_093.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130735_564.png
+Imagem salva: capture_20251211_130735_564.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130736_094.png
+Imagem salva: capture_20251211_130736_094.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130736_619.png
+Imagem salva: capture_20251211_130736_619.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130737_014.png
+Imagem salva: capture_20251211_130737_014.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130737_397.png
+Imagem salva: capture_20251211_130737_397.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130737_819.png
+Imagem salva: capture_20251211_130737_819.png
+>>> Encerrando a captura de dataset...
+[35mCAMERA ENCERRADA[0m 
+
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+Câmera Realsense inicializada com sucesso.
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130819_061.png
+Imagem salva: capture_20251211_130819_061.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130819_545.png
+Imagem salva: capture_20251211_130819_545.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130821_941.png
+Imagem salva: capture_20251211_130821_941.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130822_374.png
+Imagem salva: capture_20251211_130822_374.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130822_847.png
+Imagem salva: capture_20251211_130822_847.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130823_222.png
+Imagem salva: capture_20251211_130823_222.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130823_706.png
+Imagem salva: capture_20251211_130823_706.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130824_217.png
+Imagem salva: capture_20251211_130824_217.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130825_742.png
+Imagem salva: capture_20251211_130825_742.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130826_742.png
+Imagem salva: capture_20251211_130826_742.png
+>>> Encerrando a captura de dataset...
+[35mCAMERA ENCERRADA[0m 
+
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+Câmera Realsense inicializada com sucesso.
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130850_844.png
+Imagem salva: capture_20251211_130850_844.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130851_314.png
+Imagem salva: capture_20251211_130851_314.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130851_699.png
+Imagem salva: capture_20251211_130851_699.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130852_126.png
+Imagem salva: capture_20251211_130852_126.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130852_495.png
+Imagem salva: capture_20251211_130852_495.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130852_831.png
+Imagem salva: capture_20251211_130852_831.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130853_214.png
+Imagem salva: capture_20251211_130853_214.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130853_641.png
+Imagem salva: capture_20251211_130853_641.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130855_326.png
+Imagem salva: capture_20251211_130855_326.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130855_807.png
+Imagem salva: capture_20251211_130855_807.png
+>>> Encerrando a captura de dataset...
+[35mCAMERA ENCERRADA[0m 
+
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+Câmera Realsense inicializada com sucesso.
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130926_360.png
+Imagem salva: capture_20251211_130926_360.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130926_931.png
+Imagem salva: capture_20251211_130926_931.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130927_648.png
+Imagem salva: capture_20251211_130927_648.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130928_130.png
+Imagem salva: capture_20251211_130928_130.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130928_570.png
+Imagem salva: capture_20251211_130928_570.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130928_950.png
+Imagem salva: capture_20251211_130928_950.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130929_378.png
+Imagem salva: capture_20251211_130929_378.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130929_763.png
+Imagem salva: capture_20251211_130929_763.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130930_238.png
+Imagem salva: capture_20251211_130930_238.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130930_663.png
+Imagem salva: capture_20251211_130930_663.png
+>>> Encerrando a captura de dataset...
+[35mCAMERA ENCERRADA[0m 
+
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+Câmera Realsense inicializada com sucesso.
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130957_278.png
+Imagem salva: capture_20251211_130957_278.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130957_798.png
+Imagem salva: capture_20251211_130957_798.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130958_323.png
+Imagem salva: capture_20251211_130958_323.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130958_984.png
+Imagem salva: capture_20251211_130958_984.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_130959_554.png
+Imagem salva: capture_20251211_130959_554.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_131000_041.png
+Imagem salva: capture_20251211_131000_041.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_131000_509.png
+Imagem salva: capture_20251211_131000_509.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_131000_985.png
+Imagem salva: capture_20251211_131000_985.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_131001_368.png
+Imagem salva: capture_20251211_131001_368.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_131001_790.png
+Imagem salva: capture_20251211_131001_790.png
+>>> Encerrando a captura de dataset...
+[35mCAMERA ENCERRADA[0m 
+
+
+Abrindo a aba de Captura para Dataset
+[35mCAMERA INICIALIZADA[0m 
+
+Câmera Realsense inicializada com sucesso.
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_131022_828.png
+Imagem salva: capture_20251211_131022_828.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_131023_264.png
+Imagem salva: capture_20251211_131023_264.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_131023_732.png
+Imagem salva: capture_20251211_131023_732.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_131024_072.png
+Imagem salva: capture_20251211_131024_072.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_131024_398.png
+Imagem salva: capture_20251211_131024_398.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_131024_738.png
+Imagem salva: capture_20251211_131024_738.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_131024_980.png
+Imagem salva: capture_20251211_131024_980.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_131025_267.png
+Imagem salva: capture_20251211_131025_267.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_131025_509.png
+Imagem salva: capture_20251211_131025_509.png
+Imagem infravermelha salva em: C:\Users\labga\OneDrive\Documentos\WRL\dataset\infrared\capture_20251211_131026_607.png
+Imagem salva: capture_20251211_131026_607.png
+>>> Encerrando a captura de dataset...
+[35mCAMERA ENCERRADA[0m 
+
+[31mFinalizando o código - Tela do Menu[0m 
+
+ 
+Programa finalizado. 

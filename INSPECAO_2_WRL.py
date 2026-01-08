@@ -18,6 +18,7 @@ import sys
 import Splash_screen as Loading
 import json
 import threading
+import math
 
 print("\n\n", color.Fore.GREEN + "Iniciando o código - Tela da câmera" + color.Style.RESET_ALL)
 pasta = folder()
@@ -87,94 +88,65 @@ def componentes_frame1(inp_frame, inp_janela, inp_menu, dc, comando_para_voltar)
     btfoto_pg2 = tk.Button(inp_frame, text='TIRAR FOTO (CTRL)', relief="ridge", cursor="circle", bd=4, bg='#545454', fg='white', font=("arial", 13))
     btfoto_pg2.place(relx=0.5, rely=0.93, anchor=CENTER)
 
-def componentes_frame2_refatorado(inp_frame, lista_dados_inspecao, dc, on_photo_taken_callback):
-    borda = tk.Label(inp_frame, bg="white")
-    borda.place(relx=0, rely=0, relwidth=1, relheight=1)
-
-    def escolher_imagem_local():
-        caminho_imagem = filedialog.askopenfilename(
-            title="Selecione uma imagem",
-            filetypes=[("Arquivos de imagem", "*.png;*.jpg;*.jpeg;*.bmp")]
-        )
-        if caminho_imagem:
-            img = cv2.imread(caminho_imagem)
-            return img
-        return None
-
-    def exibir_video():
-        global nome_arquivo, caminho_fotoBW, caminho_fotoColorida, nome_arquivo_BW
-        global lista_APP, qtd_furos, Abertura, infra_image, centro, depth_frame
-        
-        if not borda.winfo_exists():
-            return
-
-        ret,  infra_image_cam = dc.get_simple_frame()
-
-        if not ret:  
-            # Não conseguiu pegar da câmera → pergunta imagem
-            infra_image_cam = escolher_imagem_local()
-            if infra_image_cam is None:
-                print("Nenhuma imagem selecionada. Encerrando...")
-                return
-            ret = True  # força fluxo normal
-
-        if ret:
-            infra_image = infra_image_cam  
-            back_frame = fun2.sobrepor_molde(infra_image)
-            lista_APP, id_bico, qtd_furos = fun2.organizar_dados_app(lista_dados_inspecao)
-            
-            frame = cv2.cvtColor(back_frame, cv2.COLOR_BGR2RGB)
-            img = Image.fromarray(frame)
-            img = img.resize((borda.winfo_width(), borda.winfo_height()))
-            image = ImageTk.PhotoImage(image=img)
-            borda.configure(image=image)
-            borda.image = image
-            centro = fun2.definir_centro(borda.winfo_height(), borda.winfo_width())
-
-            if keyboard.is_pressed('ctrl') or keyboard.is_pressed('right control'):
-                if hasattr(dc, "get_frame"):  
-                    ret, depth_frame, color_frame, _, Abertura = dc.get_frame()
-                    nome_arquivo, caminho_fotoBW, caminho_fotoColorida, nome_arquivo_BW = \
-                        fun2.tirar_foto(color_frame, infra_image, id_bico)
-                    if hasattr(dc, "release"):
-                        try:
-                            dc.release()
-                        except RuntimeError:
-                            pass
-                on_photo_taken_callback()
-                return
-        
-        borda.after(10, exibir_video)
-
-    exibir_video()
-
-
 def aba_camera(inp_janela, dados, inp_menu):
     """
-    Gerencia a UI da câmera, o fluxo de captura (local ou ao vivo),
-    e o processamento da imagem de forma assíncrona e segura.
+    Gerencia a UI da câmera, com a ordem das funções internas corrigida.
     """
     # --- Variáveis de Estado e Controle ---
-    global splash
-    processando_foto = False  # Flag para evitar múltiplas capturas ("debounce")
-    
-    def acao_voltar():
-        finalizar_e_limpar_camera()
-        inp_janela.deiconify()
+    processando_foto = False
+    dc = None
+    janela_tres = None
+    video_loop_running = [True]
+    after_id = [None]
+    worker_thread = None
+    splash = None
+
+    def finalizar_e_limpar_camera():
+        nonlocal worker_thread, dc, splash # Permite modificar as variáveis do escopo pai
+
+        print(">>> [DEBUG AÇÃO] Iniciando limpeza da janela da câmera...")
+        video_loop_running[0] = False
+        
+        # Cancela o próximo loop de vídeo agendado para evitar erros
+        if after_id[0]:
+            # Adiciona uma verificação para garantir que video_label exista
+            if 'video_label' in locals() and video_label.winfo_exists():
+                video_label.after_cancel(after_id[0])
+                print(">>> [DEBUG AÇÃO] Tarefa .after() cancelada.")
+        
+        if dc:
+            #tenta liberar a camera
+            try:
+                dc.release()
+            except RuntimeError:
+                pass
+            dc = None # Quebra a referência ao objeto da câmera
+        
+        if splash and splash.winfo_exists():
+            splash.destroy()
+            splash = None
+        
+        if janela_tres and janela_tres.winfo_exists():
+            janela_tres.destroy()
+        
+        # A janela anterior (inp_janela) não é destruída aqui, apenas mostrada novamente.
+        # A sua destruição é responsabilidade da tela de resultados (aba_dados).
+        if inp_janela and inp_janela.winfo_exists():
+            inp_janela.deiconify()
+
+        worker_thread = None
+        print("Recursos da câmera limpos.")
+
 
     # --- Funções de Navegação e Callbacks da UI ---
-
-    def handle_failure(message, imagem_erro=None, splash_obj=None): # Adicionado splash_obj
+    # Agora estas funções podem chamar 'finalizar_e_limpar_camera' sem erro.
+    def handle_failure(message, imagem_erro=None, splash_obj=None):
         if "flush" not in message.lower():
             print(f"FALHA: {message}")
-
-        if splash_obj and splash_obj.winfo_exists():
-            splash_obj.destroy()
-
-        # Chama a limpeza
-        finalizar_e_limpar_camera()
-
-        # (Seu código para o popup de erro aqui...)
+        
+        # A chamada agora é válida porque a função foi definida antes
+        finalizar_e_limpar_camera() 
+        
         if imagem_erro:
             try:
                 popup = tk.Toplevel(inp_janela)
@@ -204,85 +176,52 @@ def aba_camera(inp_janela, dados, inp_menu):
         else:
             messagebox.showwarning("Falha na Análise", f"{message}\nTente novamente.")
 
-        # Fecha a janela da câmera para uma transição limpa
-        if 'janela_tres' in locals() and janela_tres.winfo_exists():
-            janela_tres.destroy()
-            print("Janela da câmera destruída após falha.")
 
-
-        processando_foto = False
-        # Reexibe a janela de cadastro
-        inp_janela.deiconify()
-
-    def handle_success(resultado, splash_obj): # Adicionado splash_obj para segurança
+    def handle_success(resultado, splash_obj=None):
         nonlocal processando_foto
         print("SUCESSO: Preparando para exibir resultados.")
-
+        ''
         if splash_obj and splash_obj.winfo_exists():
             splash_obj.destroy()
 
-        # Depois, abre a próxima tela
         abrir_janela_de_resultados(resultado["dados"], resultado["arquivo"])
-        print("Resultados exibidos com sucesso.")
-        processando_foto = False # Libera para um novo ciclo completo
-        print("Processamento de foto resetado.")
-        # Primeiro, limpa os recursos da tela da câmera
-        finalizar_e_limpar_camera()
-        print("Recursos da câmera limpos.")
-        inp_janela.deiconify()
-
+        
     def abrir_janela_de_resultados(dados_da_inspecao, arquivo_resultado):
-        """Abre a tela final com os dados da inspeção."""
-        # Esta função chama a próxima tela da sua aplicação
-
-        # print("DAdos da inspeção")
-        # for i in range(len(dados_da_inspecao)):
-        #     print(f"\n{dados_da_inspecao[i]}")
-
+        # ANTES de abrir a próxima janela, DESTRUÍMOS a da câmera.
+        finalizar_e_limpar_camera()
         try:
             print("abrindo aba dados")
+            print("dados_da_inspecao:", dados_da_inspecao)
+            print("arquivo_resultado:", arquivo_resultado)
+            # Passa a referência da janela 1 (inp_janela) para a próxima etapa.
             aba_dados(inp_janela, dados_da_inspecao[0],dados_da_inspecao[5], dados_da_inspecao[4], arquivo_resultado, inp_menu, inp_janela)
         except Exception as e:
-            print("nao abriu aba dados", e)
-
-    # --- Função de Orquestração do Processamento ---
+            print(f"nao abriu aba dados: {e}")
 
     def iniciar_processamento(dados_de_entrada):
-        global splash
-
-        # Função alvo que será executada na nova thread
+        nonlocal splash, worker_thread
+        splash_ref = [None] 
         def tarefa_alvo():
-            # Chama a função de lógica desacoplada (que vamos corrigir no Erro 2)
             resultado = fun2.tarefa_de_processamento_independente(dados_de_entrada)
-            
-            # Enfileira a atualização da UI de volta para a thread principal
+            splash_para_fechar = splash_ref[0]
             if resultado["sucesso"]:
-                inp_menu.after(0, lambda: handle_success(resultado, splash))
+                inp_menu.after(0, lambda: handle_success(resultado, splash_para_fechar))
             else:
-                # Passa também a imagem, se existir
-                inp_menu.after(0, lambda: handle_failure(
-                    resultado["mensagem_erro"], 
-                    resultado.get("imagem_erro")
-                    # fecha tela de camera e splash (se existir)
-
-                ))
-
-        # Cria a thread
+                inp_menu.after(0, lambda: handle_failure(resultado["mensagem_erro"], resultado.get("imagem_erro"), splash_para_fechar))
+        
         worker_thread = threading.Thread(target=tarefa_alvo)
-
-        # A função que o Splash vai chamar depois de aparecer
         def iniciar_tarefa_em_thread():
             worker_thread.start()
+        
+        splash_ref[0] = Loading.Splash(inp_menu, iniciar_tarefa_em_thread)
+        splash_ref[0].grab_set()
+        splash = splash_ref[0]
+        
 
-        # CORREÇÃO AQUI: Passe 'iniciar_tarefa_em_thread' como o callback
-        splash = Loading.Splash(inp_menu, iniciar_tarefa_em_thread)
-        splash.grab_set()
-    # --- Lógica Principal da Função 'aba_camera' ---
-
-    # Tenta inicializar a câmera
+    # --- Inicialização da Câmera ---
     try:
         dc = DepthCamera()
-        ret, _ = dc.get_simple_frame()
+        ret, _ = dc.get_simple_infrared()
         if not ret: raise RuntimeError("Não foi possível obter o frame inicial da câmera.")
         camera_ok = True
     except Exception as e:
@@ -312,87 +251,64 @@ def aba_camera(inp_janela, dados, inp_menu):
         iniciar_processamento(dados_de_entrada)
         return # Finaliza a execução para não criar a UI da câmera
 
-    # --- FLUXO 2: Câmera ao Vivo ---
-    
-    # Cria a janela da câmera
-    video_loop_running = [True]
-    after_id = [None]
+    # --- FLUXO 2: Câmera ao Vivo (criação da UI) ---
     janela_tres = tk.Toplevel(inp_menu)
+    inp_janela.withdraw()
+
     tela(janela_tres)
     adicionar_detalhes(janela_tres)
     frame_um, frame_dois = frames_da_tela(janela_tres)
-
-    worker_thread = None
     
-    def finalizar_e_limpar_camera():
-        global splash
-        nonlocal worker_thread, dc # Permite modificar as variáveis do escopo pai
-
-        print(">>> [DEBUG AÇÃO] Iniciando limpeza da janela da câmera...")
-        video_loop_running[0] = False
-        
-        if after_id[0]:
-            if video_label.winfo_exists():
-                video_label.after_cancel(after_id[0])
-                print(">>> [DEBUG AÇÃO] Tarefa .after() cancelada.")
-        
-        if dc:
-            dc.release()
-            dc = None # Quebra a referência ao objeto da câmera
-            print("CAMERA ENCERRADA")
-        
-        if splash and splash.winfo_exists():
-            splash.destroy()
-            splash = None # Quebra a referência ao splash screen
-        
-        if janela_tres and janela_tres.winfo_exists():
-            janela_tres.destroy()
-        
-        if inp_janela and inp_janela.winfo_exists():
-            inp_janela.deiconify()
-
-        # Quebra a referência à thread para garantir que ela seja coletada
-        worker_thread = None
-        print("Recursos da câmera limpos.")
-
+    # Passa a função de limpeza diretamente para o botão
     componentes_frame1(frame_um, janela_tres, inp_menu, dc, finalizar_e_limpar_camera)
     
-    # Lógica do Frame de Vídeo (refatorada para clareza)
     video_label = tk.Label(frame_dois, bg="white")
     video_label.place(relx=0, rely=0, relwidth=1, relheight=1)
+    tamanho = (video_label.winfo_width(), video_label.winfo_height())
 
+    # Crie uma nova função para a captura em lote e agregação
+    
     def exibir_video():
-        nonlocal processando_foto # Permite modificar a flag
-        
-        if not video_label.winfo_exists(): return
+        nonlocal processando_foto
+        if not video_loop_running[0] or not video_label.winfo_exists():
+            return
 
-        # Lógica de Captura e Callback
         if (keyboard.is_pressed('ctrl') or keyboard.is_pressed('right control')) and not processando_foto:
-            processando_foto = True # Trava para evitar múltiplas capturas
+            processando_foto = True
+            video_loop_running[0] = False
+            ret, frames = dc.only_get_frame()
+            _, depth_frame, depth_image, color_frame, infra_image = dc.turn_in_array(frames)
+            depth_intrin = dc.get_intrin(depth_frame)
+            Abertura = math.degrees(2*math.atan(depth_intrin.width/(2*depth_intrin.fx)))
 
-            ret_foto, depth_frame, depth_image, color_frame, infra_image, Abertura = dc.get_frame()
-            if ret_foto:
+            pasta_arquivo = fun2.salvar_frames(dc)
+            
+            if ret:
                 id_bico = dados[5]
-                nome_arquivo, caminho_fotoBW, _, nome_arquivo_BW = fun2.tirar_foto(color_frame, infra_image, id_bico)
+                nome_arquivo, caminho_fotoBW, _, _ = fun2.tirar_foto(color_frame, infra_image, id_bico)
                 
                 lista_APP, _, qtd_furos = fun2.organizar_dados_app(dados)
-                centro = fun2.definir_centro(video_label.winfo_height(), video_label.winfo_width())
-
-                # Prepara dados para o processamento
+                centro = fun2.definir_centro(tamanho[0], tamanho[1])
                 dados_de_entrada = {
                     "model": model, "caminho_fotoBW": caminho_fotoBW, "nome_arquivo": nome_arquivo, 
                     "depth_frame" : depth_frame, "depth_image": depth_image, "Abertura": Abertura, "nome_arquivo_BW": nome_arquivo_BW,
-                    "centro": centro, "lista_APP": lista_APP, "qtd_furos": qtd_furos
+                    "centro": centro, "lista_APP": lista_APP, "qtd_furos": qtd_furos, "caminho_arquivos": pasta_arquivo, "depth_intrin": depth_intrin
                 }
+
+                # dados_de_entrada = {
+                #     "model": model, "caminho_fotoBW": caminho_fotoBW, "nome_arquivo": nome_arquivo, 
+                #     "depth_frame" : depth_frame, "depth_image": depth_image, "Abertura": Abertura, "nome_arquivo_BW": nome_arquivo_BW,
+                #     "centro": centro, "lista_APP": lista_APP, "qtd_furos": qtd_furos
+                # }
+
                 iniciar_processamento(dados_de_entrada)
             else:
-                handle_failure("Falha ao capturar a imagem da câmera no momento da foto.")
-            
-            # Não agenda o próximo frame, parando o loop de vídeo
+                handle_failure("Falha ao capturar a imagem da câmera.")
             return
 
+
         # Lógica de Exibição do Feed
-        ret_feed, infra_image_cam = dc.get_simple_frame()
+        ret_feed, infra_image_cam = dc.get_simple_infrared()
         if ret_feed:
             back_frame = fun2.sobrepor_molde(infra_image_cam)
             frame = cv2.cvtColor(back_frame, cv2.COLOR_BGR2RGB)
@@ -407,12 +323,11 @@ def aba_camera(inp_janela, dados, inp_menu):
             # Armazena o ID retornado pelo .after() na nossa lista
             after_id[0] = video_label.after(15, exibir_video)
 
-    # Inicia o loop de vídeo
+
     exibir_video()
 
-    # Configurações finais da janela da câmera
+    janela_tres.protocol("WM_DELETE_WINDOW", finalizar_e_limpar_camera)
     janela_tres.focus_force()
     janela_tres.grab_set()
-    inp_janela.withdraw()
-    janela_tres.protocol("WM_DELETE_WINDOW", acao_voltar)
+
     return janela_tres

@@ -45,15 +45,85 @@ class DepthCamera:
         except:
             print("AVISO","CONECTA A CAMÊRA")
 
-    def get_simple_frame(self):
-        frames = self.pipeline.wait_for_frames(timeout_ms=1000) #timeout_ms=2000
-        infrared = frames.get_infrared_frame()
-        infra_image = np.asanyarray(infrared.get_data())
-        if not infrared:
-            return False, None
-        return True, infra_image
-                
+    def start_recording(self, filename="recording.bag"):
+        """Inicia a gravação da câmera em um arquivo .bag"""
+        try:
+            if self.pipeline:
+                self.pipeline.stop()
 
+            # Cria nova pipeline e configuração
+            self.pipeline = rs.pipeline()
+            config = rs.config()
+
+            # Configura para gravar no arquivo
+            # SALVAR DENTRO DA PASTA REGISTROS
+            config.enable_record_to_file(filename)
+
+            # Configura os streams desejados
+            config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
+            config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
+            config.enable_stream(rs.stream.infrared, 1, 640, 480, rs.format.y8, 30)
+
+            # Inicia a pipeline com a gravação ativada
+            self.pipeline.start(config)
+            print(f"Gravação iniciada no arquivo: {filename}")
+        except Exception as e:
+            print(f"Erro ao iniciar a gravação: {e}")
+
+    def stop_recording(self):
+        """Para a gravação e salva o arquivo .bag."""
+        try:
+            recorder = self.pipeline.get_active_profile().get_device().as_recorder()
+            recorder.pause() # Pausa a gravação
+            print("Gravação pausada e arquivo salvo.")
+        except Exception as e:
+            print(f"Erro ao parar a gravação: {e}")
+
+
+    def get_simple_infrared(self):
+        ret, frames = self.only_get_frame()
+        if ret:
+            infrared = frames.get_infrared_frame()
+            infra_image = np.asanyarray(infrared.get_data())
+            return True, infra_image
+        else:
+            return False, None
+                
+    def only_get_frame(self):
+        frames = self.pipeline.wait_for_frames(timeout_ms=1000) #timeout_ms=2000
+        if not frames:
+            return False, None
+        else:
+            return True, frames
+    
+    
+    def turn_in_array(self, frames):
+        depth_frame = frames.get_depth_frame()
+        color_frame = frames.get_color_frame()
+        infrared = frames.get_infrared_frame()
+        depth_image = np.asanyarray(depth_frame.get_data())
+        color_image = np.asanyarray(color_frame.get_data())
+        infra_image = np.asanyarray(infrared.get_data())
+        if not depth_frame or not color_frame:
+            return False, None, None
+        return True, depth_frame, depth_image, color_image, infra_image
+    
+    def get_cp(self, frames):
+        #Salva nuvem de pontos e retorna o nome do arquivo
+        colorizer = rs.colorizer()
+        colorized = colorizer.process(frames)
+        carimbo = frames.get_timestamp()
+        ply = rs.save_to_ply(f"cloudpoint_{carimbo}.ply")
+        ply.set_option(rs.save_to_ply.option_ply_binary, True)
+        ply.set_option(rs.save_to_ply.option_ply_normals, False)
+        ply.process(colorized)
+        print(f"Cloud point saved: cloudpoint_{carimbo}.ply")
+        return f"cloudpoint_{carimbo}.ply"
+    
+    def get_intrin(self, depth_frame):
+        depth_intrin = depth_frame.profile.as_video_stream_profile().intrinsics
+        return depth_intrin
+    
     def get_frame(self):      
         frames = self.pipeline.wait_for_frames(timeout_ms=2000) #timeout_ms=2000
         colorizer = rs.colorizer()
@@ -111,6 +181,113 @@ def exibir_imagens(foto_app, img_segmentada, img_identificada):
             break
     cv2.destroyAllWindows()
 
+
+
+def salvar_frames(dc):
+    import pyrealsense2 as rs
+    import numpy as np
+    import cv2
+    import os
+    import time 
+
+    data = datetime.now()
+    diretorio_destino=  fr'{pasta}\registros'
+    nome_arquivo = data.strftime('registro_%d-%m-%Y_%H.%M.%S')
+
+    os.makedirs(diretorio_destino, exist_ok=True)
+
+    try:
+        caminho_completo_fotografia = os.path.join(diretorio_destino, nome_arquivo)
+    except:
+        os.mkdir(fr'{pasta}\registros')
+        os.mkdir(fr'{diretorio_destino}\{nome_arquivo}')
+        print(fr'{pasta}\registros',"criado com sucesso")
+        print(fr'{diretorio_destino}\{nome_arquivo}',"criado com sucesso")
+        caminho_completo_fotografia = os.path.join(diretorio_destino, nome_arquivo)
+    diretorio_registro = os.path.join(diretorio_destino, nome_arquivo)
+    dc.start_recording(filename=diretorio_destino + rf'\{nome_arquivo}.bag')
+
+    time.sleep(3)  # Aguarda 3 segundos para capturar mais frames
+    dc.stop_recording()
+
+    if dc:
+        try:
+            dc.release()
+        except:
+            pass
+        dc = None
+
+
+    # === CONFIGURAÇÕES ===
+    bag_file = diretorio_destino + rf'\{nome_arquivo}.bag'
+    output_folder = diretorio_destino + rf'\{nome_arquivo}'
+
+    os.makedirs(output_folder, exist_ok=True)
+
+    # === CONFIGURANDO A LEITURA DO .BAG ===
+    pipeline = rs.pipeline()
+    config = rs.config()
+
+    # Carrega o .bag para leitura (sem loop)
+    config.enable_device_from_file(bag_file, repeat_playback=False)
+
+    # Habilita os streams desejados (igual aos da gravação)
+    config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
+    config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
+    config.enable_stream(rs.stream.infrared, 1, 640, 480, rs.format.y8, 30)
+
+    # Inicia o pipeline
+    pipeline.start(config)
+
+    # Para obter o controle do playback
+    device = pipeline.get_active_profile().get_device()
+    playback = device.as_playback()
+    playback.set_real_time(False)  # Para não depender do tempo real
+
+    frame_id = 0
+
+    while frame_id < 25:
+        frames = pipeline.wait_for_frames()
+
+        color_frame = frames.get_color_frame()
+        depth_frame = frames.get_depth_frame()
+        infra_frame = frames.get_infrared_frame()
+
+        if not color_frame or not depth_frame or not infra_frame:
+            continue
+
+        # Converte para numpy arrays
+        color_image = np.asanyarray(color_frame.get_data())
+        depth_image = np.asanyarray(depth_frame.get_data())
+        infra_image = np.asanyarray(infra_frame.get_data())
+
+        # === Aqui você trata os frames individualmente ===
+
+        # Exemplo: salva os frames como imagem
+        color_path = os.path.join(output_folder, f"color_{frame_id:04d}.png")
+        infra_frame_path = os.path.join(output_folder, f"infra_{frame_id:04d}.png")
+        
+        #salvar nuvem de pontos
+        colorizer = rs.pointcloud()
+        colorized = colorizer.process(frames)
+
+        ply = rs.save_to_ply(rf"{output_folder}\cloudpoint_{frame_id:04d}.ply")
+        ply.set_option(rs.save_to_ply.option_ply_binary, True)
+        ply.set_option(rs.save_to_ply.option_ply_normals, False)
+        ply.process(colorized)
+
+        cv2.imwrite(color_path, color_image)
+        cv2.imwrite(infra_frame_path, infra_image)
+
+        frame_id += 1
+
+    pipeline.stop()
+    cv2.destroyAllWindows()
+    print(f"Total de frames processados: {frame_id}")
+
+    return output_folder
+
+
 def tirar_foto(color_frame, infra_image, id_bico):
     data = datetime.now()
     lista_arq = []
@@ -150,7 +327,126 @@ def tirar_foto(color_frame, infra_image, id_bico):
 
     return lista_arq, caminho_completo_fotografia_BW, caminho_completo_fotografia_colorida, nome_arquivo_colorido
 
-def analisar_imagem(model, imagem, nome, depth_frame, depth_image, Abertura):
+def processamento_individual(i, result, mascaras, depth_frame, depth_intrin, rs):
+    """Processa uma detecção (bico ou furo) e calcula seu diâmetro 3D."""
+
+    class_id = int(result.boxes.cls[i])
+    class_name = result.names[class_id]
+    mask = mascaras[i].astype(np.uint8)
+
+    # --- 4. ENCONTRAR O CONTORNO (A BORDA) DA MÁSCARA ---
+    # Usar apenas a borda é mais eficiente e preciso para medir o diâmetro.
+    contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    if not contours:
+        print(f"AVISO: Nenhuma borda encontrada para a detecção {class_name} ({i+1}). Pulando.")
+        return None
+
+    # Usamos o maior contorno encontrado para garantir
+    contour = max(contours, key=cv2.contourArea)
+
+    contour = contour.squeeze() # Remove dimensões desnecessárias
+    
+    num_pontos_contorno = contour.shape[0]
+    print(f"Contorno para '{class_name}': {num_pontos_contorno} pontos encontrados.")
+
+
+    # # 1. Crie uma imagem preta para desenhar o contorno
+    # img_contorno_visual = np.zeros_like(mask, dtype=np.uint8) 
+
+    # # 2. Desenhe o contorno na imagem preta
+    # cv2.drawContours(img_contorno_visual, [contour], -1, (255, 255, 255), 1) # Cor branca, espessura 1
+
+    # # 3. Mostre a imagem e espere por uma tecla
+    # nome_janela_contorno = f"Contorno: {class_name} ({num_pontos_contorno} pontos)" 
+    # cv2.imshow(nome_janela_contorno, img_contorno_visual)
+    # cv2.waitKey(0) # ESSA LINHA É CRUCIAL! O programa vai pausar aqui.
+
+    # # 4. Destrua apenas a janela que você criou após pressionar uma tecla
+    # cv2.destroyWindow(nome_janela_contorno) 
+
+
+    # Se o contorno não for 2D (ex: um único ponto ou linha), pular
+    if contour.ndim != 2 or contour.shape[0] < 2:
+        print(f"AVISO: Contorno inválido para a detecção {class_name} ({i+1}). Pulando.")
+        return 
+
+    # --- 5. CONVERTER PIXELS DO CONTORNO PARA PONTOS 3D ---
+    pontos_3d_mm = []
+    for pixel_coords in contour:
+        x, y = int(pixel_coords[0]), int(pixel_coords[1])
+
+        try:
+            profundidade_metros = depth_frame.get_distance(x, y)
+        except Exception as e:
+            # Caso a coordenada esteja fora dos limites da imagem de profundidade
+            print(f"Erro ao obter profundidade para ({x}, {y}): {e}")
+            continue
+
+        # Filtro para ignorar pixels sem informação de profundidade válida
+        if 0.1 < profundidade_metros < 0.6:  # (Ex: entre 10cm e 60cm)
+            # A MÁGICA ACONTECE AQUI: Converte o pixel 2D (x, y) + profundidade para um ponto 3D (X, Y, Z)
+            ponto_3d_metros = rs.rs2_deproject_pixel_to_point(depth_intrin, [x, y], profundidade_metros)
+            
+            # Converte de metros para milímetros e adiciona à nossa lista
+            pontos_3d_mm.append([p * 1000 for p in ponto_3d_metros])
+    
+    if len(pontos_3d_mm) < 10: # Se tivermos muito poucos pontos 3D, a medição não é confiável
+        print(f"AVISO: Pontos de profundidade insuficientes ({len(pontos_3d_mm)}) para a detecção {i+1}. Pulando.")
+        return None
+
+    print(f"Convertidos {len(pontos_3d_mm)} pixels da borda para uma nuvem de pontos 3D.")
+
+    # --- 6. CALCULAR O DIÂMETRO A PARTIR DA NUVEM DE PONTOS 3D ---
+    # Abordagem robusta: calcular o diâmetro médio a partir do centroide dos pontos 3D.
+    nuvem_pontos = np.array(pontos_3d_mm)
+    
+    # --- 6a. FILTRAR OUTLIERS DA NUVEM DE PONTOS ---
+    if len(nuvem_pontos) > 10: # Só filtra se tivermos pontos suficientes
+        # a. Calcular o centroide e as distâncias (raios)
+        centroide_3d_inicial = np.mean(nuvem_pontos, axis=0)
+        distancias_iniciais = np.linalg.norm(nuvem_pontos - centroide_3d_inicial, axis=1)
+        
+        # b. Calcular a média e o desvio padrão dos raios
+        media_raio = np.mean(distancias_iniciais)
+        desvio_padrao_raio = np.std(distancias_iniciais)
+        
+        # c. Definir um critério: manter apenas pontos dentro de, por exemplo, 1.5 desvios padrão da média
+        limite_aceitacao = 1.5 
+        
+        # d. Criar a nova nuvem de pontos filtrada
+        nuvem_pontos_filtrada = nuvem_pontos[abs(distancias_iniciais - media_raio) < limite_aceitacao * desvio_padrao_raio]
+        
+        if len(nuvem_pontos_filtrada) > 5:
+            print(f"Filtro de outliers: {len(nuvem_pontos)} -> {len(nuvem_pontos_filtrada)} pontos.")
+            nuvem_pontos = nuvem_pontos_filtrada # Usa a nuvem filtrada para o cálculo
+        else:
+            print("AVISO: Filtro de outliers removeu pontos demais. Usando nuvem original.")
+
+
+    # --- 6b. CALCULAR O DIÂMETRO (agora com a nuvem filtrada) ---
+    centroide_3d = np.mean(nuvem_pontos, axis=0)
+    distancias_ao_centro = np.linalg.norm(nuvem_pontos - centroide_3d, axis=1)
+    diametro_mm = np.mean(distancias_ao_centro) * 2
+
+    # a. Encontrar o centro da nuvem de pontos
+    centroide_3d = np.mean(nuvem_pontos, axis=0)
+
+    # b. Calcular a distância de cada ponto da borda até o centro (raios)
+    distancias_ao_centro = np.linalg.norm(nuvem_pontos - centroide_3d, axis=1)
+
+    # c. O diâmetro é duas vezes o raio médio
+    diametro_mm = np.mean(distancias_ao_centro) * 2
+
+    print(f"Medição concluída para '{class_name}': Diâmetro = {diametro_mm:.2f} mm ({len(nuvem_pontos)} pts)")
+
+    return {
+        'classe': class_name,
+        'diametro_mm': diametro_mm,
+        'centroide_3d': centroide_3d,
+        'nuvem_pontos': nuvem_pontos # Retorna a nuvem para poder retornar na função principal
+    }
+
+def analisar_imagem(model, nome, depth_frame, lista_imagens, output_folder, depth_intrin):
     """
     Analisa a imagem para detectar o bico e os furos, e calcula seus diâmetros reais
     usando uma abordagem de nuvem de pontos 3D.
@@ -162,7 +458,7 @@ def analisar_imagem(model, imagem, nome, depth_frame, depth_image, Abertura):
         depth_frame: O frame de profundidade da câmera RealSense.
         depth_image: A imagem de profundidade (array NumPy).
         Abertura: O ângulo de abertura da câmera (não mais usado diretamente no cálculo,
-                  mas mantido para compatibilidade com a chamada da função).
+        mas mantido para compatibilidade com a chamada da função).
 
     Returns:
         Uma tupla contendo:
@@ -172,154 +468,147 @@ def analisar_imagem(model, imagem, nome, depth_frame, depth_image, Abertura):
         - caminho_completo_fotografia_segmentada (str): Caminho para a imagem salva com as máscaras.
     """
     print("--- INICIANDO ANÁLISE DE IMAGEM (FLUXO 3D) ---")
-
+    lista_de_resultados_do_lote = [] 
+    if not nome.lower().endswith(('.png', '.jpg', '.jpeg')):
+        nome = nome + '.png'  # ou .jpg
     try:
-        # --- 1. EXECUÇÃO DO MODELO YOLO ---
-        results = model(imagem, device='cpu', retina_masks=True, save=True, save_crop=True, project=fr"{pasta}\resultados", name=nome, conf=0.80)
+        results_lote  = model(lista_imagens, device='cpu', retina_masks=True, save=True, save_crop=True,
+                project=fr"{output_folder}\resultados", name=nome, conf=0.80)
 
-        if not results or len(results[0].boxes) == 0:
+        if not results_lote :
             raise NoDetectionsError("Nenhum objeto (bico ou furo) foi detectado na imagem.")
-                
-
-        result = results[0]  # Trabalhamos com o primeiro (e único) resultado
-
-        # --- SALVAR IMAGEM SEGMENTADA (VISUALIZAÇÃO) ---
-        img_segmentada = result.plot(masks=True, boxes=False)
-        diretorio_destino_imgSegmentada = fr'{pasta}\FOTOS_SEGMENTADA'
-        os.makedirs(diretorio_destino_imgSegmentada, exist_ok=True)
-        caminho_completo_fotografia_segmentada = os.path.join(diretorio_destino_imgSegmentada, nome)
-        cv2.imwrite(caminho_completo_fotografia_segmentada, img_segmentada)
-
-        # --- 2. PREPARAÇÃO PARA CONVERSÃO 3D ---
-        # Obter os parâmetros intrínsecos da câmera. Isso é crucial para a conversão de pixel para ponto 3D.
-        # Estes são os "dados de fábrica" da lente da câmera.
-        try:
-            depth_intrin = depth_frame.profile.as_video_stream_profile().intrinsics
-            
-        except AttributeError:
-             raise AttributeError("O 'depth_frame' fornecido não é válido ou não tem perfil de stream. Use um frame real da câmera.")
+    
 
 
-        print(f"Parâmetros da câmera (Intrinsics) carregados. Dimensões: {depth_intrin.width}x{depth_intrin.height}")
+        #PASSAR A TRABALHAR COM LOTE DE IMAGENS
+        for k, result in enumerate(results_lote):
 
-        lista_medicoes = []
-        mascaras = result.masks.data.cpu().numpy()
+            lista_medicoes = []
+            nuvem_pontos_imagem = np.array([])
 
-        # --- 3. PROCESSAMENTO INDIVIDUAL DE CADA DETECÇÃO ---
-        # Iteramos por cada objeto que o YOLO encontrou.
-        for i in range(len(result.boxes)):
-            class_id = int(result.boxes.cls[i])
-            class_name = result.names[class_id]
-
-            # Pega a máscara binária para a detecção atual
-            mask = mascaras[i].astype(np.uint8)
-
-            # --- 4. ENCONTRAR O CONTORNO (A BORDA) DA MÁSCARA ---
-            # Usar apenas a borda é mais eficiente e preciso para medir o diâmetro.
-            contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-            
-            if not contours:
-                print(f"AVISO: Nenhuma borda encontrada para a detecção {i+1}. Pulando.")
+            if not result.boxes or len(result.boxes) == 0:
+                print(f"Imagem {k+1}: Nenhuma detecção válida. Pulando.")
                 continue
-
-            # Usamos o maior contorno encontrado para garantir
-            contour = max(contours, key=cv2.contourArea)
-            contour = contour.squeeze() # Remove dimensões desnecessárias
-
-            # --- 5. CONVERTER PIXELS DO CONTORNO PARA PONTOS 3D ---
-            pontos_3d_mm = []
-            for pixel_coords in contour:
-                x, y = int(pixel_coords[0]), int(pixel_coords[1])
-
-                # Pega a distância (profundidade) em metros para este pixel específico.
-                profundidade_metros = depth_frame.get_distance(x, y)
-
-                # Filtro para ignorar pixels sem informação de profundidade válida
-                if 0.1 < profundidade_metros < 1.5:  # (Ex: entre 10cm e 1.5m)
-                    # A MÁGICA ACONTECE AQUI: Converte o pixel 2D (x, y) + profundidade para um ponto 3D (X, Y, Z)
-                    ponto_3d_metros = rs.rs2_deproject_pixel_to_point(depth_intrin, [x, y], profundidade_metros)
-                    
-                    # Converte de metros para milímetros e adiciona à nossa lista
-                    pontos_3d_mm.append([p * 1000 for p in ponto_3d_metros])
-            
-            if len(pontos_3d_mm) < 10: # Se tivermos muito poucos pontos 3D, a medição não é confiável
-                print(f"AVISO: Pontos de profundidade insuficientes ({len(pontos_3d_mm)}) para a detecção {i+1}. Pulando.")
-                continue
-
-            print(f"Convertidos {len(pontos_3d_mm)} pixels da borda para uma nuvem de pontos 3D.")
-
-            # --- 6. CALCULAR O DIÂMETRO A PARTIR DA NUVEM DE PONTOS 3D ---
-            # Abordagem robusta: calcular o diâmetro médio a partir do centroide dos pontos 3D.
-            nuvem_pontos = np.array(pontos_3d_mm)
-            
-            # --- 6a. FILTRAR OUTLIERS DA NUVEM DE PONTOS ---
-            if len(nuvem_pontos) > 10: # Só filtra se tivermos pontos suficientes
-                # a. Calcular o centroide e as distâncias (raios)
-                centroide_3d_inicial = np.mean(nuvem_pontos, axis=0)
-                distancias_iniciais = np.linalg.norm(nuvem_pontos - centroide_3d_inicial, axis=1)
                 
-                # b. Calcular a média e o desvio padrão dos raios
-                media_raio = np.mean(distancias_iniciais)
-                desvio_padrao_raio = np.std(distancias_iniciais)
-                
-                # c. Definir um critério: manter apenas pontos dentro de, por exemplo, 1.5 desvios padrão da média
-                limite_aceitacao = 1.5 
-                
-                # d. Criar a nova nuvem de pontos filtrada
-                nuvem_pontos_filtrada = nuvem_pontos[abs(distancias_iniciais - media_raio) < limite_aceitacao * desvio_padrao_raio]
-                
-                if len(nuvem_pontos_filtrada) > 5:
-                    print(f"Filtro de outliers: {len(nuvem_pontos)} -> {len(nuvem_pontos_filtrada)} pontos.")
-                    nuvem_pontos = nuvem_pontos_filtrada # Usa a nuvem filtrada para o cálculo
-                else:
-                    print("AVISO: Filtro de outliers removeu pontos demais. Usando nuvem original.")
+            print(f"\n--- Processando Imagem {k+1}/{len(results_lote)}) ---")
 
+            # --- SALVAR IMAGEM SEGMENTADA (VISUALIZAÇÃO) ---
+            img_segmentada = result.plot(masks=True, boxes=False)
 
-            # --- 6b. CALCULAR O DIÂMETRO (agora com a nuvem filtrada) ---
-            centroide_3d = np.mean(nuvem_pontos, axis=0)
-            distancias_ao_centro = np.linalg.norm(nuvem_pontos - centroide_3d, axis=1)
-            diametro_mm = np.mean(distancias_ao_centro) * 2
+            try:
+                diretorio_destino_imgSegmentada = fr'{pasta}\FOTOS_SEGMENTADA\{nome}'
+                print(diretorio_destino_imgSegmentada)
+            except:
+                os.mkdir(fr'{pasta}\FOTOS_SEGMENTADA\{nome}')
+                print(fr'{pasta}\FOTOS_SEGMENTADA\{nome}',"criado com sucesso")
+            os.makedirs(diretorio_destino_imgSegmentada, exist_ok=True)
+            caminho_completo_fotografia_segmentada = os.path.join(diretorio_destino_imgSegmentada, nome)
+            cv2.imwrite(caminho_completo_fotografia_segmentada, img_segmentada)
+            print(f"Imagem segmentada salva em: {caminho_completo_fotografia_segmentada}")
 
-            # a. Encontrar o centro da nuvem de pontos
-            centroide_3d = np.mean(nuvem_pontos, axis=0)
+            # --- 2. PREPARAÇÃO PARA CONVERSÃO 3D ---
+            # Obter os parâmetros intrínsecos da câmera. Isso é crucial para a conversão de pixel para ponto 3D.
+            # Estes são os "dados de fábrica" da lente da câmera.
 
-            # b. Calcular a distância de cada ponto da borda até o centro (raios)
-            distancias_ao_centro = np.linalg.norm(nuvem_pontos - centroide_3d, axis=1)
+            print(f"Parâmetros da câmera (Intrinsics) carregados. Dimensões: {depth_intrin.width}x{depth_intrin.height}")
 
-            # c. O diâmetro é duas vezes o raio médio
-            diametro_mm = np.mean(distancias_ao_centro) * 2
+            mascaras = result.masks.data.cpu().numpy()
+            for i in range(len(result.boxes)):
+                medicao = processamento_individual(i, result, mascaras, depth_frame, depth_intrin, rs)
+                if medicao is not None:
+                    lista_medicoes.append(medicao)
+                    # Acumula as nuvens de pontos para a imagem (apenas para o retorno, se necessário)
+                    if nuvem_pontos_imagem.size == 0:
+                        nuvem_pontos_imagem = medicao['nuvem_pontos']
+                    else:
+                        nuvem_pontos_imagem = np.vstack((nuvem_pontos_imagem, medicao['nuvem_pontos']))
+            # Organizar e ordenar os resultados desta imagem
+            diametro_bico_info = None
+            furos_info = []
+            for medicao in lista_medicoes:
+                if medicao['classe'].lower() == 'bico':
+                    diametro_bico_info = medicao
+                elif medicao['classe'].lower() == 'furo':
+                    furos_info.append(medicao)
 
-            print(f"Medição concluída para '{class_name}': Diâmetro = {diametro_mm:.2f} mm")
+            # Lógica crucial de ordenação (seu código original, que está correto)
+            if furos_info:
+                furos_info.sort(key=lambda f: f['centroide_3d'][0])
 
-            # Armazena o resultado de forma estruturada
-            lista_medicoes.append({
-                'classe': class_name,
-                'diametro_mm': diametro_mm,
-                'centroide_3d': centroide_3d
+            resultado_da_imagem = {
+                'bico': diametro_bico_info,
+                'furos': furos_info
+            }
+
+            print(f"\n--- ANÁLISE CONCLUÍDA ---")
+            # Armazena o resultado da imagem atual
+            lista_de_resultados_do_lote.append({
+                'medicoes': resultado_da_imagem,
+                'mascaras': result.masks.data,
+                'resultado_modelo': result,
+                'caminho_imagem': caminho_completo_fotografia_segmentada,
+                'nuvem_geral': nuvem_pontos_imagem
             })
 
-        # --- 7. ORGANIZAR OS RESULTADOS FINAIS ---
-        # Separa o bico dos furos e monta a lista final na ordem esperada pelo resto do código.
-        diametro_bico = 0
-        furos = []
-        for medicao in lista_medicoes:
-            if medicao['classe'].lower() == 'bico':
-                diametro_bico = medicao['diametro_mm']
-            elif medicao['classe'].lower() == 'furo':
-                furos.append(medicao)
-        
-        # AQUI você pode adicionar uma lógica para ordenar os furos se necessário,
-        # por exemplo, usando as coordenadas X e Y do 'centroide_3d'.
-        # Por enquanto, vamos apenas adicionar os diâmetros.
-        
-        lista_diametros = [float(round(diametro_bico, 2))]
-        for furo in furos:
-            lista_diametros.append(float(round(furo['diametro_mm'], 2)))
+        if not lista_de_resultados_do_lote:
+            print("AVISO: Nenhuma medição válida foi obtida de nenhuma imagem no lote.")
+            return None, None, None, None, None
+            
+        dados_agregados = {'bico': [], 'furos': {}}
 
-        print(f"\n--- ANÁLISE CONCLUÍDA ---")
-        print(f"Lista de diâmetros final (mm): {lista_diametros}")
-        
-        return lista_diametros, result.masks.data, results, caminho_completo_fotografia_segmentada
+        # Iterar sobre os resultados de cada imagem e preencher a estrutura
+        for resultado in lista_de_resultados_do_lote:
+            medicoes = resultado['medicoes']
+            if medicoes['bico']:
+                dados_agregados['bico'].append(medicoes['bico']['diametro_mm'])
+            
+            for i, furo_info in enumerate(medicoes['furos']):
+                if i not in dados_agregados['furos']:
+                    dados_agregados['furos'][i] = []
+                dados_agregados['furos'][i].append(furo_info['diametro_mm'])
+
+        # Calcular as estatísticas finais (média, desvio padrão, contagem)
+        estatisticas_finais = {}
+
+        if dados_agregados['bico']:
+            medicoes_bico = dados_agregados['bico']
+            estatisticas_finais['bico'] = {
+                'media': np.mean(medicoes_bico),
+                'desvio_padrao': np.std(medicoes_bico),
+                'total_medicoes': len(medicoes_bico),
+                'medicoes': medicoes_bico
+            }
+
+        for i, lista_diams_furo in dados_agregados['furos'].items():
+            if lista_diams_furo:
+                chave = f'furo_{i+1}'
+                estatisticas_finais[chave] = {
+                    'media': np.mean(lista_diams_furo),
+                    'desvio_padrao': np.std(lista_diams_furo),
+                    'total_medicoes': len(lista_diams_furo),
+                    'medicoes': lista_diams_furo
+                }
+
+        # Apresentar os resultados finais
+        print("\n======================================")
+        print("   ANÁLISE FINAL DO LOTE DE IMAGENS")
+        print("======================================")
+        for classe, dados in estatisticas_finais.items():
+            print(f"  Classe: {classe.replace('_', ' ').title()}")
+            print(f"    - Média do Diâmetro: {dados['media']:.2f} mm")
+            print(f"    - Desvio Padrão:     {dados['desvio_padrao']:.3f} mm")
+            print(f"    - Total de Medições: {dados['total_medicoes']}")
+
+        lista_diametros = []
+        if 'bico' in estatisticas_finais:
+            lista_diametros.append(float(round(estatisticas_finais['bico']['media'], 2)))
+        for i in range(len(estatisticas_finais) - 1):  # -1 porque 'bico' não é furo
+            chave = f'furo_{i+1}'
+            if chave in estatisticas_finais:
+                lista_diametros.append(float(round(estatisticas_finais[chave]['media'], 2)))
+        #CONCERTAR RETORNO, ESTOU RECEBENDO APENAS O ULTIMO RESULTADO DO LOTE, SENDO SOMENTE O BICO DE BOX
+        return lista_diametros, result.masks.data, result, caminho_completo_fotografia_segmentada, nuvem_pontos_imagem
+       
 
     except Exception as e:
         if 'Nenhum objeto (bico ou furo) foi detectado na imagem.' in str(e):
@@ -328,35 +617,13 @@ def analisar_imagem(model, imagem, nome, depth_frame, depth_image, Abertura):
             print(f"ERRO CRÍTICO na função analisar_imagem: {e}")
             # Retorna None para indicar falha e permitir que o código que chamou a função trate o erro.
             return None, None, None, None
-    
-    except Exception as e:
-        # --- BLOCO DE TRATAMENTO DE ERROS ---
-        
-        # VERIFICA SE O ERRO É O ESPERADO (FALTA DE PROFUNDIDADE)
-        if "Pontos de profundidade insuficientes" in str(e) or "máscara de detecção principal está vazia" in str(e):
-            print(f"AVISO: Erro de profundidade detectado (esperado para imagem local): {e}")
-            print("--- MASCARANDO ERRO: Retornando dados falsos para continuar o fluxo. ---")
 
-            # Cria dados falsos ("mock") com a estrutura correta
-            detections = len(results_cache[0]) if results_cache else 1
-
-            dummy_lista_diametros = [0.0] * detections  # Lista de zeros com o tamanho correto
-            dummy_mascaras = results_cache[0].masks.data if results_cache and results_cache[0].masks else None
-            
-            # RETORNA OS DADOS FALSOS, MAS COM A ESTRUTURA VÁLIDA
-            return dummy_lista_diametros, dummy_mascaras, results_cache, caminho_segmentada_cache
-        
-        else:
-            # Se for qualquer outro erro inesperado, sinaliza uma falha real
-            print(f"ERRO CRÍTICO DENTRO DE analisar_imagem: {e}")
-            return None, None, None, None
 
 def extrair_data_e_hora(nome_arquivo):
     lista = nome_arquivo.split("_")
 
-    data_original = lista[2]
-    hora_original = lista[3]
-    hora_original = hora_original[:5]
+    data_original = lista[1]
+    hora_original = lista[2]
 
     data = data_original.replace("-", "/")
     hora = hora_original.replace(".", ":")
@@ -487,9 +754,33 @@ def extrair_coordenadas_centro(detected_boxes, classes_nomes):
 
     return pontos
 
-def enumerar_furos(lista_pontos, qtd_furos, img, nome_arquivo, lista_diametros=None):
+def enumerar_furos(lista_pontos, qtd_furos, img, nome_arquivo, lista_diametros=None, output_folder=None):
     # Definir o ponto central (suposição: centro da imagem localizada em resultados)
-    bico_crop = cv2.imread(os.path.join(fr'{pasta}\resultados', fr'{nome_arquivo}\crops\Bico\image0.jpg'))
+   
+    path_resultados = os.path.join(output_folder, 'resultados')
+
+    nome_pasta_dinamica = os.listdir(path_resultados)[0]
+
+    # 3. Construir o caminho para a pasta de crops do bico
+    path_crops_bico = os.path.join(path_resultados, nome_pasta_dinamica, 'crops', 'Bico')
+
+    # 4. Listar todas as imagens, ordená-las e pegar a última
+    lista_de_imagens_crop = sorted(os.listdir(path_crops_bico))
+    nome_ultima_imagem = lista_de_imagens_crop[-1] # Pega o último item da lista ordenada
+    print("nome_ultima_imagem", nome_ultima_imagem)
+    # 5. Construir o caminho final completo e carregar a imagem
+    caminho_final_crop = os.path.join(path_crops_bico, nome_ultima_imagem)
+
+    bico_crop = cv2.imread(caminho_final_crop)
+
+    # Agora a variável 'bico_crop' contém a imagem correta.
+    if bico_crop is not None:
+        print("Imagem carregada com sucesso!")
+        # cv2.imshow("Crop do Bico", bico_crop)
+        # cv2.waitKey(0)
+    else:
+        print("Falha ao carregar a imagem.")
+
     altura, largura = bico_crop.shape[:2]
     print("altura, largura", altura, largura)
     ponto_central = definir_centro(altura, largura)
@@ -498,16 +789,23 @@ def enumerar_furos(lista_pontos, qtd_furos, img, nome_arquivo, lista_diametros=N
     lista_pontos = filtrar_ponto_central(lista_pontos, ponto_central, threshold=10)
     print("\nlista_pontos em enumerar furos pós filtrar ponto central\n", lista_pontos)
     # Se lista_diametros não for fornecida, não filtra pelo diâmetro
-    if lista_diametros is not None and len(lista_diametros) == len(lista_pontos) + 1:
+    if lista_diametros is not None and len(lista_diametros) == len(lista_pontos):
         print("lista com diâmetros fornecida, filtrando pelo diâmetro do bico.")
         # O primeiro elemento de lista_diametros é o bico (maior diâmetro)
         # Remover o ponto correspondente ao bico (maior diâmetro)
         idx_bico = np.argmax(lista_diametros)
         # O bico está sempre no início da lista_diametros, então removemos o ponto correspondente
-        pontos_furos = [p for i, p in enumerate(lista_pontos) if i != (idx_bico - 1)]
+
+        pontos_furos = []
+        # Itera sobre os pontos e seus índices
+        for i, p in enumerate(lista_pontos):
+            if i != idx_bico:  # Filtra o ponto do bico
+                pontos_furos.append(p)
+        print("pontos_furos", pontos_furos)
     else:
         print("lista com diâmetros não fornecida ou tamanho incompatível, não filtrando pelo diâmetro do bico.")
         pontos_furos = lista_pontos
+        print("pontos_furos", pontos_furos)  
 
     if len(pontos_furos) < qtd_furos:
         print("(fun_cam)Não foram detectados pontos suficientes.")
@@ -516,6 +814,8 @@ def enumerar_furos(lista_pontos, qtd_furos, img, nome_arquivo, lista_diametros=N
         print("tamanho: ", len(pontos_furos))
         return []
     else:
+        # Quando tem mais pontos do que o necessário, seleciona do começo da lista até a quantidade de furos 
+        # o ideal seria selecionar os mais próximos do centro
         furos = pontos_furos[:qtd_furos]
 
         if furos:
@@ -531,9 +831,11 @@ def enumerar_furos(lista_pontos, qtd_furos, img, nome_arquivo, lista_diametros=N
                 cv2.putText(img, str(i), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
 
             diretorio_guias = fr'{pasta}\FOTOS_GUIA'
-            caminho = os.path.join(diretorio_guias, nome_arquivo)
+            caminho = os.path.join(diretorio_guias, nome_ultima_imagem)
+            print("Caminho para salvar imagem com furos numerados:", caminho)
             cv2.imwrite(caminho, img)
-            return numbered_holes
+            
+            return numbered_holes, caminho
         else:
             return []
 
@@ -576,7 +878,7 @@ def sobrepor_molde(infra_image):
     # Calcule o centro do frame
     center_x = width // 2
     center_y = height // 2
-    cv2.circle(frame, (center_x, center_y), 140, (0, 255, 255),5, 1)
+    cv2.circle(frame, (center_x, center_y), 140, (0, 255, 255),2, 1)
 
     # back_frame = cv2.cvtColor(back_frame, cv2.COLOR_GRAY2RGB)
     # molde = cv2.imread(fr'{pasta}\ICONES_FOTOS\MOLDE.png')
@@ -793,21 +1095,41 @@ def tarefa_de_processamento_independente(dados_entrada):
     Recebe um dicionário com todos os dados e retorna um dicionário com o resultado.
     """
     try:
+
+        # dados_de_entrada = {
+        #     "model": model, "caminho_fotoBW": caminho_fotoBW, "nome_arquivo": nome_arquivo, 
+        #     "depth_frame" : depth_frame, "depth_image": depth_image, "Abertura": Abertura, "nome_arquivo_BW": nome_arquivo_BW,
+        #     "centro": centro, "lista_APP": lista_APP, "qtd_furos": qtd_furos, "caminho_arquivos": pasta_arquivo
+        # }
+
         # Desempacota os dados de entrada
         model = dados_entrada["model"]
-        caminho_fotoBW = dados_entrada["caminho_fotoBW"]
-        nome_arquivo = dados_entrada["nome_arquivo"]
+        # caminho_fotoBW = dados_entrada["caminho_fotoBW"]
+        
         depth_frame = dados_entrada["depth_frame"]        
-        depth_image = dados_entrada["depth_image"]
-        Abertura = dados_entrada["Abertura"]
+        # depth_image = dados_entrada["depth_image"]
+        # Abertura = dados_entrada["Abertura"]
         nome_arquivo_BW = dados_entrada["nome_arquivo_BW"]
         centro = dados_entrada["centro"]
         lista_APP = dados_entrada["lista_APP"]
         qtd_furos = dados_entrada["qtd_furos"]
+        output_folder = dados_entrada["caminho_arquivos"]
+        depth_intrin = dados_entrada["depth_intrin"]
+
+
+        nome_arquivo = output_folder[len(output_folder)-28:]
 
         # --- Início da sua lógica de processamento ---
-        lista_dh = extrair_data_e_hora(nome_arquivo[0])
-        lista_diametros, mascaras, resultados, caminho_fotoSegmentada = analisar_imagem(model, cv2.imread(caminho_fotoBW), nome_arquivo[0], depth_frame, depth_image, Abertura)
+        lista_dh = extrair_data_e_hora(nome_arquivo)
+        from pathlib import Path
+        output_folder_ = Path(output_folder)
+        lista_imagens = list(output_folder_.glob("infra_*.png"))
+
+        lista_diametros, mascaras, resultados, caminho_fotoSegmentada, nuvem = analisar_imagem(model, nome_arquivo, depth_frame, lista_imagens, output_folder, depth_intrin)
+        
+
+        # lista_diametros, mascaras, resultados, caminho_fotoSegmentada, nuvem = analisar_imagem(model, cv2.imread(caminho_fotoBW), nome_arquivo[0], depth_frame, depth_image, Abertura)
+        
         if lista_diametros is None:
             raise ValueError("Não podemos identificar os furos. Tire a foto novamente.")
         caixas_detectadas, nomes_classes = extrair_dados(resultados, mascaras, nome_arquivo_BW)
@@ -815,7 +1137,7 @@ def tarefa_de_processamento_independente(dados_entrada):
         lista_pontos = filtrar_ponto_central(lista_pontos, centro)
 
         # Obter furos numerados e ordenados
-        furos_numerados = enumerar_furos(lista_pontos, qtd_furos, cv2.imread(caminho_fotoSegmentada), nome_arquivo[0])
+        furos_numerados, caminho_foto_enumerada = enumerar_furos(lista_pontos, qtd_furos, cv2.imread(caminho_fotoSegmentada), nome_arquivo, lista_diametros, output_folder)
         for dado in lista_dh: nome_arquivo.append(dado)
 
         # Sincronizar diametros com ordem dos furos numerados
@@ -834,7 +1156,7 @@ def tarefa_de_processamento_independente(dados_entrada):
         print("nome_arquivo: ", nome_arquivo)
         print("diametros_ordenados: ", diametros_ordenados)
         lista_completa = reunir_dados(lista_APP, nome_arquivo, diametros_ordenados)
-        print("pós lista completa linhas 687 funcoes camera: ", lista_completa)
+        print("pós lista completa linhas 871 funcoes camera: ", lista_completa)
         estados = identificar_estados(lista_completa)
         estado_bico = estado_geral_bico(estados)
 
@@ -856,7 +1178,7 @@ def tarefa_de_processamento_independente(dados_entrada):
         msg_erro = str(e).lower()
         if "não podemos identificar os" in msg_erro:  # seu erro específico
             # Retorna também a imagem (caminho)
-            print(f"{pasta}\resultados\{nome_arquivo[0]}\image0.jpg")
+            print(rf"{pasta}\resultados\{nome_arquivo[0]}\image0.jpg")
             return {
                 "sucesso": False,
                 "mensagem_erro": str(e),
